@@ -1,16 +1,19 @@
 package org.academiadecodigo.codezillas.Client;
 
+import org.academiadecodigo.codezillas.Utils.Defaults;
+
 import java.io.File;
+import java.net.ServerSocket;
 import java.net.Socket;
 
-public class Client implements Peer {
+public class Host implements Peer {
 
-    private Socket socket;
-    private String nickname;
+    private ServerSocket serverSocket;
+    private static final int PORT = Defaults.CLIENT_PORT;
 
-    public void connecoToServer(){};
-    public void connectToPeer(){};
-    public void getIP(){};
+    public Socket acceptConnection() {
+        return null;
+    }
 
     @Override
     public void write() {
