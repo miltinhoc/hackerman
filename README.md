@@ -1,4 +1,8 @@
-Hacker Text-Based MMO-RPG created during <AC_>'s #28 Bootcamp.
+Cloud storage and P2P Server and Client created during <AC_>'s #28 Bootcamp.
 
-TEAM: Gonçao Correia, Milton Cardoso, Pedro Reimão & Alex Mendonça
+Version 1.1 
+Features:
+-Supports transfers
+
+TEAM: Gonçalo Correia, Milton Cardoso, Pedro Reimão & Alex Mendonça
 
