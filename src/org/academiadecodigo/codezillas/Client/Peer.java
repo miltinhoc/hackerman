@@ -5,7 +5,7 @@ import java.io.File;
 public interface Peer {
 
     //change return type if needed.
-    void write();
+    void write(File file);
     void read();
     void saveFile(File file);
     void shutdown();
