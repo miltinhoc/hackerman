@@ -1,40 +1,42 @@
 package org.academiadecodigo.codezillas.Client;
 
+
+import org.academiadecodigo.bootcamp.InputScanner;
 import org.academiadecodigo.bootcamp.Prompt;
 import org.academiadecodigo.bootcamp.scanners.menu.MenuInputScanner;
 import org.academiadecodigo.bootcamp.scanners.string.StringInputScanner;
-import org.academiadecodigo.codezillas.Server.Server;
-import org.academiadecodigo.codezillas.Utils.PromptUtils;
+import org.academiadecodigo.codezillas.Utils.NavigationUtils;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ClientPrompt {
+//TODO DELETE THIS - REFERENCE CLASS
+
+public abstract class ClientPrompt {
+/*
 
     private Prompt prompt;
-    private Client client;
-    private Server server;
 
-    public void setPeer(Client client) {
-        this.client = client;
+
+    public void setPrompt() {
         prompt = new Prompt(System.in, System.out);
     }
 
-    public void setServer(Server server) {
-        this.server = server;
+    public void setStreams(PrintWriter out, BufferedReader in) {
     }
 
+    public int handleRequest(InputScanner<Integer> request){
+        return prompt.getUserInput(request);
+    }
     public void runClientPrompt() {
-        init();
-    }
-
-    private void init() {
         initConnectionMenu();
     }
 
     private void initConnectionMenu() {
-        int menuOption = showMenu(PromptUtils.INIT_CONNECTION_MENU_OPTIONS, PromptUtils.INIT_CONNECTION_MENU_MESSAGE);
+        int menuOption = showMenu(NavigationUtils.INIT_CONNECTION_MENU_OPTIONS, NavigationUtils.INIT_CONNECTION_MENU_MESSAGE);
         handleInitConnectionMenu(menuOption);
     }
 
@@ -52,7 +54,7 @@ public class ClientPrompt {
     }
 
     private void login() {
-        String loginNickname = stringScanner(PromptUtils.LOGIN_NICKNAME);
+        String loginNickname = stringScanner(NavigationUtils.LOGIN_NICKNAME);
         if (!verifyClientLogin(loginNickname)) {
             initConnectionMenu();
         }
@@ -62,7 +64,7 @@ public class ClientPrompt {
     private boolean verifyClientLogin(String loginID) {
         Map<String,Client> testerMap = new HashMap<>();
         if (!testerMap.containsKey(loginID)) {
-            System.out.println(PromptUtils.CLIENT_NOT_FOUND);
+            System.out.println(NavigationUtils.CLIENT_NOT_FOUND);
             return false;
         }
         return true;
@@ -77,9 +79,8 @@ public class ClientPrompt {
     }
 
     private void initMenu() {
-        MenuInputScanner menuInput = new MenuInputScanner(PromptUtils.SELECT_MENU_OPTION);
-        menuInput.setMessage(PromptUtils.SELECT_MENU_MESSAGE + client.getNickname());
-
+        MenuInputScanner menuInput = new MenuInputScanner(NavigationUtils.SELECT_MENU_OPTION);
+        menuInput.setMessage(NavigationUtils.SELECT_MENU_MESSAGE + client.getNickname());
 
         int menuOption = prompt.getUserInput(menuInput);
 
@@ -124,7 +125,7 @@ public class ClientPrompt {
         String[] clientsLoggedNicknames = getClientsLogged(testerMap);
 
         MenuInputScanner menuInput = new MenuInputScanner(clientsLoggedNicknames);
-        menuInput.setMessage(PromptUtils.SHOW_CLIENTS_MENU_MESSAGE);
+        menuInput.setMessage(NavigationUtils.SHOW_CLIENTS_MENU_MESSAGE);
 
         int selectedOption = prompt.getUserInput(menuInput) - 1;
 
@@ -134,17 +135,18 @@ public class ClientPrompt {
     }
 
     /**
-     *THIS IS NOW IMPLEMENTED IN SERVER WAITING MIGRATION
-     * -> Server.getActiveClientNames
+     *
      * @param loggedClientsMap Server Class: loggedClient.getMap()
      * @return an array with all clients currently logged
-     */
+
     private String[] getClientsLogged(Map<String,Client> loggedClientsMap) {
         return loggedClientsMap.keySet().toArray(new String[loggedClientsMap.size()]);
     }
 
     private void setClientNickname() {
-        String nickname = stringScanner(PromptUtils.SET_NICKNAME_MESSAGE);
+        String nickname = stringScanner(NavigationUtils.SET_NICKNAME_MESSAGE);
+
+        //client.setNickname(nickname);
     }
 
     public String stringScanner(String message){
@@ -159,12 +161,14 @@ public class ClientPrompt {
 
     }
 
-    private int showMenu(String[] options, String message){
+    private MenuInputScanner showMenu(String[] options, String message){
         MenuInputScanner menuInput = new MenuInputScanner(options);
         menuInput.setMessage(message);
 
         int selectedOption = prompt.getUserInput(menuInput);
-        return selectedOption;
+        return menuInput;
     }
-
+*/
 }
+
+

@@ -1,6 +1,6 @@
 package org.academiadecodigo.codezillas.Utils;
 
-public class PromptUtils {
+public class NavigationUtils {
 
     public static String WELCOME_MESSAGE = "<Welcome to WireMonkey>\n";
 
@@ -17,4 +17,13 @@ public class PromptUtils {
     public static String INIT_CONNECTION_MENU_MESSAGE = WELCOME_MESSAGE;
 
     public static String LOGIN_NICKNAME = "Enter Nickname:";
+
+    public static String UPLOAD_MESSAGE = "Select directory to upload file:";
+
+    public static String DOWNLOAD_MESSAGE = "Select file to download:";
+
+    public static String TRANSFER_FILE_MESSAGE = "Select Client you wish to connect:";
+
+    public static String[] ACCEPT_CONNECTION_OPTIONS = {"Yes","No"};
+    public static String ACCEPT_CONNECTION_MESSAGE = " wants to connect. Accept connection:";
 }
