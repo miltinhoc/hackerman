@@ -1,6 +1,7 @@
 package org.academiadecodigo.codezillas.Client;
 
 import org.academiadecodigo.codezillas.Connectable;
+import org.academiadecodigo.codezillas.FileServices.FileManager;
 import org.academiadecodigo.codezillas.FileServices.FileTransferer;
 import org.academiadecodigo.codezillas.Request;
 import org.academiadecodigo.codezillas.Server.ServerRequest;
@@ -108,7 +109,8 @@ public class Client extends Peer implements Connectable {
 
 
             try {
-                FileTransferer.download(serverSocket.getInputStream(), "gg.txt");
+
+                FileManager.saveFile(FileTransferer.download(serverSocket.getInputStream(), "gg.txt"));
             } catch (IOException e) {
                 e.printStackTrace();
             }

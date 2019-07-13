@@ -107,13 +107,12 @@ public class Server {
 
         public void handle() throws IOException{
 
-            while(true){
                 System.out.println("HANDLING CLIENT: OK");
                 //TODO: Client-server API goes in here.
 
-                FileTransferer.upload(client.getOutputStream(), FileManager.loadFile("home/test.txt"));
+                FileTransferer.upload(writer, FileManager.loadFile("home/test.txt"));
+            System.out.println("sent file");
 
-            }
         }
 
         public void respondRequest(ServerRequest request){
