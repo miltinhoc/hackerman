@@ -1,0 +1,4 @@
+
+DEV NOTES && FUTURE FEATURES:
+
+-> Client needs to be able to choose Server IP to connect.
