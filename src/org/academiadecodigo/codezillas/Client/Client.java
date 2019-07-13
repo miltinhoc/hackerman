@@ -40,17 +40,27 @@ public class Client extends Peer implements Connectable {
 
     }
 
-    public void initP2PTransfer(String nickname, File file){ //TODO: Check Logic with Milton
+    public void initP2PTransfer(String nickname, File file){ //TODO: Check join Logic with Milton
 
-        Thread seconThread = new Thread(() -> peerTooPeerTransfer(nickname, file));
+        Thread thread = new Thread(() -> peerTooPeerTransfer(nickname, file));
 
-        seconThread.start();
+        thread.start();
 
         try {
-            seconThread.join();
+            thread.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    private void initNotificationHandler(){
+
+        Thread thread = new Thread(() -> notificationHandler());
+
+        thread.start();
+
+        //TODO: implement joins logic
+
     }
 
     private void peerTooPeerTransfer(String nickname, File file){
