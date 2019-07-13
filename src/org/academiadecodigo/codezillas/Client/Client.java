@@ -18,11 +18,13 @@ public class Client extends Peer implements Connectable {
     private BufferedReader reader;
     private PrintWriter writer;
     private Host host;
+    private PromptHandler promptHandler;
 
 
     public Client(String nickname) {
         this.nickname = nickname;
         host = new Host();
+        promptHandler = new PromptHandler();
     }
 
      public void start(){
