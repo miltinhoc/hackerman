@@ -6,6 +6,11 @@ import java.nio.file.Files;
 public abstract class FileTransferer {
     //can be made non-abstract if necessary
 
+    /**
+     *
+     * @param outputStream
+     * @param file
+     */
     public static void upload(OutputStream outputStream, File file){
 
         if (file.exists()){
@@ -18,6 +23,12 @@ public abstract class FileTransferer {
         }
     }
 
+    /**
+     *
+     * @param inputStream
+     * @param path
+     * @return
+     */
     public static File download(InputStream inputStream, String path){
 
         try {

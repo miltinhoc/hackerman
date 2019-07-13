@@ -43,7 +43,7 @@ public class Client extends Peer implements Connectable {
     public void connectToServer(){
 
         try {
-            serverSocket = new Socket("localhost",Defaults.SERVER_PORT);
+            serverSocket = new Socket("192.168.1.125",Defaults.SERVER_PORT);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -109,8 +109,22 @@ public class Client extends Peer implements Connectable {
 
 
             try {
+                DataInputStream dataInputStream = new DataInputStream(new BufferedInputStream(serverSocket.getInputStream()));
 
-                FileManager.saveFile(FileTransferer.download(serverSocket.getInputStream(), "gg.txt"));
+                OutputStream outputStream = new FileOutputStream("gg.txt");
+                //outputStream.write(dataInputStream.readAllBytes());
+
+                outputStream = new FileOutputStream("gg.txt");
+                byte[] buffer = new byte[16*1024];
+
+                int count;
+
+                while ( (count = dataInputStream.read(buffer)) > 0 ){
+                    outputStream.write(buffer, 0, count);
+                }
+
+                //FileManager.saveFile();
+                //FileManager.saveFile(FileTransferer.download(serverSocket.getInputStream(), "gg.txt"));
             } catch (IOException e) {
                 e.printStackTrace();
             }
