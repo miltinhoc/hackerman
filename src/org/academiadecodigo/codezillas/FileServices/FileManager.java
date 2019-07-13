@@ -71,18 +71,14 @@ public abstract class FileManager {
         }
     }
 
-    public static String listAllPathContent(){
-        File file = new File("/");
+    public static String[] listAllPathContent(){
+        File file = new File(Defaults.ROOT);
         String[] content = file.list();
 
         if (content != null){
-
-            for (String s : content){
-                System.out.println(s);
-            }
-
+            return content;
         }
-        return "";
+        return null;
     }
 
 }
