@@ -19,23 +19,22 @@ public class Navigation {
     }
 
     public static InputScanner uploadMenu(String[] availableUploadLocations) {
-        return showMenu(availableUploadLocations, NavigationUtils.UPLOAD_MESSAGE);
+        return showMenu(menuOptions(availableUploadLocations), NavigationUtils.UPLOAD_MESSAGE);
     }
 
     public static InputScanner downloadMenu(String[] availableDownloadFiles) {
-
-        return showMenu(availableDownloadFiles, NavigationUtils.DOWNLOAD_MESSAGE);
+        return showMenu(menuOptions(availableDownloadFiles), NavigationUtils.DOWNLOAD_MESSAGE);
     }
 
     public static InputScanner transferFileMenu(String[] clientsLogged) {
-        return showMenu(clientsLogged, NavigationUtils.TRANSFER_FILE_MESSAGE);
+        return showMenu(menuOptions(clientsLogged), NavigationUtils.TRANSFER_FILE_MESSAGE);
     }
 
     public static InputScanner acceptConnectionMenu(String requestingClientNickname) {
         return showMenu(NavigationUtils.ACCEPT_CONNECTION_OPTIONS, requestingClientNickname + NavigationUtils.ACCEPT_CONNECTION_MESSAGE);
     }
 
-    private static String[] addQuit(String[] array) {
+    private static String[] menuOptions(String[] array) {
         String[] newArray = new String[array.length + 1];
         for (int i = 0; i < array.length - 1; i++) {
             newArray[i] = array[i];
