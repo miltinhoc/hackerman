@@ -20,6 +20,10 @@ public class Client extends Peer {
         this.nickname = nickname;
     }
 
+    public String getNickname() {
+        return nickname;
+    }
+
     /*
     @Override
     public void write(File file) {
