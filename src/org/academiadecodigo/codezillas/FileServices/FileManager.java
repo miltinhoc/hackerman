@@ -3,6 +3,7 @@ package org.academiadecodigo.codezillas.FileServices;
 import org.academiadecodigo.codezillas.Utils.Defaults;
 
 import java.io.*;
+import java.nio.file.Path;
 
 public abstract class FileManager {
 
@@ -75,12 +76,23 @@ public abstract class FileManager {
      *
      * @return Array of String if not null
      */
-    public static String[] listAllPathContent(){ //TODO: Differentiate between files and directories
+    public static String[] listAllPathContent(String path){
 
-        File file = new File(Defaults.ROOT);
-        String[] content = file.list();
+        File newPath = new File(Defaults.ROOT + path);
+        File[] files = newPath.listFiles();
 
-        if (content != null){
+        if (files != null){
+            int size = files.length;
+            String[] content = new String[size];
+
+            for (int i = 0; i < size; i++) {
+
+                if (files[i].isDirectory()){
+                    content[i] = String.format("/%s", files[i].getName());
+                    continue;
+                }
+                content[i] = files[i].getName();
+            }
             return content;
         }
         return null;
