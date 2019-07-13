@@ -6,6 +6,7 @@ import org.academiadecodigo.bootcamp.scanners.string.StringInputScanner;
 import org.academiadecodigo.codezillas.Server.Server;
 import org.academiadecodigo.codezillas.Utils.PromptUtils;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,7 +15,6 @@ public class ClientPrompt {
     private Prompt prompt;
     private Client client;
     private Server server;
-    private StringInputScanner stringInputScanner;
 
     public void setPeer(Client client) {
         this.client = client;
@@ -26,16 +26,54 @@ public class ClientPrompt {
     }
 
     public void runClientPrompt() {
-        stringInputScanner = new StringInputScanner();
-
         init();
     }
 
     private void init() {
-        welcomeMessage();
-        setClientNickname();
+        initConnectionMenu();
+    }
 
+    private void initConnectionMenu() {
+        int menuOption = showMenu(PromptUtils.INIT_CONNECTION_MENU_OPTIONS, PromptUtils.INIT_CONNECTION_MENU_MESSAGE);
+        handleInitConnectionMenu(menuOption);
+    }
+
+    private void handleInitConnectionMenu(int menuOption) {
+        switch (menuOption) {
+            case 1:
+                login();
+                break;
+            case 2:
+                register();
+                break;
+            case 3:
+                exit();
+        }
+    }
+
+    private void login() {
+        String loginNickname = stringScanner(PromptUtils.LOGIN_NICKNAME);
+        if (!verifyClientLogin(loginNickname)) {
+            initConnectionMenu();
+        }
         initMenu();
+    }
+
+    private boolean verifyClientLogin(String loginID) {
+        Map<String,Client> testerMap = new HashMap<>();
+        if (!testerMap.containsKey(loginID)) {
+            System.out.println(PromptUtils.CLIENT_NOT_FOUND);
+            return false;
+        }
+        return true;
+    }
+
+    private void register() {
+        setClientNickname();
+    }
+
+    private void exit() {
+        System.exit(0);
     }
 
     private void initMenu() {
@@ -70,37 +108,28 @@ public class ClientPrompt {
     }
 
     private void handleSendFileToUser() {
-        int selectedClient = showClientList();
-        sendFileToClient();
+        String selectedClient = showClientList();
+        sendFileToClient(selectedClient);
     }
 
-    //TODO: create method sendFileToClient
-    //can access the selected client
-    //depends on Client method implementation
-    private void sendFileToClient() {}
+    private void sendFileToClient(String nickname) {
+        File file = new File("");
+        //client.initP2PTransfer(nickname, file);
+    }
 
-    private int showClientList() {
+    private String showClientList() {
         Map<String,Client> testerMap = new HashMap<>();
-        Client[] clientsLogged = getClientsLogged(testerMap);
 
-        String[] clientsLoggedNicknames = getAllClientNicknames(clientsLogged);
+        String[] clientsLoggedNicknames = getClientsLogged(testerMap);
 
         MenuInputScanner menuInput = new MenuInputScanner(clientsLoggedNicknames);
         menuInput.setMessage(PromptUtils.SHOW_CLIENTS_MENU_MESSAGE);
 
-        int selectedOption = prompt.getUserInput(menuInput);
+        int selectedOption = prompt.getUserInput(menuInput) - 1;
 
-        return selectedOption;
-    }
+        String selectedClient = clientsLoggedNicknames[selectedOption];
 
-    private String[] getAllClientNicknames(Client[] clientsLogged) {
-        String[] clientNicKnames = new String[clientsLogged.length];
-        int i = 0;
-
-        for (Client client : clientsLogged) {
-            clientNicKnames[i] = client.getNickname();
-        }
-        return clientNicKnames;
+        return selectedClient;
     }
 
     /**
@@ -108,26 +137,22 @@ public class ClientPrompt {
      * @param loggedClientsMap Server Class: loggedClient.getMap()
      * @return an array with all clients currently logged
      */
-    private Client[] getClientsLogged(Map<String,Client> loggedClientsMap) {
-
-        return loggedClientsMap.values().toArray(new Client[0]);
-
-    }
-
-
-    private void welcomeMessage() {
-        System.out.println(PromptUtils.WELCOME_MESSAGE);
+    private String[] getClientsLogged(Map<String,Client> loggedClientsMap) {
+        return loggedClientsMap.keySet().toArray(new String[loggedClientsMap.size()]);
     }
 
     private void setClientNickname() {
-        stringInputScanner.setMessage(PromptUtils.SET_NICKNAME_MESSAGE);
-        String nickname = prompt.getUserInput(stringInputScanner);
+        String nickname = stringScanner(PromptUtils.SET_NICKNAME_MESSAGE);
 
         client.setNickname(nickname);
     }
 
-    public void StringScanner(String message){
+    public String stringScanner(String message){
+        StringInputScanner stringScanner = new StringInputScanner();
+        stringScanner.setMessage(message);
 
+        String string = prompt.getUserInput(stringScanner);
+        return string;
     }
 
     public void intScanner(String message){
