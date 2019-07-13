@@ -71,7 +71,12 @@ public abstract class FileManager {
         }
     }
 
-    public static String[] listAllPathContent(){
+    /**
+     *
+     * @return Array of String if not null
+     */
+    public static String[] listAllPathContent(){ //TODO: Differentiate between files and directories
+
         File file = new File(Defaults.ROOT);
         String[] content = file.list();
 
