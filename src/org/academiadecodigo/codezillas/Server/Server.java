@@ -97,6 +97,8 @@ public class Server {
 
                     receivedCommand = reader.readLine();
 
+
+
                     if(false){
                         return;
                     }
