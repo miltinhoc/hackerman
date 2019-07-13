@@ -1,6 +1,6 @@
 package org.academiadecodigo.codezillas.Utils;
 
-public class PromptUtils {
+public class NavigationUtils {
 
     public static String WELCOME_MESSAGE = "<Welcome to WireMonkey>\n";
 
