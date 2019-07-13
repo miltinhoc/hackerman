@@ -6,22 +6,27 @@ import java.io.File;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class Host implements Peer {
+public class Host extends Peer {
 
     private ServerSocket serverSocket;
     private static final int PORT = Defaults.CLIENT_PORT;
 
+    public Host() {
+
+    }
+
+    /*
     public Socket acceptConnection() {
         return null;
     }
 
     @Override
-    public void write() {
+    public void write(File file) {
 
     }
 
     @Override
-    public void read() {
+    public void read(File file, String path) {
 
     }
 
@@ -34,4 +39,5 @@ public class Host implements Peer {
     public void shutdown() {
 
     }
+    */
 }
