@@ -3,6 +3,7 @@ package org.academiadecodigo.codezillas.Client;
 import org.academiadecodigo.bootcamp.Prompt;
 import org.academiadecodigo.codezillas.Connectable;
 import org.academiadecodigo.codezillas.Request;
+import org.academiadecodigo.codezillas.Server.ServerRequest;
 import org.academiadecodigo.codezillas.Utils.Defaults;
 
 import java.io.*;
@@ -24,7 +25,7 @@ public class Client extends Peer implements Connectable {
     public Client(String nickname) {
         this.nickname = nickname;
         host = new Host();
-        promptHandler = new PromptHandler();
+
     }
 
      public void start(){
@@ -38,6 +39,7 @@ public class Client extends Peer implements Connectable {
 
         try {
             serverSocket = new Socket("localhost",Defaults.SERVER_PORT);
+            promptHandler = new PromptHandler(serverSocket);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -103,8 +105,10 @@ public class Client extends Peer implements Connectable {
 
 
 
-                System.out.println(receiveResponse().getCommand());
-/*
+
+                promptHandler.handleRequests(receiveResponse());
+
+/*              p
                 notification = reader.readLine();
                 System.out.println(notification);
 
@@ -125,12 +129,12 @@ public class Client extends Peer implements Connectable {
         }
     }
 
-    public Request receiveResponse(){
+    public ServerRequest receiveResponse(){
 
         //TODO: CHANGE LOCATION OF THIS METHOD
         try {
             ObjectInputStream ios = new ObjectInputStream(serverSocket.getInputStream());
-            return (Request) ios.readObject();
+            return (ServerRequest) ios.readObject();
 
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();

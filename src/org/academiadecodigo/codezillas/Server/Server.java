@@ -109,13 +109,16 @@ public class Server {
                 System.out.println("HANDLING CLIENT: OK");
                 //TODO: Client-server API goes in here.
 
-                Request request = new Request("ABRASSE", new IntegerInputScanner());
-                respondRequest(request);
+
+                ServerRequest serverRequest = new ServerRequest("Abrasse", Navigation.loginRegisterMenu());
+
+                respondRequest(serverRequest);
+
 
             }
         }
 
-        public void respondRequest(Request request){
+        public void respondRequest(ServerRequest request){
 
             try {
                 writer.writeObject(request);

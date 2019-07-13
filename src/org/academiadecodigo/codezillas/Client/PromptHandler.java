@@ -31,9 +31,7 @@ public class PromptHandler {
         }
     }
 
-    public String handleRequests() {
-
-        ServerRequest serverRequest = receiveRequest();
+    public String handleRequests(ServerRequest serverRequest) {
 
         String command = serverRequest.getCommand();
         String ip;
@@ -70,7 +68,7 @@ public class PromptHandler {
         return "";
     }
 
-    private ServerRequest receiveRequest(){
+    private ServerRequest eceiveRequest(){
 
         ServerRequest serverRequest = null;
 

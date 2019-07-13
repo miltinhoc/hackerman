@@ -1,7 +1,6 @@
 package org.academiadecodigo.codezillas.Test;
 
 import org.academiadecodigo.codezillas.Client.Client;
-import org.academiadecodigo.codezillas.Client.ClientPrompt;
 
 public class ClientTester {
     public static void main(String[] args) {
