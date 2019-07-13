@@ -23,28 +23,30 @@ public class Server {
     public Server(){
         servicePool = Executors.newCachedThreadPool();
         clientList = Collections.synchronizedMap(new HashMap<>());
-    }
-
-    public void start(){
 
         try {
             serverSocket = new ServerSocket(Defaults.SERVER_PORT);
-
         } catch (IOException e) {
             System.err.println(Defaults.CONNECTION_ERROR);
             e.printStackTrace();
+            System.exit(1); //TODO: replace with initial menu instead of forced quit
         }
     }
 
-    public void waitForConnections(){
+    public void start(){
+        System.out.println("SERVER BOOT: OK");
+        waitForConnections();
+    }
 
+    private void waitForConnections(){
+
+        System.out.println("Now waiting for connections...");
         while (true){
 
             try {
 
-                System.out.println(Defaults.CONNECTION_OK + serverSocket.getInetAddress() + serverSocket.getLocalPort());
-
                 servicePool.submit(new ClientHandler(serverSocket.accept()));
+                System.out.println(Defaults.CONNECTION_OK); //TODO: Include client IP and Port
 
             } catch (IOException e) {
                 System.err.println(Defaults.CONNECTION_ERROR);
@@ -53,7 +55,12 @@ public class Server {
         }
     }
 
-    public class ClientHandler implements Runnable{
+    //package-private
+    String[] getActiveClientsNames(){
+        return clientList.keySet().toArray(new String[0]);
+    }
+
+    private class ClientHandler implements Runnable{
 
         private Socket client;
         private BufferedReader reader;
@@ -70,12 +77,19 @@ public class Server {
             setup();
             setupStream();
 
+            try {
+                handle();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
         }
 
         public void setup(){
             //prompt getnickname;
             nickname = "Anon" + Defaults.rng();
             clientList.put(nickname, this);
+            System.out.println("CLIENT NICKNAME SETUP: OK");
         }
 
         public void setupStream(){
@@ -86,34 +100,36 @@ public class Server {
                 System.out.println();
                 e.printStackTrace();
             }
+            System.out.println("CLIENT STREAMS SETUP: OK");
         }
 
         public void handle() throws IOException{
-            synchronized (this){
+
                 while(true){
+                    System.out.println("HANDLING CLIENT: OK");
                     //TODO: Client-server API goes in here.
 
                     String receivedCommand;
 
-                    receivedCommand = reader.readLine();
-
-                    if(false){
-                        return;
+                    System.out.println(receivedCommand = reader.readLine());
+                    writer.println("ok bro");
+                    if(receivedCommand.equals("/exit")){
+                        close();
                     }
-                    
                 }
-            }
+
         }
+
 
         public void close(){
             try {
                 clientList.remove(this.nickname);
                 client.close();
-                System.err.println("Client exited");
+                System.out.println("CLIENT " + nickname + " DISCONNECT: OK");
                 System.exit(0);
 
             } catch (IOException e) {
-                System.out.println("System exiting error");
+                System.err.println("System exiting error");
                 e.printStackTrace();
             }
         }

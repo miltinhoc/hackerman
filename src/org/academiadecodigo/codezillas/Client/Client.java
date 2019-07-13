@@ -42,7 +42,7 @@ public class Client extends Peer implements Connectable {
 
     public void initP2PTransfer(String nickname, File file){ //TODO: Check join Logic with Milton
 
-        Thread thread = new Thread(() -> peerTooPeerTransfer(nickname, file));
+        Thread thread = new Thread(() -> peerToPeerTransfer(nickname, file));
 
         thread.start();
 
@@ -63,7 +63,7 @@ public class Client extends Peer implements Connectable {
 
     }
 
-    private void peerTooPeerTransfer(String nickname, File file){
+    private void peerToPeerTransfer(String nickname, File file){
 
         requestPeerConnection(nickname);
 
@@ -105,9 +105,10 @@ public class Client extends Peer implements Connectable {
 
                 System.out.println("Where do you want to Save the file?"); //TODO: change the message; defaults?
                 String savePath = reader.readLine();
+                System.out.println(savePath);
 
                 if (answer.toLowerCase().equals("yes")) {
-                    host.start(savePath);
+                    host.start(Defaults.ROOT);
                 }
 
             } catch (IOException e) {
@@ -172,7 +173,7 @@ public class Client extends Peer implements Connectable {
     }
 
 
-    private class Host extends Peer  implements Connectable{
+    private class Host extends Peer implements Connectable{
 
         private ServerSocket serverSocket;
         private Socket connectionSocket;

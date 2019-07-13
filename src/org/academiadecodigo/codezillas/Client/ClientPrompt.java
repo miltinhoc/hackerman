@@ -133,7 +133,8 @@ public class ClientPrompt {
     }
 
     /**
-     *
+     *THIS IS NOW IMPLEMENTED IN SERVER WAITING MIGRATION
+     * -> Server.getActiveClientNames
      * @param loggedClientsMap Server Class: loggedClient.getMap()
      * @return an array with all clients currently logged
      */
@@ -143,8 +144,6 @@ public class ClientPrompt {
 
     private void setClientNickname() {
         String nickname = stringScanner(PromptUtils.SET_NICKNAME_MESSAGE);
-
-        client.setNickname(nickname);
     }
 
     public String stringScanner(String message){
