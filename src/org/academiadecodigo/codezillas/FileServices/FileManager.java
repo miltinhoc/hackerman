@@ -16,7 +16,7 @@ public abstract class FileManager {
         try {
 
             InputStream inputStream = new BufferedInputStream(new FileInputStream(file));
-            FileOutputStream fileOutputStream = new FileOutputStream(Defaults.ROOT + "test.txt");
+            FileOutputStream fileOutputStream = new FileOutputStream(Defaults.ROOT + "gg.txt");
 
             byte[] buffer = new byte[1024];
             int numOfBytes = inputStream.read(buffer);

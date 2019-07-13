@@ -1,9 +1,10 @@
 package org.academiadecodigo.codezillas.Client;
 
-import org.academiadecodigo.bootcamp.Prompt;
 import org.academiadecodigo.codezillas.Connectable;
+import org.academiadecodigo.codezillas.FileServices.FileManager;
 import org.academiadecodigo.codezillas.FileServices.FileTransferer;
 import org.academiadecodigo.codezillas.Request;
+import org.academiadecodigo.codezillas.Server.ServerRequest;
 import org.academiadecodigo.codezillas.Utils.Defaults;
 
 import java.io.*;
@@ -25,14 +26,18 @@ public class Client extends Peer implements Connectable {
     public Client(String nickname) {
         this.nickname = nickname;
         host = new Host();
-        promptHandler = new PromptHandler(serverSocket);
     }
 
      public void start(){
 
-        connectToServer();
-        notificationHandler();
+        init();
+        serverCommunication();
 
+    }
+
+    private void init(){
+        connectToServer();
+        initPromptHandler(serverSocket);
     }
 
     public void connectToServer(){
@@ -45,7 +50,11 @@ public class Client extends Peer implements Connectable {
 
     }
 
-    public void initP2PTransfer(String nickname, File file){ //TODO: Check join Logic with Milton
+    private void initPromptHandler(Socket socket){
+        promptHandler = new PromptHandler(socket);
+    }
+
+    /*public void initP2PTransfer(String nickname, File file){
 
         Thread thread = new Thread(() -> peerToPeerTransfer(nickname, file));
 
@@ -56,17 +65,15 @@ public class Client extends Peer implements Connectable {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-    }
+    }*/
 
-    private void initNotificationHandler(){
+    /*private void initNotificationHandler(){
 
         Thread thread = new Thread(() -> notificationHandler());
 
         thread.start();
 
-        //TODO: implement joins logic
-
-    }
+    }*/
 
     private void peerToPeerTransfer(String nickname, File file){
 
@@ -91,60 +98,44 @@ public class Client extends Peer implements Connectable {
     }
 
 
-    public void notificationHandler() {
-
-        setUpReaderStreams();
-        Scanner scanner = new Scanner(System.in);
-        String notification = "";
-        String answer = "";
+    private void serverCommunication() {
 
         while (serverSocket.isBound()) {
 
-         //   try {
+           // String ip = promptHandler.handleRequests();
+
+          //  if(!ip.equals("")){
+            //    host.start(Defaults.ROOT); //TODO: check path name
 
 
             try {
-                FileTransferer.download(serverSocket.getInputStream(), "/gg.txt");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-/*
-                notification = reader.readLine();
-                System.out.println(notification);
+                DataInputStream dataInputStream = new DataInputStream(new BufferedInputStream(serverSocket.getInputStream()));
 
-                answer = scanner.nextLine();
+                OutputStream outputStream = new FileOutputStream("gg.txt");
+                //outputStream.write(dataInputStream.readAllBytes());
 
+                outputStream = new FileOutputStream("gg.txt");
+                byte[] buffer = new byte[16*1024];
 
-                System.out.println("Where do you want to Save the file?"); //TODO: change the message; defaults?
-                String savePath = reader.readLine();
-                System.out.println(savePath);
+                int count;
 
-                if (answer.toLowerCase().equals("yes")) {
-                    host.start(Defaults.ROOT);
+                while ( (count = dataInputStream.read(buffer)) > 0 ){
+                    outputStream.write(buffer, 0, count);
                 }
+
+                //FileManager.saveFile();
+                //FileManager.saveFile(FileTransferer.download(serverSocket.getInputStream(), "gg.txt"));
             } catch (IOException e) {
                 e.printStackTrace();
             }
-*/
-        }
-    }
+        break;
 
-    public Request receiveResponse(){
-
-        //TODO: CHANGE LOCATION OF THIS METHOD
-        try {
-            ObjectInputStream ios = new ObjectInputStream(serverSocket.getInputStream());
-            return (Request) ios.readObject();
-
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
         }
 
-        return null;
     }
 
     private void requestPeerConnection(String nickname){
-        writer.println("/CODE " + nickname); //TODO: Implement /CODE, decide with Alex The Lion
+        writer.println("/ " + nickname); //TODO: Implement /CODE, decide with Alex The Lion
     }
 
     public void connectToPeer(String ip){
@@ -198,6 +189,9 @@ public class Client extends Peer implements Connectable {
         return nickname;
     }
 
+    //................................................................................................................//
+    //--------------------------------------------> Host class <------------------------------------------------------//
+    //................................................................................................................//
 
     private class Host extends Peer implements Connectable{
 

@@ -2,11 +2,13 @@ package org.academiadecodigo.codezillas.Server;
 
 import org.academiadecodigo.bootcamp.InputScanner;
 
-public class ServerRequest {
+import java.io.Serializable;
+
+public class ServerRequest implements Serializable {
 
     private String command;
     private String ip;
-    private InputScanner inputScanner;
+    private transient InputScanner inputScanner;
 
     public ServerRequest(String command, InputScanner inputScanner) {
         this.command = command;

@@ -62,12 +62,17 @@ public class PromptHandler {
 
                 case Commands.IP:
                     ip = serverRequest.getIp();
+
+                   if(ip.equals("")){
+                       System.out.println("Destination User refused to connect"); //TODO: check message
+                   }
                     return ip;
             }
+
         } catch (IOException ex){
             System.err.println("Something went wrong while handlingTheRequest");
         }
-        return "";
+        return ""; //TODO: check if better alternative to return the ip
     }
 
     private ServerRequest receiveRequest(){
@@ -76,7 +81,7 @@ public class PromptHandler {
 
         try {
 
-            serverRequest = (ServerRequest) inputStream.readObject(); //TODO: fix method to read
+            serverRequest = (ServerRequest) inputStream.readObject(); //TODO: check if better alternative of read method
 
         } catch (IOException e) {
             System.err.println("Something went wrong while receiving the request");

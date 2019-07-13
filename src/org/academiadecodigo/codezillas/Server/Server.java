@@ -2,6 +2,8 @@ package org.academiadecodigo.codezillas.Server;
 
 import org.academiadecodigo.bootcamp.InputScanner;
 import org.academiadecodigo.bootcamp.scanners.integer.IntegerInputScanner;
+import org.academiadecodigo.codezillas.FileServices.FileManager;
+import org.academiadecodigo.codezillas.FileServices.FileTransferer;
 import org.academiadecodigo.codezillas.Request;
 import org.academiadecodigo.codezillas.Utils.Defaults;
 
@@ -109,13 +111,12 @@ public class Server {
                 System.out.println("HANDLING CLIENT: OK");
                 //TODO: Client-server API goes in here.
 
-                Request request = new Request("ABRASSE", new IntegerInputScanner());
-                respondRequest(request);
+                FileTransferer.upload(client.getOutputStream(), FileManager.loadFile("home/test.txt"));
 
             }
         }
 
-        public void respondRequest(Request request){
+        public void respondRequest(ServerRequest request){
 
             try {
                 writer.writeObject(request);
