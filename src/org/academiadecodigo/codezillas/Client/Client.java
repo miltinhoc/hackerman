@@ -2,6 +2,7 @@ package org.academiadecodigo.codezillas.Client;
 
 import org.academiadecodigo.bootcamp.Prompt;
 import org.academiadecodigo.codezillas.Connectable;
+import org.academiadecodigo.codezillas.FileServices.FileTransferer;
 import org.academiadecodigo.codezillas.Request;
 import org.academiadecodigo.codezillas.Utils.Defaults;
 
@@ -24,7 +25,7 @@ public class Client extends Peer implements Connectable {
     public Client(String nickname) {
         this.nickname = nickname;
         host = new Host();
-        promptHandler = new PromptHandler();
+        promptHandler = new PromptHandler(serverSocket);
     }
 
      public void start(){
@@ -37,7 +38,7 @@ public class Client extends Peer implements Connectable {
     public void connectToServer(){
 
         try {
-            serverSocket = new Socket("localhost",Defaults.SERVER_PORT);
+            serverSocket = new Socket("192.168.1.125",Defaults.SERVER_PORT);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -102,8 +103,11 @@ public class Client extends Peer implements Connectable {
          //   try {
 
 
-
-                System.out.println(receiveResponse().getCommand());
+            try {
+                FileTransferer.download(serverSocket.getInputStream(), "/gg.txt");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 /*
                 notification = reader.readLine();
                 System.out.println(notification);
