@@ -26,4 +26,5 @@ public class NavigationUtils {
 
     public static String[] ACCEPT_CONNECTION_OPTIONS = {"Yes","No"};
     public static String ACCEPT_CONNECTION_MESSAGE = " wants to connect. Accept connection:";
+    //TODO: check messages;
 }
