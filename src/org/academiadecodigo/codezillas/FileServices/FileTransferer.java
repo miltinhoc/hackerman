@@ -1,9 +1,6 @@
 package org.academiadecodigo.codezillas.FileServices;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.nio.file.Files;
 
 public abstract class FileTransferer {
@@ -22,7 +19,17 @@ public abstract class FileTransferer {
     }
 
     public static File download(InputStream inputStream, String path){
-        return null;
-    }
 
+        try {
+
+            byte[] file = inputStream.readAllBytes();
+            FileOutputStream fileOutputStream = new FileOutputStream(path);
+
+            fileOutputStream.write(file);
+
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
+        }
+        return new File(path);
+    }
 }
