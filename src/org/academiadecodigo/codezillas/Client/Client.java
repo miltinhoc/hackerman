@@ -203,8 +203,6 @@ public class Client extends Peer implements Connectable {
             }
         }
 
-
-
         public File receiveFile(String path) {
             return super.download(path, connectionSocket);
         }
