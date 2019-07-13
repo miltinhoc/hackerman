@@ -1,7 +1,9 @@
 package org.academiadecodigo.codezillas.Client;
 
 import org.academiadecodigo.codezillas.Connectable;
+import org.academiadecodigo.codezillas.FileServices.FileTransferer;
 import org.academiadecodigo.codezillas.Request;
+import org.academiadecodigo.codezillas.Server.ServerRequest;
 import org.academiadecodigo.codezillas.Utils.Defaults;
 
 import java.io.*;
@@ -99,12 +101,21 @@ public class Client extends Peer implements Connectable {
 
         while (serverSocket.isBound()) {
 
-            String ip = promptHandler.handleRequests();
+           // String ip = promptHandler.handleRequests();
 
-            if(!ip.equals("")){
-                host.start(Defaults.ROOT); //TODO: check path name
+          //  if(!ip.equals("")){
+            //    host.start(Defaults.ROOT); //TODO: check path name
+
+
+            try {
+                FileTransferer.download(serverSocket.getInputStream(), "gg.txt");
+            } catch (IOException e) {
+                e.printStackTrace();
             }
+        break;
+
         }
+
     }
 
     private void requestPeerConnection(String nickname){
