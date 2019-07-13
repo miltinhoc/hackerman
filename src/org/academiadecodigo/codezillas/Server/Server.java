@@ -110,7 +110,7 @@ public class Server {
                 System.out.println("HANDLING CLIENT: OK");
                 //TODO: Client-server API goes in here.
 
-                FileTransferer.upload(writer, FileManager.loadFile("home/test.txt"));
+            FileTransferer.upload(writer, FileManager.loadFile("home/gg.txt"));
             System.out.println("sent file");
 
         }
