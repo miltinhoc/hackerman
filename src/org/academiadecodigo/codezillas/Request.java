@@ -19,7 +19,7 @@ public class Request implements Serializable {
         return command;
     }
 
-    public InputScanner getScanner() {
+    public InputScanner getInputScanner() {
         return scanner;
     }
 }

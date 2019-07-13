@@ -5,6 +5,7 @@ import org.academiadecodigo.bootcamp.scanners.integer.IntegerInputScanner;
 import org.academiadecodigo.codezillas.FileServices.FileManager;
 import org.academiadecodigo.codezillas.FileServices.FileTransferer;
 import org.academiadecodigo.codezillas.Request;
+import org.academiadecodigo.codezillas.Utils.Commands;
 import org.academiadecodigo.codezillas.Utils.Defaults;
 
 import java.io.*;
@@ -111,28 +112,12 @@ public class Server {
                 //TODO: Client-server API goes in here.
 
 
-            DataOutputStream out = new DataOutputStream(new BufferedOutputStream(client.getOutputStream()));
-
-            File file = FileManager.loadFile("gg.txt");
-
-            byte[] buffer = new byte[16*1024];
-
-            InputStream in = new FileInputStream(file);
-
-            int count;
-
-            while ( (count = in.read(buffer)) > 0 ){
-                out.write(buffer, 0, count);
-            }
-            out.flush();
-
-
-            //FileTransferer.upload(writer, FileManager.loadFile("home/test.txt"));
-            System.out.println("sent file");
+           Request request = new Request(Commands.INT,Navigation.loginRegisterMenu());
+           respondRequest(request);
 
         }
 
-        public void respondRequest(ServerRequest request){
+        public void respondRequest(Request request){
 
             try {
                 writer.writeObject(request);

@@ -1,5 +1,7 @@
 package org.academiadecodigo.codezillas.Client;
 
+import org.academiadecodigo.bootcamp.InputScanner;
+import org.academiadecodigo.bootcamp.Prompt;
 import org.academiadecodigo.codezillas.Connectable;
 import org.academiadecodigo.codezillas.FileServices.FileManager;
 import org.academiadecodigo.codezillas.FileServices.FileTransferer;
@@ -107,32 +109,30 @@ public class Client extends Peer implements Connectable {
           //  if(!ip.equals("")){
             //    host.start(Defaults.ROOT); //TODO: check path name
 
+            Prompt prompt = new Prompt(System.in, System.out);
 
-            try {
-                DataInputStream dataInputStream = new DataInputStream(new BufferedInputStream(serverSocket.getInputStream()));
-
-                OutputStream outputStream = new FileOutputStream("gg.txt");
-                //outputStream.write(dataInputStream.readAllBytes());
-
-                outputStream = new FileOutputStream("gg.txt");
-                byte[] buffer = new byte[16*1024];
-
-                int count;
-
-                while ( (count = dataInputStream.read(buffer)) > 0 ){
-                    outputStream.write(buffer, 0, count);
-                }
-
-                //FileManager.saveFile();
-                //FileManager.saveFile(FileTransferer.download(serverSocket.getInputStream(), "gg.txt"));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        break;
+            Request serverRequest = receiveResponse();
+            System.out.println(serverRequest.getCommand());
+            InputScanner inputScanner = serverRequest.getInputScanner();
 
         }
 
     }
+
+    public Request receiveResponse(){
+
+        //TODO: CHANGE LOCATION OF THIS METHOD
+        try {
+            ObjectInputStream ios = new ObjectInputStream(serverSocket.getInputStream());
+            return (Request) ios.readObject();
+
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
 
     private void requestPeerConnection(String nickname){
         writer.println("/ " + nickname); //TODO: Implement /CODE, decide with Alex The Lion
