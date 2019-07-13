@@ -6,6 +6,10 @@ import java.io.*;
 
 public abstract class FileManager {
 
+    /**
+     *
+     * @param file String of the wanted path to save the file
+     */
     public static void saveFile(File file){
 
         try {
@@ -25,6 +29,11 @@ public abstract class FileManager {
         }
     }
 
+    /**
+     *
+     * @param filepath String of the path to the file
+     * @return a File if exists, null if doesn't exist
+     */
     public static File loadFile(String filepath){
 
         File file = new File(filepath);
@@ -35,6 +44,11 @@ public abstract class FileManager {
         return null;
     }
 
+    /**
+     *
+     * @param receivedPath String
+     * @return true if Directory exists, false if doesn't exist
+     */
     public boolean pathExists(String receivedPath){
 
         File path = new File(receivedPath);
@@ -45,12 +59,30 @@ public abstract class FileManager {
 
     }
 
+    /**
+     *
+     * @param path String name of the directory to create
+     */
     public static void createDirectory(String path){
 
         File directory = new File(path);
         if (!directory.exists()){
             boolean result = directory.mkdir();
         }
+    }
+
+    public static String listAllPathContent(){
+        File file = new File("/");
+        String[] content = file.list();
+
+        if (content != null){
+
+            for (String s : content){
+                System.out.println(s);
+            }
+
+        }
+        return "";
     }
 
 }
