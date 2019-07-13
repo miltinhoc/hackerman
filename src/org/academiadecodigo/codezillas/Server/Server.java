@@ -110,7 +110,24 @@ public class Server {
                 System.out.println("HANDLING CLIENT: OK");
                 //TODO: Client-server API goes in here.
 
-                FileTransferer.upload(writer, FileManager.loadFile("home/test.txt"));
+
+            DataOutputStream out = new DataOutputStream(new BufferedOutputStream(client.getOutputStream()));
+
+            File file = FileManager.loadFile("gg.txt");
+
+            byte[] buffer = new byte[16*1024];
+
+            InputStream in = new FileInputStream(file);
+
+            int count;
+
+            while ( (count = in.read(buffer)) > 0 ){
+                out.write(buffer, 0, count);
+            }
+            out.flush();
+
+
+            //FileTransferer.upload(writer, FileManager.loadFile("home/test.txt"));
             System.out.println("sent file");
 
         }
