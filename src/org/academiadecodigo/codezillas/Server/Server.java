@@ -1,11 +1,11 @@
 package org.academiadecodigo.codezillas.Server;
 
+import org.academiadecodigo.bootcamp.InputScanner;
+import org.academiadecodigo.bootcamp.scanners.integer.IntegerInputScanner;
+import org.academiadecodigo.codezillas.Request;
 import org.academiadecodigo.codezillas.Utils.Defaults;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Collections;
@@ -64,7 +64,7 @@ public class Server {
 
         private Socket client;
         private BufferedReader reader;
-        private PrintWriter writer;
+        private ObjectOutputStream writer;
         private String nickname;
 
         public ClientHandler(Socket client){
@@ -95,7 +95,7 @@ public class Server {
         public void setupStream(){
             try {
                 reader = new BufferedReader(new InputStreamReader(client.getInputStream()));
-                writer = new PrintWriter(client.getOutputStream(), true);
+                writer = new ObjectOutputStream(client.getOutputStream());
             } catch (IOException e) {
                 System.out.println();
                 e.printStackTrace();
@@ -105,18 +105,25 @@ public class Server {
 
         public void handle() throws IOException{
 
-                while(true){
-                    System.out.println("HANDLING CLIENT: OK");
-                    //TODO: Client-server API goes in here.
+            while(true){
+                System.out.println("HANDLING CLIENT: OK");
+                //TODO: Client-server API goes in here.
 
-                    String receivedCommand;
+                Request request = new Request("ABRASSE", new IntegerInputScanner());
+                respondRequest(request);
 
-                    System.out.println(receivedCommand = reader.readLine());
-                    writer.println("ok bro");
-                    if(receivedCommand.equals("/exit")){
-                        close();
-                    }
-                }
+            }
+        }
+
+        public void respondRequest(Request request){
+
+            try {
+                writer.writeObject(request);
+                writer.flush();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
         }
 
 

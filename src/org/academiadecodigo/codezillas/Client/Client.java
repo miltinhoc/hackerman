@@ -1,6 +1,8 @@
 package org.academiadecodigo.codezillas.Client;
 
+import org.academiadecodigo.bootcamp.Prompt;
 import org.academiadecodigo.codezillas.Connectable;
+import org.academiadecodigo.codezillas.Request;
 import org.academiadecodigo.codezillas.Utils.Defaults;
 
 import java.io.*;
@@ -95,13 +97,17 @@ public class Client extends Peer implements Connectable {
 
         while (serverSocket.isBound()) {
 
-            try {
+         //   try {
 
+
+
+                System.out.println(receiveResponse().getCommand());
+/*
                 notification = reader.readLine();
                 System.out.println(notification);
 
                 answer = scanner.nextLine();
-                writer.println(answer);
+
 
                 System.out.println("Where do you want to Save the file?"); //TODO: change the message; defaults?
                 String savePath = reader.readLine();
@@ -110,11 +116,25 @@ public class Client extends Peer implements Connectable {
                 if (answer.toLowerCase().equals("yes")) {
                     host.start(Defaults.ROOT);
                 }
-
             } catch (IOException e) {
                 e.printStackTrace();
             }
+*/
         }
+    }
+
+    public Request receiveResponse(){
+
+        //TODO: CHANGE LOCATION OF THIS METHOD
+        try {
+            ObjectInputStream ios = new ObjectInputStream(serverSocket.getInputStream());
+            return (Request) ios.readObject();
+
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
     private void requestPeerConnection(String nickname){

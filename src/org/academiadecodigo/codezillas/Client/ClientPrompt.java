@@ -80,6 +80,7 @@ public class ClientPrompt {
         MenuInputScanner menuInput = new MenuInputScanner(PromptUtils.SELECT_MENU_OPTION);
         menuInput.setMessage(PromptUtils.SELECT_MENU_MESSAGE + client.getNickname());
 
+
         int menuOption = prompt.getUserInput(menuInput);
 
         handleMenu(menuOption);
