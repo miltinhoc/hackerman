@@ -18,8 +18,8 @@ public class Navigation {
         return showMenu(NavigationUtils.SELECT_MENU_OPTION, NavigationUtils.SELECT_MENU_MESSAGE);
     }
 
-    public static InputScanner uploadMenu(String[] availableUploadLocations) {
-        return showMenu(menuOptions(availableUploadLocations), NavigationUtils.UPLOAD_MESSAGE);
+    public static InputScanner uploadMenu() {
+        return stringScanner(NavigationUtils.UPLOAD_MESSAGE);
     }
 
     public static InputScanner downloadMenu(String[] availableDownloadFiles) {

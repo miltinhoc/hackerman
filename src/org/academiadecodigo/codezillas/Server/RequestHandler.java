@@ -1,32 +1,65 @@
 package org.academiadecodigo.codezillas.Server;
 
-import org.academiadecodigo.bootcamp.InputScanner;
 import org.academiadecodigo.codezillas.Client.ClientRequest;
+import org.academiadecodigo.codezillas.FileServices.FileManager;
+import org.academiadecodigo.codezillas.Utils.Commands;
 
 public class RequestHandler {
 
-    private InputScanner lastInput;
+    private int menuPosition;
 
-    public Object handleStart(ClientRequest clientRequest){
+    public RequestHandler() { }
 
-        InputScanner scanner = null;
+    public ServerRequest handleStart(ClientRequest clientRequest){
 
         String command = clientRequest.getCommand();
         String answerString = clientRequest.getAnswerString();
         int answerInt = clientRequest.getAnswerInt();
 
-        if (lastInput == null) {
-            scanner = Navigation.loginRegisterMenu();
-            lastInput = scanner;
-            return scanner;
-        }
+        ServerRequest serverRequest = handleRequest(command, answerString, answerInt);
 
-        if (lastInput.equals(Navigation.loginRegisterMenu())) {
-            scanner = Navigation.clientMenu();
-            lastInput = scanner;
-            return scanner;
-        }
-
-        return Navigation.loginRegisterMenu();
+        return serverRequest;
     }
+
+    private ServerRequest handleRequest(String command, String answerString, int answerInt) {
+
+        if (command.equals(Commands.INT) && answerString == null && answerInt == 1 && menuPosition == 1) {
+            menuPosition = 0;
+            System.out.println("RequestHandler: menu position " + menuPosition);
+            return new ServerRequest(Commands.QUESTION, Navigation.uploadMenu());
+        }
+
+        if (command.equals(Commands.INT) && answerString == null && answerInt == 2 && menuPosition == 1) {
+            menuPosition = 2;
+            System.out.println("RequestHandler: menu position " + menuPosition);
+            return new ServerRequest(Commands.MENU, Navigation.downloadMenu(FileManager.listAllPathContent(""))); //TODO:check listAllPaths content method implementation
+        }
+
+        if (command.equals(Commands.INT) && answerString == null && answerInt == 3 && menuPosition == 1) {
+            menuPosition = 2;
+            System.out.println("RequestHandler: menu position " + menuPosition);
+            return new ServerRequest(Commands.MENU, Navigation.transferFileMenu(new String[]{"3","4"}));
+        }
+
+        if (command.equals(Commands.INT) && answerString == null && answerInt == 1 && menuPosition == 2) {
+            menuPosition = 0;
+            System.out.println("RequestHandler: menu position " + menuPosition);
+            return new ServerRequest(Commands.MENU, Navigation.acceptConnectionMenu("Yo BRO"));
+        }
+        return null;
+    }
+
+    public ServerRequest initMenu() {
+        menuPosition = 1;
+        System.out.println("RequestHandler: menu position " + menuPosition);
+        return new ServerRequest(Commands.MENU, Navigation.clientMenu());
+    }
+
+    /*
+    public ServerRequest initLoginMenu() {
+        menuPosition = 0;
+        System.out.println("RequestHandler: menu position " + menuPosition);
+        return new ServerRequest(Commands.MENU, Navigation.loginRegisterMenu());
+    }
+    */
 }

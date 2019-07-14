@@ -2,9 +2,7 @@ package org.academiadecodigo.codezillas.Client;
 
 import org.academiadecodigo.codezillas.Connectable;
 import org.academiadecodigo.codezillas.FileServices.FileManager;
-import org.academiadecodigo.codezillas.FileServices.FileTransferer;
-import org.academiadecodigo.codezillas.Request;
-import org.academiadecodigo.codezillas.Server.ServerRequest;
+import org.academiadecodigo.codezillas.Utils.Commands;
 import org.academiadecodigo.codezillas.Utils.Defaults;
 
 import java.io.*;
@@ -54,27 +52,6 @@ public class Client extends Peer implements Connectable {
         promptHandler = new PromptHandler(socket);
     }
 
-    /*public void initP2PTransfer(String nickname, File file){
-
-        Thread thread = new Thread(() -> peerToPeerTransfer(nickname, file));
-
-        thread.start();
-
-        try {
-            thread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }*/
-
-    /*private void initNotificationHandler(){
-
-        Thread thread = new Thread(() -> notificationHandler());
-
-        thread.start();
-
-    }*/
-
     private void peerToPeerTransfer(String nickname, File file){
 
         requestPeerConnection(nickname);
@@ -102,42 +79,30 @@ public class Client extends Peer implements Connectable {
 
         while (serverSocket.isBound()) {
 
-           // String ip = promptHandler.handleRequests();
+            String[] command = promptHandler.handleRequests();
 
-          //  if(!ip.equals("")){
-            //    host.start(Defaults.ROOT); //TODO: check path name
+            switch (command[0]){
 
+                case Commands.IP:
 
-            try {
-                //DataInputStream dataInputStream = new DataInputStream(new BufferedInputStream(serverSocket.getInputStream()));
+                    break;
 
-                //OutputStream outputStream = new FileOutputStream("gg.txt");
-                //outputStream.write(dataInputStream.readAllBytes());
+                case Commands.RECEIVE_FILE:
+                    host.start(command[2]);
 
-                //outputStream = new FileOutputStream("gg.txt");
-                /*byte[] buffer = new byte[16*1024];
+                case Commands.DOWNLOAD:
+                    download(command[1]);
+                    break;
 
-                int count;
-
-                while ( (count = dataInputStream.read(buffer)) > 0 ){
-                    outputStream.write(buffer, 0, count);
-                }*/
-
-                FileTransferer.download(serverSocket.getInputStream(),"home/ola.txt");
-
-                //FileManager.saveFile();
-                //FileManager.saveFile(FileTransferer.download(serverSocket.getInputStream(), "gg.txt"));
-            } catch (IOException e) {
-                e.printStackTrace();
+                case Commands.UPLOAD:
+                    uploadToServer();
+                    break;
             }
-        break;
-
         }
-
     }
 
     private void requestPeerConnection(String nickname){
-        writer.println("/ " + nickname); //TODO: Implement /CODE, decide with Alex The Lion
+        writer.println("/request" + nickname);
     }
 
     public void connectToPeer(String ip){
@@ -150,27 +115,26 @@ public class Client extends Peer implements Connectable {
 
     }
 
-    private void setUpReaderStreams(){
+    private void uploadToServer() {
 
-        try {
-
-            reader = new BufferedReader(new InputStreamReader(serverSocket.getInputStream()));
-            writer = new PrintWriter(serverSocket.getOutputStream(), true);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void writeToServer(File file) {
+        File file = fileToUpload();
         super.write(file, serverSocket);
     }
 
-    public void writeToPeer(File file){
+    private File fileToUpload() {
+
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Insert the path of the file you want to upload"); //TODO: check message
+        String path = scanner.nextLine();
+
+        return FileManager.loadFile(path);
+    }
+
+    private void writeToPeer(File file){
         super.write(file, peerSocket);
     }
 
-    public void download(String path){
+    private void download(String path){
         super.download(path, serverSocket);
     }
 
@@ -199,7 +163,6 @@ public class Client extends Peer implements Connectable {
 
         private ServerSocket serverSocket;
         private Socket connectionSocket;
-        public static final int PORT = Defaults.CLIENT_PORT;
 
         public void start(String savePath){
             initSocket();

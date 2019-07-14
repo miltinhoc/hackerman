@@ -6,9 +6,7 @@ import org.academiadecodigo.bootcamp.scanners.string.StringInputScanner;
 import org.academiadecodigo.codezillas.Server.ServerRequest;
 import org.academiadecodigo.codezillas.Utils.Commands;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.net.Socket;
 
 public class PromptHandler {
@@ -18,7 +16,7 @@ public class PromptHandler {
     private ObjectOutputStream outputStream;
 
 
-    public PromptHandler(Socket socket){
+    public PromptHandler(Socket socket) {
 
         try {
 
@@ -31,12 +29,12 @@ public class PromptHandler {
         }
     }
 
-    public String handleRequests() {
+    public String[] handleRequests() {
 
         ServerRequest serverRequest = receiveRequest();
 
         String command = serverRequest.getCommand();
-        String ip;
+        String[] defaultAnswer = {""};
 
         try {
 
@@ -56,15 +54,40 @@ public class PromptHandler {
 
                 case Commands.CONNECTION:
 
-                    int connectionAnswer = connectionRequestHandler((MenuInputScanner) serverRequest.getInputScanner());
-                    write(new ClientRequest(Commands.INT, connectionAnswer));
+                    int answerConnection = connectionRequestHandler((MenuInputScanner) serverRequest.getInputScanner());
+                    write(new ClientRequest(Commands.INT, answerConnection));
                     break;
 
-                case Commands.IP:
-                    ip = serverRequest.getIp();
+                case Commands.RECEIVE_FILE:
 
-                   if(ip.equals("")){
+                    //TODO: Servidor tem de perguntar onde vou guardar o ficheiro
+
+                    String[] pathReceive = ((Commands.RECEIVE_FILE + receiveFileRequestHandler((StringInputScanner) serverRequest.getInputScanner())).split("/"));
+                    return pathReceive;
+
+                case Commands.DOWNLOAD:
+
+                    //TODO: Servidor tem de perguntar onde vou guardar o ficheiro
+
+                    String[] pathDownload = (Commands.DOWNLOAD + downloadRequestHandler((StringInputScanner) serverRequest.getInputScanner())).split("/");
+                    return pathDownload;
+
+                case Commands.UPLOAD:
+
+                    //TODO: Servidor tem de perguntar onde quero guardar o ficheiro na cloud
+
+                    String[] pathUpload = (Commands.UPLOAD + uploadRequestHandler((StringInputScanner) serverRequest.getInputScanner())).split("/");
+                    write(new ClientRequest(Commands.STRING, pathUpload[2]));
+                    return pathUpload;
+
+                case Commands.IP:
+
+                    String[] ip = (Commands.IP + serverRequest.getIp()).split("/");
+
+                   if(ip[1].equals("no")){
+
                        System.out.println("Destination User refused to connect"); //TODO: check message
+                       return defaultAnswer;
                    }
                     return ip;
             }
@@ -72,10 +95,10 @@ public class PromptHandler {
         } catch (IOException ex){
             System.err.println("Something went wrong while handlingTheRequest");
         }
-        return ""; //TODO: check if better alternative to return the ip
+        return defaultAnswer; //TODO: check if better alternative to return the ip
     }
 
-    private ServerRequest receiveRequest(){
+     private ServerRequest receiveRequest(){
 
         ServerRequest serverRequest = null;
 
@@ -109,6 +132,18 @@ public class PromptHandler {
 
         return prompt.getUserInput(menuInputScanner);
 
+    }
+
+    private String uploadRequestHandler(StringInputScanner stringInputScanner){
+        return prompt.getUserInput(stringInputScanner);
+    }
+
+    private String downloadRequestHandler(StringInputScanner stringInputScanner){
+        return prompt.getUserInput(stringInputScanner);
+    }
+
+    private String receiveFileRequestHandler(StringInputScanner stringInputScanner){
+        return prompt.getUserInput(stringInputScanner);
     }
 
     private void write(ClientRequest clientRequest) throws IOException {
