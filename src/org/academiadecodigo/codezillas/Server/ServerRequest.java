@@ -11,13 +11,13 @@ public class ServerRequest implements Serializable {
     private String ip;
     private InputScanner inputScanner;
 
-    ServerRequest(String command, InputScanner inputScanner) {
+    public ServerRequest(String command, InputScanner inputScanner) {
         this.command = command;
         this.inputScanner = inputScanner;
     }
 
 
-    ServerRequest(String command) {
+    public ServerRequest(String command) {
         this.command = command;
     }
 

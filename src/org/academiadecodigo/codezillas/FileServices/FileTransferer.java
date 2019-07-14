@@ -52,7 +52,7 @@ public abstract class FileTransferer {
 
             byte[] data = Files.readAllBytes(file.toPath());
 
-            FileOutputStream fileOutputStream = new FileOutputStream(path);
+            FileOutputStream fileOutputStream = new FileOutputStream(path + file.getName());
 
             fileOutputStream.write(data);
             fileOutputStream.flush();

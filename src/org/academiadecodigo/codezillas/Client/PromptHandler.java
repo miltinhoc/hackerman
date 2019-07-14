@@ -3,11 +3,12 @@ package org.academiadecodigo.codezillas.Client;
 import org.academiadecodigo.bootcamp.Prompt;
 import org.academiadecodigo.bootcamp.scanners.menu.MenuInputScanner;
 import org.academiadecodigo.bootcamp.scanners.string.StringInputScanner;
-import org.academiadecodigo.codezillas.FileServices.FileManager;
+import org.academiadecodigo.codezillas.Server.Navigation;
 import org.academiadecodigo.codezillas.Server.ServerRequest;
 import org.academiadecodigo.codezillas.Utils.Commands;
 
 import java.io.*;
+import java.util.Scanner;
 
 class PromptHandler {
 
@@ -28,8 +29,12 @@ class PromptHandler {
         this.outputStream = outputStream;
 
         ServerRequest serverRequest = receiveRequest();
+        if(serverRequest == null){
+            serverRequest = new ServerRequest(Commands.MENU, Navigation.clientMenu());
+        }
         String command = serverRequest.getCommand();
         String[] defaultAnswer = {""};
+
 
         try {
 
@@ -66,15 +71,20 @@ class PromptHandler {
 
                 case Commands.UPLOAD:
 
-                    String[] pathUpload = (Commands.UPLOAD + uploadRequestHandler((StringInputScanner) serverRequest.getInputScanner())).split("/");
-                    System.out.println("escrevi");
-                    File file = new File(pathUpload[1]);
+                    String[] pathUpload = (new String[]{Commands.UPLOAD}); //+ uploadRequestHandler((StringInputScanner) serverRequest.getInputScanner())).split("/");
+
+                    Scanner scanner = new Scanner(System.in);
+                    System.out.println("Enter the path of the desired file: ");
+                    String path[] = new String[]{Commands.UPLOAD,scanner.nextLine()};
+
+                    File file = new File(path[1]);
 
                     if(file.exists()){
                         write(new ClientRequest(Commands.STRING, "yes"));
                         System.out.println("enviei");
-                        return pathUpload;
+                        return path;
                     }
+
                     System.err.println("File doesn't exist");
                     write(new ClientRequest(Commands.STRING, "no"));
                     break;

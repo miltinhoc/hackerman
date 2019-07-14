@@ -4,7 +4,8 @@ public class Defaults {
 
     public static final int CLIENT_PORT = 9001;
     public static final int SERVER_PORT = 43069;
-    public static final String ROOT = "home";
+    public static final String SERVER_ROOT = "home/";
+    public static final String CLIENT_ROOT = "clienthome/";
 
     public static final String CONNECTION_ERROR = "SERVER FAILED TO START";
     public static final String CLIENT_CONNECT_ERROR = "FAILED TO CONNECT TO CLIENT";
