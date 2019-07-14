@@ -1,6 +1,7 @@
 package org.academiadecodigo.codezillas.Client;
 
 import org.academiadecodigo.codezillas.Connectable;
+import org.academiadecodigo.codezillas.FileServices.FileContainer;
 import org.academiadecodigo.codezillas.FileServices.FileManager;
 import org.academiadecodigo.codezillas.Utils.Commands;
 import org.academiadecodigo.codezillas.Utils.Defaults;
@@ -70,7 +71,8 @@ public class Client extends Peer implements Connectable {
         while (serverSocket.isBound()) {
 
             String[] command = promptHandler.handleRequests(inputStream, outputStream);
-
+            System.out.println("entrei no client");
+            System.out.println(command[0]);
             switch (command[0]) {
 
                 case Commands.IP:
@@ -81,10 +83,11 @@ public class Client extends Peer implements Connectable {
                     host.start(command[1]);
 
                 case Commands.DOWNLOAD:
-                    download(command[1]);
+                    //download(command[1]);
                     break;
 
-                case Commands.UPLOAD:
+                case "upload":
+                    System.out.println("entrei no switch upload");
                     uploadToServer(command[1]);
                     break;
             }
@@ -109,9 +112,9 @@ public class Client extends Peer implements Connectable {
     }
 
     private void uploadToServer(String path) {
-
+        System.out.println("starting to upload");
         File file = fileToUpload(path);
-        super.write(file, serverSocket);
+        super.write(new FileContainer(file), outputStream);
     }
 
     private File fileToUpload(String path) {
@@ -126,9 +129,9 @@ public class Client extends Peer implements Connectable {
 
     } */
 
-    private void download(String path) {
-        super.download(path, serverSocket);
-    }
+    //private void download(String path) {
+    //    super.download(path, serverSocket);
+    //}
 
     @Override
     public void shutdown() {
@@ -159,8 +162,8 @@ public class Client extends Peer implements Connectable {
         public void start(String savePath) {
             initSocket();
             awaitConnection();
-            File file = receiveFile(savePath);
-            saveFile(file);
+            //File file = receiveFile(savePath);
+            //saveFile(file);
             shutdown();
         }
 
@@ -180,9 +183,9 @@ public class Client extends Peer implements Connectable {
             }
         }
 
-        public File receiveFile(String path) {
-            return super.download(path, connectionSocket);
-        }
+        //public File receiveFile(String path) {
+        //    return super.download(path, connectionSocket);
+        //}
 
         @Override
         public void saveFile(File file) {

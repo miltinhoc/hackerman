@@ -1,6 +1,7 @@
 package org.academiadecodigo.codezillas.Client;
 
 import org.academiadecodigo.codezillas.Connectable;
+import org.academiadecodigo.codezillas.FileServices.FileContainer;
 import org.academiadecodigo.codezillas.FileServices.FileManager;
 import org.academiadecodigo.codezillas.FileServices.FileTransferer;
 
@@ -10,33 +11,32 @@ import java.net.Socket;
 
 public abstract class Peer implements Connectable {
 
-    public void write(File file, Socket socket){
+    public void write(FileContainer container, ObjectOutputStream outputStream){
 
-        try {
+        //try {
 
-            OutputStream outputStream = socket.getOutputStream();
+            //OutputStream outputStream = socket.getOutputStream();
 
-            FileTransferer.upload(outputStream, file);
+            FileTransferer.upload(outputStream, container);
 
-            outputStream.close();
+            //outputStream.close();
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        //} catch (IOException e) {
+         //   e.printStackTrace();
+        //}
     }
 
-    public File download(String path, Socket socket){
+    public void download(String path, ObjectInputStream inputStream){
 
 
-                File downloadedFile = null;
+                    FileTransferer.download(inputStream, path);
 
-                try {
+      /*          try {
 
-                    InputStream input = socket.getInputStream();
+                    //InputStream input = socket.getInputStream();
 
-                    downloadedFile = FileTransferer.download(input, path);
 
-                    input.close();
+                    //input.close();
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -44,7 +44,7 @@ public abstract class Peer implements Connectable {
             ex.getMessage();
         }
 
-        return downloadedFile;
+        return downloadedFile;*/
     }
 
     public void saveFile(File file){

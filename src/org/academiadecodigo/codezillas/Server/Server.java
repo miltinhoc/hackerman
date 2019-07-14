@@ -122,20 +122,23 @@ public class Server {
 
         public void handle() throws IOException{
 
-            System.out.println("HANDLING CLIENT: OK");
+            while (true) {
+                System.out.println("HANDLING CLIENT: OK");
 
-            if(!firstMenu){
-                respondRequest(requestHandler.initMenu());
-                firstMenu = true;
-            }
+                if (!firstMenu) {
+                    respondRequest(requestHandler.initMenu());
+                    firstMenu = true;
+                }
 
-            try {
+                try {
 
-                ClientRequest clientRequest = (ClientRequest) inputStream.readObject();
-                respondRequest(requestHandler.handleRequest(clientRequest));
+                    ClientRequest clientRequest = (ClientRequest) inputStream.readObject();
+                    System.out.println(clientRequest.getAnswerString());
+                    respondRequest(requestHandler.handleRequest(clientRequest, inputStream));
 
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
             }
 
         }

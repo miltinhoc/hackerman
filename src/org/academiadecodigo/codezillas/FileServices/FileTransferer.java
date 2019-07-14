@@ -11,16 +11,20 @@ public abstract class FileTransferer {
      * @param outputStream
      * @param file
      */
-    public static void upload(OutputStream outputStream, File file){
+    public static void upload(ObjectOutputStream outputStream, FileContainer file){
 
-        if (file.exists()){
+        //if (file.exists()){
 
             try {
-                outputStream.write(Files.readAllBytes(file.toPath()));
+                System.out.println("uploading");
+                outputStream.writeObject(file);
+                outputStream.flush();
+                System.out.println("uploaded");
+
             } catch (IOException e) {
                 System.err.println(e.getMessage());
             }
-        }
+        //}
     }
 
     /**
@@ -29,18 +33,31 @@ public abstract class FileTransferer {
      * @param path
      * @return
      */
-    public static File download(InputStream inputStream, String path){
+    public static void download(ObjectInputStream inputStream, String path){
 
         try {
 
-            byte[] file = inputStream.readAllBytes();
+            System.out.println("Starting download");
+
+            FileContainer container = (FileContainer) inputStream.readObject();
+
+            File file = container.getFile();
+            System.out.println("File downloaded");
+            System.out.println(file.getAbsolutePath());
+
+
+            byte[] data = Files.readAllBytes(file.toPath());
+
             FileOutputStream fileOutputStream = new FileOutputStream(path);
 
-            fileOutputStream.write(file);
+            fileOutputStream.write(data);
+            fileOutputStream.flush();
 
         } catch (IOException e) {
             System.err.println(e.getMessage());
+        } catch (ClassNotFoundException e){
+            System.err.println("Class not found");
         }
-        return new File(path);
+        //return new File(path);
     }
 }
