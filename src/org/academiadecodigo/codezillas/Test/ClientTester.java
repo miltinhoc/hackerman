@@ -7,9 +7,8 @@ public class ClientTester {
         Client client = new Client("BRO");
 
         client.start();
-        //ClientPrompt clientPrompt = new ClientPrompt();
-        //clientPrompt.setPeer(client);
-        //clientPrompt.runClientPrompt();
+
+
 
     }
 

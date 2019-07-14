@@ -18,7 +18,7 @@ public class NavigationUtils {
 
     public static String LOGIN_NICKNAME = "Enter Nickname:";
 
-    public static String UPLOAD_MESSAGE = "Select directory to upload file:";
+    public static String UPLOAD_MESSAGE = "Enter upload path: ";
 
     public static String DOWNLOAD_MESSAGE = "Select file to download:";
 

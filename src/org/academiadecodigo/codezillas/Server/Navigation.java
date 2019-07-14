@@ -19,7 +19,7 @@ public class Navigation {
     }
 
     public static InputScanner uploadMenu() {
-        return showMenu(menuOptions(new String[]{""}), NavigationUtils.UPLOAD_MESSAGE);
+        return stringScanner(NavigationUtils.UPLOAD_MESSAGE);
     }
 
     public static InputScanner downloadMenu(String[] availableDownloadFiles) {
