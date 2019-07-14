@@ -1,6 +1,7 @@
 package org.academiadecodigo.codezillas.Client;
 
 import org.academiadecodigo.codezillas.FileServices.FileManager;
+import org.academiadecodigo.codezillas.Utils.ASCII;
 import org.academiadecodigo.codezillas.Utils.Commands;
 import org.academiadecodigo.codezillas.Utils.Defaults;
 
@@ -27,7 +28,6 @@ public class Client extends Peer {
     }
 
     public void start() {
-
         init();
         serverCommunication();
 
@@ -55,7 +55,6 @@ public class Client extends Peer {
 
             outputStream = new ObjectOutputStream(serverSocket.getOutputStream());
             inputStream = new ObjectInputStream(serverSocket.getInputStream());
-            System.out.println("Streams opened"); //TODO: erase when debugging is done
 
         } catch (IOException ex){
             System.err.println("Something went Wrong while opening Client Streams");
@@ -67,7 +66,6 @@ public class Client extends Peer {
 
     private void serverCommunication() {
         while (serverSocket.isBound()) {
-            System.out.println(Defaults.BROS);
 
             String[] command = promptHandler.handleRequests(inputStream, outputStream);
 
@@ -87,6 +85,7 @@ public class Client extends Peer {
                 case Commands.UPLOAD:
                     uploadToServer();
                     break;
+
             }
         }
     }

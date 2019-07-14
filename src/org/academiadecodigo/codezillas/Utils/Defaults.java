@@ -10,6 +10,15 @@ public class Defaults {
     public static final String CLIENT_CONNECT_ERROR = "Failed to connect to client!";
     public static final String CONNECTION_OK = "Successfully connected to client: ";
 
+    public static String userDetails(String username, String ip){
+
+        return "CLIENT NICKNAME SETUP: OK\n " +
+                "\nClient nickname is " + username
+                +"\nIP is " + ip + "\n";
+    }
+
     public static int rng(){return (int) ((Math.random() * 10000) + 1000);}
-    
+
+
+
 }

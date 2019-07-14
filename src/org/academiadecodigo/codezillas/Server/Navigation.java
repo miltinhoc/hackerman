@@ -3,6 +3,7 @@ package org.academiadecodigo.codezillas.Server;
 import org.academiadecodigo.bootcamp.InputScanner;
 import org.academiadecodigo.bootcamp.scanners.menu.MenuInputScanner;
 import org.academiadecodigo.bootcamp.scanners.string.StringInputScanner;
+import org.academiadecodigo.codezillas.Utils.ASCII;
 import org.academiadecodigo.codezillas.Utils.NavigationUtils;
 
 public class Navigation {
@@ -14,8 +15,8 @@ public class Navigation {
         return showMenu(NavigationUtils.INIT_CONNECTION_MENU_OPTIONS, NavigationUtils.INIT_CONNECTION_MENU_MESSAGE);
     }
 
-    public static InputScanner clientMenu() {
-        return showMenu(NavigationUtils.SELECT_MENU_OPTION, NavigationUtils.SELECT_MENU_MESSAGE);
+    public static InputScanner clientMenu(String nick) {
+        return showMenu(NavigationUtils.SELECT_MENU_OPTION, NavigationUtils.LOGGEDIN(nick));
     }
 
     public static InputScanner uploadMenu() {
@@ -32,6 +33,10 @@ public class Navigation {
 
     public static InputScanner acceptConnectionMenu(String requestingClientNickname) {
         return showMenu(NavigationUtils.ACCEPT_CONNECTION_OPTIONS, requestingClientNickname + NavigationUtils.ACCEPT_CONNECTION_MESSAGE);
+    }
+
+    public static InputScanner getLogin(){
+        return stringScanner(ASCII.CLIENTINTRO + "\n" + NavigationUtils.SET_NICKNAME_MESSAGE);
     }
 
     private static String[] menuOptions(String[] array) {

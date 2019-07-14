@@ -2,7 +2,7 @@ package org.academiadecodigo.codezillas.Utils;
 
 public class NavigationUtils {
 
-    public static String WELCOME_MESSAGE = Defaults.BROS + "\n" + "Welcome to <BROS Relay Oriented System >";
+    public static String WELCOME_MESSAGE = ASCII.CLIENTINTRO + "\n" + "Welcome to <BROS Relay Oriented System >";
 
     public static String SET_NICKNAME_MESSAGE = "Choose Nickname: ";
 
@@ -26,5 +26,9 @@ public class NavigationUtils {
 
     public static String[] ACCEPT_CONNECTION_OPTIONS = {"Yes","No"};
     public static String ACCEPT_CONNECTION_MESSAGE = " wants to send you file xyz. \n Accept transfer?";
+
+    public static String LOGGEDIN(String nickname){
+        return SELECT_MENU_MESSAGE + nickname;
+    }
     //TODO: check messages;
 }

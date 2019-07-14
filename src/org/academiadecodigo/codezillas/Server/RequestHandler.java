@@ -3,6 +3,7 @@ package org.academiadecodigo.codezillas.Server;
 import org.academiadecodigo.codezillas.Client.ClientRequest;
 import org.academiadecodigo.codezillas.FileServices.FileManager;
 import org.academiadecodigo.codezillas.Utils.Commands;
+import org.academiadecodigo.codezillas.Utils.NavigationUtils;
 
 public class RequestHandler {
 
@@ -61,10 +62,14 @@ public class RequestHandler {
         return null;
     }
 
-    public ServerRequest initMenu() {
+    public ServerRequest getNickname(){
+        return new ServerRequest(Commands.QUESTION, Navigation.getLogin());
+    }
+
+    public ServerRequest initMenu(String nickname) {
         menuPosition = 1;
         System.out.println("RequestHandler: menu position " + menuPosition);
-        return new ServerRequest(Commands.MENU, Navigation.clientMenu());
+        return new ServerRequest(Commands.MENU, Navigation.clientMenu(nickname));
     }
 
 }

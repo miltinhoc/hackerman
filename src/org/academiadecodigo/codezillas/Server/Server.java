@@ -1,7 +1,7 @@
 package org.academiadecodigo.codezillas.Server;
 
 import org.academiadecodigo.codezillas.Client.ClientRequest;
-import org.academiadecodigo.codezillas.Utils.Commands;
+import org.academiadecodigo.codezillas.Utils.ASCII;
 import org.academiadecodigo.codezillas.Utils.Defaults;
 
 import java.io.*;
@@ -33,9 +33,9 @@ public class Server {
     }
 
     public void start(){
+        System.out.println(ASCII.SERVERINTRO);
         System.out.println("SERVER BOOT: OK");
         waitForConnections();
-
     }
 
     private void waitForConnections(){
@@ -51,14 +51,17 @@ public class Server {
             } catch (IOException e) {
                 System.err.println(Defaults.CONNECTION_ERROR);
                 e.printStackTrace();
+                shutdown();
             }
         }
+
     }
 
     public void shutdown(){
         try {
             System.out.println("Shutting down server.");
             serverSocket.close();
+            System.exit(1);
         } catch (IOException e) {
             System.out.println("Failed to Shutdown Server.");
             e.printStackTrace();
@@ -77,7 +80,7 @@ public class Server {
         private ObjectOutputStream outputStream;
         private String nickname;
         private RequestHandler requestHandler;
-        private boolean firstMenu;
+        private boolean logged;
 
         public ClientHandler(Socket client){
             this.client = client;
@@ -87,7 +90,6 @@ public class Server {
         @Override
         public void run() {
 
-            setup();
             setupStream();
 
             try {
@@ -96,15 +98,13 @@ public class Server {
                 e.printStackTrace();
             }
 
-            shutdown();
-
         }
 
         public void setup(){
             //prompt getnickname;
-            nickname = "Anon" + Defaults.rng();
+
             clientList.put(nickname, this);
-            System.out.println("CLIENT NICKNAME SETUP: OK");
+            System.out.println(Defaults.userDetails(nickname, client.getInetAddress().toString()));
         }
 
         public void setupStream(){
@@ -118,22 +118,45 @@ public class Server {
             System.out.println("CLIENT STREAMS SETUP: OK");
         }
 
+        public void login(){
+
+            respondRequest(requestHandler.getNickname());
+            logged = true;
+            ClientRequest clientRequest = null;
+
+            try {
+                clientRequest = (ClientRequest) inputStream.readObject();
+            } catch (IOException | ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+
+            nickname = clientRequest.getAnswerString().trim().isEmpty() ?
+                    "Bro" + Defaults.rng() : clientRequest.getAnswerString();
+
+            clientList.put(nickname, this);
+
+            System.out.println("Client nickname is now " + nickname);
+            System.out.println(Defaults.userDetails(nickname, client.getInetAddress().toString()));
+        }
+
         public void handle() throws IOException{
 
             System.out.println("HANDLING CLIENT: OK");
+            while(true){
+                try {
 
-            if(!firstMenu){
-                respondRequest(requestHandler.initMenu());
-                firstMenu = true;
-            }
+                    if(!logged){
+                        login();
+                        respondRequest(requestHandler.initMenu(nickname));
+                    }
 
-            try {
+                    ClientRequest clientRequest = (ClientRequest) inputStream.readObject();
+                    respondRequest(requestHandler.handleStart(clientRequest, nickname));
+                    System.out.println("nickname");
 
-                ClientRequest clientRequest = (ClientRequest) inputStream.readObject();
-                respondRequest(requestHandler.handleStart(clientRequest, nickname));
-
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
             }
 
         }
@@ -155,7 +178,6 @@ public class Server {
                 clientList.remove(this.nickname);
                 client.close();
                 System.out.println("CLIENT " + nickname + " DISCONNECT: OK");
-                System.exit(0);
 
             } catch (IOException e) {
                 System.err.println("System exiting error");
