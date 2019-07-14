@@ -3,16 +3,16 @@ package org.academiadecodigo.codezillas.Server;
 import org.academiadecodigo.bootcamp.InputScanner;
 import org.academiadecodigo.codezillas.Client.ClientRequest;
 import org.academiadecodigo.codezillas.Utils.Commands;
-import org.academiadecodigo.codezillas.Utils.NavigationPossibilites;
-import org.academiadecodigo.codezillas.Utils.NavigationPossibilitesType;
+import org.academiadecodigo.codezillas.Utils.NavigationPossibilities;
+import org.academiadecodigo.codezillas.Utils.NavigationPossibilitiesType;
 import org.academiadecodigo.codezillas.Utils.NavigationUtils;
 
 import java.util.Map;
 
 public class RequestHandler {
 
-    private NavigationPossibilitesType navigationPossibilitesType;
-    private Map<NavigationPossibilitesType, NavigationPossibilites> possibilitesMap;
+    private NavigationPossibilitiesType navigationPossibilitiesType;
+    private Map<NavigationPossibilitiesType, NavigationPossibilities> possibilitesMap;
 
     public RequestHandler() {
         NavigationUtils.initMap();
@@ -27,7 +27,7 @@ public class RequestHandler {
         switch (command){
 
             case Commands.INT:
-                analyzeIntAnswer(clientRequest.getAnswerInt());
+                serverRequest = analyzeIntAnswer(clientRequest.getAnswerInt());
                 break;
 
             case Commands.STRING:
@@ -39,19 +39,19 @@ public class RequestHandler {
         return serverRequest;
     }
 
-    private NavigationPossibilitesType[] options(){
+    private NavigationPossibilitiesType[] options(){
 
-        return possibilitesMap.get(navigationPossibilitesType).getOptionsType();
+        return possibilitesMap.get(navigationPossibilitiesType).getOptionsType();
 
     }
 
     private String[] nextCommands(){
-        return possibilitesMap.get(navigationPossibilitesType).getNextCommand();
+        return possibilitesMap.get(navigationPossibilitiesType).getNextCommand();
     }
 
     private ServerRequest analyzeIntAnswer(int answer){
 
-         NavigationPossibilitesType[] options = options();
+         NavigationPossibilitiesType[] options = options();
          String[] nextComands = nextCommands();
 
          InputScanner inputScanner = null;
@@ -76,7 +76,7 @@ public class RequestHandler {
     }
 
     public ServerRequest initMenu(){
-        navigationPossibilitesType = NavigationPossibilitesType.INITIAL_MENU;
+        navigationPossibilitiesType = NavigationPossibilitiesType.INITIAL_MENU;
         return new ServerRequest(Commands.MENU, Navigation.clientMenu());
     }
 

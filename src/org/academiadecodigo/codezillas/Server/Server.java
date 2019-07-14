@@ -19,6 +19,9 @@ public class Server {
     private ServerSocket serverSocket;
     private ExecutorService servicePool;
     private Map<String, ClientHandler> clientList;
+    private Socket connectionSocket;
+    private ObjectInputStream inputStream;
+    private ObjectOutputStream outputStream;
 
     public Server(){
         servicePool = Executors.newCachedThreadPool();
@@ -45,8 +48,13 @@ public class Server {
         while (true){
 
             try {
+                connectionSocket = serverSocket.accept();
+                System.out.println("Connection established");
+                inputStream = new ObjectInputStream(connectionSocket.getInputStream());
+                outputStream = new ObjectOutputStream(connectionSocket.getOutputStream());
+                System.out.println("Streams oppened");
 
-                servicePool.submit(new ClientHandler(serverSocket.accept()));
+                servicePool.submit(new ClientHandler(connectionSocket, inputStream, outputStream));
                 System.out.println(Defaults.CONNECTION_OK); //TODO: Include client IP and Port
 
             } catch (IOException e) {
@@ -70,16 +78,18 @@ public class Server {
         private RequestHandler requestHandler;
         private boolean firstMenu;
 
-        public ClientHandler(Socket client){
+        public ClientHandler(Socket client, ObjectInputStream inputStream, ObjectOutputStream outputStream){
             this.client = client;
             requestHandler = new RequestHandler();
+            this.inputStream = inputStream;
+            this.outputStream = outputStream;
         }
 
         @Override
         public void run() {
 
             setup();
-            setupStream();
+            //setupStream();
 
             try {
                 handle();
@@ -98,8 +108,11 @@ public class Server {
 
         public void setupStream(){
             try {
+
                 inputStream = new ObjectInputStream(client.getInputStream());
                 outputStream = new ObjectOutputStream(client.getOutputStream());
+                System.out.println("Streams opened");
+
             } catch (IOException e) {
                 System.out.println();
                 e.printStackTrace();
