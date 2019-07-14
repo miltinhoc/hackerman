@@ -1,10 +1,5 @@
 package org.academiadecodigo.codezillas.Server;
 
-import org.academiadecodigo.bootcamp.InputScanner;
-import org.academiadecodigo.bootcamp.scanners.integer.IntegerInputScanner;
-import org.academiadecodigo.codezillas.FileServices.FileManager;
-import org.academiadecodigo.codezillas.FileServices.FileTransferer;
-import org.academiadecodigo.codezillas.Request;
 import org.academiadecodigo.codezillas.Utils.Commands;
 import org.academiadecodigo.codezillas.Utils.Defaults;
 
@@ -66,12 +61,15 @@ public class Server {
     private class ClientHandler implements Runnable{
 
         private Socket client;
-        private BufferedReader reader;
+        private ObjectInputStream reader;
         private ObjectOutputStream writer;
+        private boolean logged;
         private String nickname;
+        private RequestHandler requestHandler;
 
         public ClientHandler(Socket client){
             this.client = client;
+            this.requestHandler = new RequestHandler();
         }
 
         @Override
@@ -97,7 +95,7 @@ public class Server {
 
         public void setupStream(){
             try {
-                reader = new BufferedReader(new InputStreamReader(client.getInputStream()));
+                reader = new ObjectInputStream(client.getInputStream());
                 writer = new ObjectOutputStream(client.getOutputStream());
             } catch (IOException e) {
                 System.out.println();
@@ -108,16 +106,19 @@ public class Server {
 
         public void handle() throws IOException{
 
-                System.out.println("HANDLING CLIENT: OK");
-                //TODO: Client-server API goes in here.
+            if(!logged){
+              //  ServerRequest serverRequest = requestHandler.
+            }
+
+            System.out.println("HANDLING CLIENT: OK");
+            //TODO: Client-server API goes in here.
 
 
-           Request request = new Request(Commands.INT,Navigation.loginRegisterMenu());
-           respondRequest(request);
+            //respondRequest(request);
 
         }
 
-        public void respondRequest(Request request){
+        public void respondRequest(ServerRequest request){
 
             try {
                 writer.writeObject(request);

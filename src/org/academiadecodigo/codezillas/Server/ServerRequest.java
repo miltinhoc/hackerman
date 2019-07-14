@@ -8,7 +8,7 @@ public class ServerRequest implements Serializable {
 
     private String command;
     private String ip;
-    private transient InputScanner inputScanner;
+    private InputScanner inputScanner;
 
     public ServerRequest(String command, InputScanner inputScanner) {
         this.command = command;
