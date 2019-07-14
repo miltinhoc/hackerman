@@ -18,7 +18,7 @@ public class Defaults {
     public static final String SHUTDOWN = "SHUTTING DOWN SERVER";
     public static final String SHUTDOWN_FAIL = "FAILED TO SHUTDOWN SERVER";
     public static final String WAITING = "NOW WAITING FOR CONNECTIONS...";
-    public static final String WELCOME = "Welcome to BROS - Bros Relay Oriented System";
+    public static final String WELCOME = "Welcome to BROS - Bros Relay-Over System";
 
 
     public static String userDetails(String nickname, String ip){

@@ -5,21 +5,27 @@ public class ASCII {
     public static final String PIPE = "  |  ";
     public static final String VERSION = "BROS Server - Version 0.47";
     public static final String CLIENTVERSION = "BROS Client - Version 0.47";
-    public static final String CREDITS = "Developed by CODEzillas TeamBRO at <AC_>'s #28_Bootcamp. ";
+    public static final String CREDITS = "Developed by CODEzillas TeamBRO \n" + PIPE + "@ <AC_>'s #28_Bootcamp. ";
     public static final String GITHUB = "github.com/sleepdeals/hackerman";
 
     public static final String INTRO = ASCII.DIVIDER +"\n"+ ASCII.BROS + "\n" + ASCII.DIVIDER;
+
+    public static final String DETAILS = PIPE + VERSION + "\n" + PIPE + GITHUB + "\n" + PIPE + CREDITS;
+
     public static final String CLIENTINTRO =
-                    ASCII.DIVIDER +"\n"+ ASCII.BROS + "\n"+
-                    PIPE + CLIENTVERSION + PIPE + CREDITS + PIPE + GITHUB + PIPE
+            ASCII.DIVIDER +"\n"
+                    + ASCII.BROS + "\n"
+                    + DETAILS
                     + ASCII.DIVIDER;
 
     public static final String SERVERINTRO =
-            ASCII.DIVIDER +"\n"+ ASCII.BROS + "\n"+
-                    PIPE + VERSION + PIPE + CREDITS + PIPE + GITHUB + PIPE
+            ASCII.DIVIDER +"\n"
+                    + ASCII.BROS + "\n"
+                    + DETAILS
                     + ASCII.DIVIDER;
 
-    public static final String BROS =
+
+    public static final String BROS2 =
             "    ____  ____  ____  _____    ____       __               ____       _            __     " +
                     "      __   _____            __               \n" +
                     "   / __ )/ __ \\/ __ \\/ ___/   / __ \\___  / /___ ___  __   / __ \\_____(_)__  ____  / /" +
@@ -33,6 +39,13 @@ public class ASCII {
                     "                                              /____/                                          " +
                     "         /____/                          ";
 
+    public static final String BROS =
+            "    ____     ____     ____     _____\n" +
+                    "   / __ )   / __ \\   / __ \\   / ___/\n" +
+                    "  / __  |  / /_/ /  / / / /   \\__ \\ \n" +
+                    " / /_/ /  / _, _/  / /_/ /   ___/ / \n" +
+                    "/_____/  /_/ |_|   \\____/   /____/  \n" +
+                    "                                    ";
     public static final String LATER =
             "    __         __               ____  ____  ____  _____      __          \n" +
                     "   / /  ____ _/ /____  _____   / __ )/ __ \\/ __ \\/ ___/      \\ \\    ____ \n" +
@@ -41,13 +54,15 @@ public class ASCII {
                     "/_____|__,_/\\__/\\___/_/     /_____/_/ |_|\\____//____/           \\_\\____/ \n" +
                     "                                                                         ";
 
-    public static final String DIVIDERXS =
-            "                                                 \n" +
-                    "/_____/_____/_____/_____/_____/_____/_____/_____/\n" +
-                    "                                                 \n" +
-                    "                                                 ";
-
     public static final String DIVIDER =
+            "                                     \n" +
+                    "                                     \n" +
+                    " ____________________________________\n" +
+                    "/_____/_____/_____/_____/_____/_____/\n" +
+                    "                                     \n" +
+                    "                                     ";
+
+    public static final String DIVIDERXL =
             "                                                                                                                                           \n" +
                     " _________________________________________________________________________" +
                     "_________________________________________________________________\n" +
