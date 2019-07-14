@@ -8,6 +8,8 @@ import java.util.Map;
 
 public class NavigationUtils {
 
+    public static String[] files = {"file1", "file2"}; //TODO: delete this when needed
+
     public static final String SET_NICKNAME_MESSAGE = "???WTF REIMAO STOP CHANGING SHIT" ;
     public static Map<NavigationPossibilitiesType, NavigationPossibilities> menuMap;
 

@@ -57,11 +57,15 @@ public class Navigation {
     }
 
     private static String[] menuOptions(String[] array) {
+
         String[] newArray = new String[array.length + 1];
-        for (int i = 0; i < array.length - 1; i++) {
-            newArray[i] = array[i];
+
+        for (int i = 1; i < newArray.length; i++) {
+            newArray[i] = array[i-1];
         }
-        newArray[newArray.length - 1] = "Quit";
+
+        newArray[0] = "Quit";
+
         return newArray;
     }
 

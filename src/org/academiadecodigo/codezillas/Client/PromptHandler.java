@@ -66,9 +66,16 @@ class PromptHandler {
 
                     String[] pathUpload = (Commands.UPLOAD + uploadRequestHandler((StringInputScanner) serverRequest.getInputScanner())).split("/");
                     System.out.println("escrevi");
-                    write(new ClientRequest(Commands.STRING, "yes"));
-                    System.out.println("enviei");
-                    return pathUpload;
+                    File file = new File(pathUpload[1]);
+
+                    if(file.exists()){
+                        write(new ClientRequest(Commands.STRING, "yes"));
+                        System.out.println("enviei");
+                        return pathUpload;
+                    }
+                    System.err.println("File doesn't exist");
+                    write(new ClientRequest(Commands.STRING, "no"));
+                    break;
 
                 case Commands.IP:
 
