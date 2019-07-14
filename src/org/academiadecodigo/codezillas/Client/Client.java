@@ -15,8 +15,6 @@ public class Client extends Peer implements Connectable {
     private Socket serverSocket;
     private Socket peerSocket;
     private String nickname;
-    private BufferedReader reader;
-    private PrintWriter writer;
     private Host host;
     private ObjectOutputStream outputStream;
     private ObjectInputStream inputStream;
@@ -66,12 +64,6 @@ public class Client extends Peer implements Connectable {
     }
 
 
-    private void peerToPeerTransfer(String ip) {
-
-            connectToPeer(ip);
-            sendToPeer();
-
-    }
 
 
     private void serverCommunication() {
@@ -100,6 +92,13 @@ public class Client extends Peer implements Connectable {
         }
     }
 
+    private void peerToPeerTransfer(String ip) {
+
+            connectToPeer(ip);
+            sendToPeer();
+
+    }
+
     private void connectToPeer(String ip) {
 
         try {
@@ -119,7 +118,7 @@ public class Client extends Peer implements Connectable {
     private File fileToUpload() {
 
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Insert the path of the file you want to send"); //TODO: check message
+        System.out.println("Insert the path of the file you want to send: "); //TODO: check message
         String path = scanner.nextLine();
 
         return FileManager.loadFile(path);
