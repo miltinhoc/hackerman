@@ -3,6 +3,8 @@ package org.academiadecodigo.codezillas.Server;
 import org.academiadecodigo.bootcamp.InputScanner;
 import org.academiadecodigo.bootcamp.scanners.menu.MenuInputScanner;
 import org.academiadecodigo.bootcamp.scanners.string.StringInputScanner;
+import org.academiadecodigo.codezillas.Utils.ASCII;
+import org.academiadecodigo.codezillas.Utils.Defaults;
 import org.academiadecodigo.codezillas.Utils.NavigationUtils;
 
 public class Navigation {
@@ -14,9 +16,17 @@ public class Navigation {
         return showMenu(NavigationUtils.INIT_CONNECTION_MENU_OPTIONS, NavigationUtils.INIT_CONNECTION_MENU_MESSAGE);
     }
 
-    public static InputScanner clientMenu() {
-        return showMenu(NavigationUtils.SELECT_MENU_OPTION, NavigationUtils.SELECT_MENU_MESSAGE);
+    public static InputScanner clientMenu(String nickname) {
+        return showMenu(NavigationUtils.SELECT_MENU_OPTION, NavigationUtils.LOGGEDIN(nickname));
     }
+
+    public static InputScanner clientMenu(){
+        return showMenu(NavigationUtils.SELECT_MENU_OPTION, Defaults.WELCOME);
+    }
+
+   /* public static InputScanner clientMenu( ) {
+        return showMenu(NavigationUtils.SELECT_MENU_OPTION, NavigationUtils.LOGGEDIN(S));
+    } */
 
     public static InputScanner uploadMessage() {
         return stringScanner(NavigationUtils.UPLOAD_MESSAGE);
@@ -38,12 +48,22 @@ public class Navigation {
         return showMenu(NavigationUtils.ACCEPT_CONNECTION_OPTIONS, requestingClientNickname + NavigationUtils.ACCEPT_CONNECTION_MESSAGE);
     }
 
+    public static InputScanner getLogin(){
+        return stringScanner(ASCII.CLIENTINTRO + "\n" + NavigationUtils.SET_NICKNAME);
+    }
+
+    public static InputScanner getValidLogin() {
+        return stringScanner(ASCII.CLIENTINTRO + "\n" + NavigationUtils.SET_VALID_NICKNAME);
+    }
+
     private static String[] menuOptions(String[] array) {
+
         String[] newArray = new String[array.length + 1];
-        for (int i = 1; i < newArray.length; i++) {
-            newArray[i] = array[i-1];
-        }
+
+        System.arraycopy(array, 0, newArray, 1, newArray.length - 1);
+
         newArray[0] = "Quit";
+
         return newArray;
     }
 

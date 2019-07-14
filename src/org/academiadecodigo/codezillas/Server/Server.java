@@ -1,6 +1,7 @@
 package org.academiadecodigo.codezillas.Server;
 
 import org.academiadecodigo.codezillas.Client.ClientRequest;
+import org.academiadecodigo.codezillas.Utils.ASCII;
 import org.academiadecodigo.codezillas.Utils.Commands;
 import org.academiadecodigo.codezillas.Utils.Defaults;
 
@@ -37,14 +38,14 @@ public class Server {
     }
 
     public void start(){
-        System.out.println("SERVER BOOT: OK");
+        System.out.println(ASCII.SERVERINTRO + "\n" + Defaults.SERVER_BOOT);
         waitForConnections();
-
     }
 
     private void waitForConnections(){
 
-        System.out.println("Now waiting for connections...");
+        System.out.println(Defaults.WAITING);
+
         while (true){
 
             try {
@@ -60,12 +61,24 @@ public class Server {
             } catch (IOException e) {
                 System.err.println(Defaults.CONNECTION_ERROR);
                 e.printStackTrace();
+                shutdown();
             }
+        }
+
+    }
+
+    public void shutdown(){
+        try {
+            System.err.println(Defaults.SHUTDOWN);
+            serverSocket.close();
+            System.exit(1);
+        } catch (IOException e) {
+            System.err.println(Defaults.SHUTDOWN_FAIL);
+            e.printStackTrace();
         }
     }
 
-    //package-private
-    String[] getActiveClientsNames(){
+    private String[] getActiveClientsNames(){
         return clientList.keySet().toArray(new String[0]);
     }
 
@@ -76,7 +89,7 @@ public class Server {
         private ObjectOutputStream outputStream;
         private String nickname;
         private RequestHandler requestHandler;
-        private boolean firstMenu;
+        private boolean logged;
 
         public ClientHandler(Socket client, ObjectInputStream inputStream, ObjectOutputStream outputStream){
             this.client = client;
@@ -88,7 +101,6 @@ public class Server {
         @Override
         public void run() {
 
-            setup();
             //setupStream();
 
             try {
@@ -99,45 +111,74 @@ public class Server {
 
         }
 
-        public void setup(){
-            //prompt getnickname;
-            nickname = "Anon" + Defaults.rng();
-            clientList.put(nickname, this);
-            System.out.println("CLIENT NICKNAME SETUP: OK");
-        }
-
         public void setupStream(){
             try {
-
                 inputStream = new ObjectInputStream(client.getInputStream());
                 outputStream = new ObjectOutputStream(client.getOutputStream());
-                System.out.println("Streams opened");
-
             } catch (IOException e) {
                 System.out.println();
                 e.printStackTrace();
             }
-            System.out.println("CLIENT STREAMS SETUP: OK");
+            System.out.println(Defaults.STREAMS);
+        }
+
+        public void login(){
+
+            respondRequest(requestHandler.getNickname());
+
+            try {
+
+                ClientRequest clientRequest = (ClientRequest) inputStream.readObject();
+
+                nickname = clientRequest.getAnswerString().trim().isEmpty() ?
+                        "Bro" + Defaults.rng() : clientRequest.getAnswerString();
+
+                validateLogin(nickname);
+
+            } catch (IOException | ClassNotFoundException e) {
+                System.err.println("User " + nickname + " disconnected abruptly");
+                close();
+            }
+
+            logged = true;
+
+            System.out.println(Defaults.userDetails(nickname, client.getInetAddress().toString()));
+        }
+
+        public void validateLogin(String nickname) throws IOException, ClassNotFoundException{
+
+            while(clientList.containsKey(nickname)){
+                respondRequest(requestHandler.invalidNickname());
+                ClientRequest clientRequest = (ClientRequest) inputStream.readObject();
+                nickname = clientRequest.getAnswerString();
+            }
+
+            clientList.put(nickname, this);
+
         }
 
         public void handle() throws IOException{
 
-            while (true) {
-                System.out.println("HANDLING CLIENT: OK");
-
-                if (!firstMenu) {
-                    respondRequest(requestHandler.initMenu());
-                    firstMenu = true;
-                }
-
+            System.out.println(Defaults.HANDLING_CLIENT);
+            while(true){
                 try {
+
+                    if(!logged){
+                        login();
+                        respondRequest(requestHandler.initMenu(nickname));
+                    }
 
                     ClientRequest clientRequest = (ClientRequest) inputStream.readObject();
                     System.out.println(clientRequest.getAnswerString());
-                    respondRequest(requestHandler.handleRequest(clientRequest, inputStream));
+                    respondRequest(requestHandler.handleRequest(clientRequest, inputStream, outputStream));
+
 
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();
+                } catch (EOFException EOFE){
+                    System.err.println("User " + nickname + " disconnected abruptly");
+                    close();
+                    break;
                 }
             }
 
@@ -154,16 +195,14 @@ public class Server {
 
         }
 
-
         public void close(){
             try {
                 clientList.remove(this.nickname);
                 client.close();
                 System.out.println("CLIENT " + nickname + " DISCONNECT: OK");
-                System.exit(0);
 
             } catch (IOException e) {
-                System.err.println("System exiting error");
+                System.err.println(Defaults.DISCONNECT_FAIL);
                 e.printStackTrace();
             }
         }
@@ -182,6 +221,8 @@ public class Server {
 
             return clientsLoggedIn;
         }
+
+
 
     }
 

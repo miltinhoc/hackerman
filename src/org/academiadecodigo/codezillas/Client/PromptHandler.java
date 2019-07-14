@@ -60,7 +60,8 @@ class PromptHandler {
 
                 case Commands.DOWNLOAD:
 
-                    String[] pathDownload = (Commands.DOWNLOAD + downloadRequestHandler((StringInputScanner) serverRequest.getInputScanner())).split("/");
+                    String[] pathDownload = (new String[]{Commands.DOWNLOAD}); //+ downloadRequestHandler((StringInputScanner) serverRequest.getInputScanner())).split("/");
+                    write(new ClientRequest(Commands.UPLOAD, "yes"));
                     return pathDownload;
 
                 case Commands.UPLOAD:

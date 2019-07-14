@@ -2,13 +2,17 @@ package org.academiadecodigo.codezillas.Server;
 
 import org.academiadecodigo.bootcamp.InputScanner;
 import org.academiadecodigo.codezillas.Client.ClientRequest;
+import org.academiadecodigo.codezillas.FileServices.FileContainer;
+import org.academiadecodigo.codezillas.FileServices.FileManager;
 import org.academiadecodigo.codezillas.FileServices.FileTransferer;
 import org.academiadecodigo.codezillas.Utils.Commands;
 import org.academiadecodigo.codezillas.Utils.NavigationPossibilities;
 import org.academiadecodigo.codezillas.Utils.NavigationPossibilitiesType;
 import org.academiadecodigo.codezillas.Utils.NavigationUtils;
 
+import java.io.File;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.Map;
 
 public class RequestHandler {
@@ -21,15 +25,26 @@ public class RequestHandler {
         possibilitesMap = NavigationUtils.menuMap;
     }
 
-    public ServerRequest handleRequest(ClientRequest clientRequest, ObjectInputStream inputStream){
+    public ServerRequest handleRequest(ClientRequest clientRequest, ObjectInputStream inputStream, ObjectOutputStream outputStream){
 
         String command = clientRequest.getCommand();
         System.out.println(command);
         ServerRequest serverRequest = null;
 
+            System.out.println(navigationPossibilitiesType);
+
         switch (command){
 
+
             case Commands.INT:
+
+                if(navigationPossibilitiesType == NavigationPossibilitiesType.DOWNLOAD_MENU){
+
+                    System.out.println("entrar no tipo do download");
+                    return new ServerRequest(Commands.DOWNLOAD);
+
+                }
+
                 serverRequest = analyzeIntAnswer(clientRequest.getAnswerInt());
                 break;
 
@@ -37,6 +52,14 @@ public class RequestHandler {
                 serverRequest = analyzeStringAnswer(clientRequest.getAnswerString(), inputStream);
                 break;
 
+            case Commands.MENU:
+                serverRequest = initMenu();
+                break;
+
+            case Commands.UPLOAD:
+                System.out.println("A entrar no upload");
+                analyzeDownloadOption(clientRequest.getAnswerInt(), outputStream);
+                break;
         }
         return serverRequest;
     }
@@ -64,7 +87,8 @@ public class RequestHandler {
             if(answer - 1 == i){
                 inputScanner = options[i].getInputScanner();
                 navigationPossibilitiesType = options[i];
-                System.out.println(navigationPossibilitiesType);
+                System.out.println(navigationPossibilitiesType + " 2");
+                //initMenu();
             }
         }
 
@@ -72,6 +96,7 @@ public class RequestHandler {
 
             if(answer - 1 == i){
                 command = nextComands[i];
+                System.out.println(navigationPossibilitiesType);
                 System.out.println(command);
             }
         }
@@ -79,6 +104,24 @@ public class RequestHandler {
         return new ServerRequest(command, inputScanner);
 
     }
+
+    private void analyzeDownloadOption(int answer, ObjectOutputStream outputStream){
+
+        System.out.println("entrei no analiasador da opcao do download");
+
+        String[] files = FileManager.listAllFiles();
+
+        File file = new File(files[0]);
+
+        System.out.println("fui buscar a file, starting upload");
+
+        FileTransferer.upload(outputStream, new FileContainer(file));
+
+        System.out.println("upload done");
+
+    }
+
+
 
     private ServerRequest analyzeStringAnswer(String answer, ObjectInputStream inputStream){
 
@@ -98,11 +141,23 @@ public class RequestHandler {
         return initMenu();
     }
 
-    public ServerRequest initMenu(){
+    public ServerRequest initMenu(String nickname){
+        navigationPossibilitiesType = NavigationPossibilitiesType.INITIAL_MENU;
+        return new ServerRequest(Commands.MENU, Navigation.clientMenu(nickname));
+    }
+    public ServerRequest initMenu( ){
         navigationPossibilitiesType = NavigationPossibilitiesType.INITIAL_MENU;
         return new ServerRequest(Commands.MENU, Navigation.clientMenu());
     }
 
+
+    public ServerRequest getNickname(){
+        return new ServerRequest(Commands.QUESTION, Navigation.getLogin());
+    }
+
+    public ServerRequest invalidNickname(){
+        return new ServerRequest(Commands.QUESTION, Navigation.getValidLogin());
+    }
 }
 
 

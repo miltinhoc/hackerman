@@ -98,4 +98,29 @@ public abstract class FileManager {
         return null;
     }
 
+    public static String[] listAllFiles(){
+        File path = new File("home/");
+        File[] files = path.listFiles();
+        int count = 0;
+
+        String[] content = null;
+
+        if (files != null){
+            for (File file : files) {
+                if (file.isFile()) {
+                    count++;
+                }
+            }
+
+            content = new String[count];
+            for (int i = 0; i < count; i++) {
+                if (files[i].isFile()){
+                    content[i] = files[i].getName();
+                }
+            }
+        }
+        return content;
+    }
+
+
 }

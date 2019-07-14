@@ -1,50 +1,22 @@
 package org.academiadecodigo.codezillas.Client;
 
-import org.academiadecodigo.codezillas.Connectable;
-import org.academiadecodigo.codezillas.FileServices.FileContainer;
 import org.academiadecodigo.codezillas.FileServices.FileManager;
 import org.academiadecodigo.codezillas.FileServices.FileTransferer;
+import org.academiadecodigo.codezillas.FileServices.FileContainer;
 
 import java.io.*;
-import java.net.ServerSocket;
-import java.net.Socket;
 
-public abstract class Peer implements Connectable {
+public abstract class Peer {
 
     public void write(FileContainer container, ObjectOutputStream outputStream){
 
-        //try {
-
-            //OutputStream outputStream = socket.getOutputStream();
-
-            FileTransferer.upload(outputStream, container);
-
-            //outputStream.close();
-
-        //} catch (IOException e) {
-         //   e.printStackTrace();
-        //}
+        FileTransferer.upload(outputStream, container);
     }
 
-    public void download(String path, ObjectInputStream inputStream){
+    public void download(ObjectInputStream inputStream, String path){
 
+        FileTransferer.download(inputStream, path);
 
-                    FileTransferer.download(inputStream, path);
-
-      /*          try {
-
-                    //InputStream input = socket.getInputStream();
-
-
-                    //input.close();
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException ex){
-            ex.getMessage();
-        }
-
-        return downloadedFile;*/
     }
 
     public void saveFile(File file){

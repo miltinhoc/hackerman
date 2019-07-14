@@ -7,7 +7,7 @@ import org.academiadecodigo.codezillas.Server.Navigation;
 public enum NavigationPossibilitiesType {
 
     INITIAL_MENU(Navigation.clientMenu()),
-    DOWNLOAD_MENU(Navigation.downloadMenu(NavigationUtils.files)), //TODO: add path
+    DOWNLOAD_MENU(Navigation.downloadMenu(FileManager.listAllFiles())), //TODO: add path
     ACCEPT_NEW_CONNECTION_MENU(Navigation.acceptConnectionMenu("An user")), //TODO: add user
     ONLINE_CLIENTS_MENU(Navigation.onlineClientsMenu(new String[]{"User1, User2"})), //TODO: add online clients
     UPLOAD_MESSAGE(Navigation.uploadMessage()),

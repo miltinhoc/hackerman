@@ -1,6 +1,6 @@
 package org.academiadecodigo.codezillas.Client;
 
-import org.academiadecodigo.codezillas.Connectable;
+import org.academiadecodigo.bootcamp.scanners.string.StringInputScanner;
 import org.academiadecodigo.codezillas.FileServices.FileContainer;
 import org.academiadecodigo.codezillas.FileServices.FileManager;
 import org.academiadecodigo.codezillas.FileServices.FileTransferer;
@@ -11,7 +11,7 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class Client extends Peer implements Connectable {
+public class Client extends Peer {
 
     private Socket serverSocket;
     private Socket peerSocket;
@@ -72,7 +72,6 @@ public class Client extends Peer implements Connectable {
         while (serverSocket.isBound()) {
 
             String[] command = promptHandler.handleRequests(inputStream, outputStream);
-            System.out.println("entrei no client");
             System.out.println(command[0]);
             switch (command[0]) {
 
@@ -84,11 +83,17 @@ public class Client extends Peer implements Connectable {
                     host.start(command[1]);
 
                 case Commands.DOWNLOAD:
-                    //download(command[1]);
+                    System.out.println("client download");
+                    super.download(inputStream, "clienthome/receive.txt");
+                    try {
+                        outputStream.writeObject(new ClientRequest(Commands.MENU, "yes"));
+                        outputStream.flush();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                     break;
 
                 case "upload":
-                    System.out.println("entrei no switch upload");
                     uploadToServer(command[1]);
                     break;
             }
@@ -130,10 +135,6 @@ public class Client extends Peer implements Connectable {
 
     } */
 
-    //private void download(String path) {
-    //    super.download(path, serverSocket);
-    //}
-
     @Override
     public void shutdown() {
 
@@ -155,7 +156,7 @@ public class Client extends Peer implements Connectable {
     //--------------------------------------------> Host class <------------------------------------------------------//
     //................................................................................................................//
 
-    private class Host extends Peer implements Connectable {
+    private class Host extends Peer {
 
         private ServerSocket serverSocket;
         private Socket connectionSocket;

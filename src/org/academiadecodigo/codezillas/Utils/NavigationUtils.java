@@ -8,23 +8,23 @@ import java.util.Map;
 
 public class NavigationUtils {
 
-    public static String[] files = {"file1", "file2"};
 
+    public static final String SET_NICKNAME_MESSAGE = "???WTF REIMAO STOP CHANGING SHIT" ;
     public static Map<NavigationPossibilitiesType, NavigationPossibilities> menuMap;
 
-    public static String WELCOME_MESSAGE = "<Welcome to WireMonkey>\n";
+    public static String WELCOME_MESSAGE = ASCII.CLIENTINTRO + "\n" + "Welcome to <BROS Relay Oriented System >";
 
-    public static String SET_NICKNAME_MESSAGE = "Enter Nickname: ";
+    public static String SET_NICKNAME = "Choose Nickname: ";
 
-    public static String SELECT_MENU_MESSAGE = "Logged as ";
+    public static String SET_VALID_NICKNAME = "Nickname already in use, please choose a different one: ";
 
-    public static String[] SELECT_MENU_OPTION = {"Upload File to Server", "Download File from Server", "Send File to User"};
+    public static String SELECT_MENU_MESSAGE = "Logged in as ";
 
-    public static String[] ACCEPT_CONNECTION_OPTIONS = {"Yes","No"};
+    public static String[] SELECT_MENU_OPTION = {"Upload File", "Download File", "Direct File Transfer"};
 
-    public static String SHOW_CLIENTS_MENU_MESSAGE = "Clients currently Logged to Server:";
+    public static String SHOW_CLIENTS_MENU = "Currently logged users: ";
 
-    public static String CLIENT_NOT_FOUND = "Client not Found";
+    public static String CLIENT_NOT_FOUND = "User Not Found";
 
     public static String[] INIT_CONNECTION_MENU_OPTIONS = {"LOGIN", "CREATE ACCOUNT", "QUIT"};
 
@@ -32,14 +32,19 @@ public class NavigationUtils {
 
     public static String LOGIN_NICKNAME = "Enter Nickname:";
 
-    public static String UPLOAD_MESSAGE = "Enter upload path: ";
+    public static String UPLOAD_MESSAGE = "Enter path to file:";
 
     public static String DOWNLOAD_MESSAGE = "Select file to download:";
 
-    public static String TRANSFER_FILE_MESSAGE = "Select Client you wish to connect:";
+    public static String TRANSFER_FILE_MESSAGE = "Choose user to send file: ";
 
+    public static String[] ACCEPT_CONNECTION_OPTIONS = {"Yes","No"};
 
-    public static String ACCEPT_CONNECTION_MESSAGE = " wants to connect. Accept connection:";
+    public static String ACCEPT_CONNECTION_MESSAGE = " wants to send you file xyz. \n Accept transfer?";
+
+    public static String LOGGEDIN(String nickname){
+        return SELECT_MENU_MESSAGE + nickname;
+    }
     //TODO: check messages;
 
     public static void initMap(){
@@ -48,7 +53,7 @@ public class NavigationUtils {
 
         menuMap.put(NavigationPossibilitiesType.INITIAL_MENU, new NavigationPossibilities(Navigation.clientMenu(), setPossibilitiesType(), new String[]{Commands.UPLOAD, Commands.MENU, Commands.MENU}));
 
-        menuMap.put(NavigationPossibilitiesType.DOWNLOAD_MENU, new NavigationPossibilities(Navigation.downloadMenu(new String[]{"File1, File2"}), new String[]{Commands.DOWNLOAD})); //TODO: check path
+        menuMap.put(NavigationPossibilitiesType.DOWNLOAD_MENU, new NavigationPossibilities(Navigation.downloadMenu(FileManager.listAllFiles()), new String[]{Commands.DOWNLOAD})); //TODO: check path
 
         menuMap.put(NavigationPossibilitiesType.ACCEPT_NEW_CONNECTION_MENU, new NavigationPossibilities(Navigation.acceptConnectionMenu("An user"), new String[]{Commands.IP})); //TODO: add nick
 
