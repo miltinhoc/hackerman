@@ -71,7 +71,7 @@ class PromptHandler {
                     //TODO: Servidor tem de perguntar onde quero guardar o ficheiro na cloud
 
                     String[] pathUpload = (Commands.UPLOAD + uploadRequestHandler((StringInputScanner) serverRequest.getInputScanner())).split("/");
-                    write(new ClientRequest(Commands.STRING, pathUpload[2]));
+                    write(new ClientRequest(Commands.STRING, "yes"));
                     return pathUpload;
 
                 case Commands.IP:

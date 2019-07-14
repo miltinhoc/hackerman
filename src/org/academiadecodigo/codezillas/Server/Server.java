@@ -10,6 +10,7 @@ import java.net.Socket;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -109,8 +110,6 @@ public class Server {
         public void handle() throws IOException{
 
             System.out.println("HANDLING CLIENT: OK");
-            ServerRequest serverRequest = new ServerRequest(Commands.MENU, Navigation.clientMenu());
-            respondRequest(serverRequest);
 
             if(!firstMenu){
                 respondRequest(requestHandler.initMenu());
@@ -120,7 +119,7 @@ public class Server {
             try {
 
                 ClientRequest clientRequest = (ClientRequest) inputStream.readObject();
-                respondRequest(requestHandler.handleStart(clientRequest));
+                respondRequest(requestHandler.handleRequest(clientRequest));
 
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
@@ -152,6 +151,22 @@ public class Server {
                 e.printStackTrace();
             }
         }
+
+        public String[] loggedClients(){
+
+            Set<String> nicknames = clientList.keySet();
+            String[] clientsLoggedIn = new String[nicknames.size()];
+
+            int counter = 0;
+
+            for (String n: nicknames) {                     //TODO: change to Array method
+                clientsLoggedIn[counter] = n;
+                counter++;
+            }
+
+            return clientsLoggedIn;
+        }
+
     }
 
 }

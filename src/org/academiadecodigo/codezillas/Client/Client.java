@@ -8,7 +8,6 @@ import org.academiadecodigo.codezillas.Utils.Defaults;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Scanner;
 
 public class Client extends Peer implements Connectable {
 
@@ -79,14 +78,14 @@ public class Client extends Peer implements Connectable {
                     break;
 
                 case Commands.RECEIVE_FILE:
-                    host.start(command[2]);
+                    host.start(command[1]);
 
                 case Commands.DOWNLOAD:
                     download(command[1]);
                     break;
 
                 case Commands.UPLOAD:
-                    uploadToServer();
+                    uploadToServer(command[1]);
                     break;
             }
         }
@@ -95,7 +94,7 @@ public class Client extends Peer implements Connectable {
     private void peerToPeerTransfer(String ip) {
 
             connectToPeer(ip);
-            sendToPeer();
+            //sendToPeer();
 
     }
 
@@ -109,27 +108,23 @@ public class Client extends Peer implements Connectable {
 
     }
 
-    private void uploadToServer() {
+    private void uploadToServer(String path) {
 
-        File file = fileToUpload();
+        File file = fileToUpload(path);
         super.write(file, serverSocket);
     }
 
-    private File fileToUpload() {
-
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Insert the path of the file you want to send: "); //TODO: check message
-        String path = scanner.nextLine();
+    private File fileToUpload(String path) {
 
         return FileManager.loadFile(path);
     }
 
-    private void sendToPeer() {
+   /* private void sendToPeer() {
 
         File file = fileToUpload();
         super.write(file, peerSocket);
 
-    }
+    } */
 
     private void download(String path) {
         super.download(path, serverSocket);

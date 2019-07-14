@@ -1,65 +1,85 @@
 package org.academiadecodigo.codezillas.Server;
 
+import org.academiadecodigo.bootcamp.InputScanner;
 import org.academiadecodigo.codezillas.Client.ClientRequest;
-import org.academiadecodigo.codezillas.FileServices.FileManager;
 import org.academiadecodigo.codezillas.Utils.Commands;
+import org.academiadecodigo.codezillas.Utils.NavigationPossibilites;
+import org.academiadecodigo.codezillas.Utils.NavigationPossibilitesType;
+import org.academiadecodigo.codezillas.Utils.NavigationUtils;
+
+import java.util.Map;
 
 public class RequestHandler {
 
-    private int menuPosition;
+    private NavigationPossibilitesType navigationPossibilitesType;
+    private Map<NavigationPossibilitesType, NavigationPossibilites> possibilitesMap;
 
-    public RequestHandler() { }
+    public RequestHandler() {
+        NavigationUtils.initMap();
+        possibilitesMap = NavigationUtils.menuMap;
+    }
 
-    public ServerRequest handleStart(ClientRequest clientRequest){
+    public ServerRequest handleRequest(ClientRequest clientRequest){
 
         String command = clientRequest.getCommand();
-        String answerString = clientRequest.getAnswerString();
-        int answerInt = clientRequest.getAnswerInt();
+        ServerRequest serverRequest = null;
 
-        ServerRequest serverRequest = handleRequest(command, answerString, answerInt);
+        switch (command){
 
+            case Commands.INT:
+                analyzeIntAnswer(clientRequest.getAnswerInt());
+                break;
+
+            case Commands.STRING:
+
+                //TODO: add logic
+                break;
+
+        }
         return serverRequest;
     }
 
-    private ServerRequest handleRequest(String command, String answerString, int answerInt) {
+    private NavigationPossibilitesType[] options(){
 
-        if (command.equals(Commands.INT) && answerString == null && answerInt == 1 && menuPosition == 1) {
-            menuPosition = 0;
-            System.out.println("RequestHandler: menu position " + menuPosition);
-            return new ServerRequest(Commands.QUESTION, Navigation.uploadMenu());
-        }
+        return possibilitesMap.get(navigationPossibilitesType).getOptionsType();
 
-        if (command.equals(Commands.INT) && answerString == null && answerInt == 2 && menuPosition == 1) {
-            menuPosition = 2;
-            System.out.println("RequestHandler: menu position " + menuPosition);
-            return new ServerRequest(Commands.MENU, Navigation.downloadMenu(FileManager.listAllPathContent(""))); //TODO:check listAllPaths content method implementation
-        }
-
-        if (command.equals(Commands.INT) && answerString == null && answerInt == 3 && menuPosition == 1) {
-            menuPosition = 2;
-            System.out.println("RequestHandler: menu position " + menuPosition);
-            return new ServerRequest(Commands.MENU, Navigation.transferFileMenu(new String[]{"3","4"}));
-        }
-
-        if (command.equals(Commands.INT) && answerString == null && answerInt == 1 && menuPosition == 2) {
-            menuPosition = 0;
-            System.out.println("RequestHandler: menu position " + menuPosition);
-            return new ServerRequest(Commands.MENU, Navigation.acceptConnectionMenu("Yo BRO"));
-        }
-        return null;
     }
 
-    public ServerRequest initMenu() {
-        menuPosition = 1;
-        System.out.println("RequestHandler: menu position " + menuPosition);
+    private String[] nextCommands(){
+        return possibilitesMap.get(navigationPossibilitesType).getNextCommand();
+    }
+
+    private ServerRequest analyzeIntAnswer(int answer){
+
+         NavigationPossibilitesType[] options = options();
+         String[] nextComands = nextCommands();
+
+         InputScanner inputScanner = null;
+         String command = "";
+
+        for (int i = 0; i < options.length ; i++) {
+
+            if(answer - 1 == i){
+                inputScanner = options[i].getInputScanner();
+            }
+        }
+
+        for (int i = 0; i < nextComands.length; i++) {
+
+            if(answer - 1 == i){
+                command = nextComands[i];
+            }
+        }
+
+        return new ServerRequest(command, inputScanner);
+
+    }
+
+    public ServerRequest initMenu(){
+        navigationPossibilitesType = NavigationPossibilitesType.INITIAL_MENU;
         return new ServerRequest(Commands.MENU, Navigation.clientMenu());
     }
 
-    /*
-    public ServerRequest initLoginMenu() {
-        menuPosition = 0;
-        System.out.println("RequestHandler: menu position " + menuPosition);
-        return new ServerRequest(Commands.MENU, Navigation.loginRegisterMenu());
-    }
-    */
 }
+
+

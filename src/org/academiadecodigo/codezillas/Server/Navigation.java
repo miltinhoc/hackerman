@@ -18,7 +18,7 @@ public class Navigation {
         return showMenu(NavigationUtils.SELECT_MENU_OPTION, NavigationUtils.SELECT_MENU_MESSAGE);
     }
 
-    public static InputScanner uploadMenu() {
+    public static InputScanner uploadMessage() {
         return stringScanner(NavigationUtils.UPLOAD_MESSAGE);
     }
 
@@ -26,8 +26,12 @@ public class Navigation {
         return showMenu(menuOptions(availableDownloadFiles), NavigationUtils.DOWNLOAD_MESSAGE);
     }
 
-    public static InputScanner transferFileMenu(String[] clientsLogged) {
+    public static InputScanner onlineClientsMenu(String[] clientsLogged) {
         return showMenu(menuOptions(clientsLogged), NavigationUtils.TRANSFER_FILE_MESSAGE);
+    }
+
+    public static InputScanner setNickname(){
+        return stringScanner(NavigationUtils.SET_NICKNAME_MESSAGE);
     }
 
     public static InputScanner acceptConnectionMenu(String requestingClientNickname) {
