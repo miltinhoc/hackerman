@@ -120,7 +120,7 @@ public class Server {
             try {
 
                 ClientRequest clientRequest = (ClientRequest) inputStream.readObject();
-                respondRequest(requestHandler.handleStart(clientRequest));
+                respondRequest(requestHandler.handleStart(clientRequest, nickname));
 
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();

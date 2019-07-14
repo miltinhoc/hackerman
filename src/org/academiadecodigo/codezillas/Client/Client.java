@@ -4,6 +4,7 @@ import org.academiadecodigo.codezillas.Connectable;
 import org.academiadecodigo.codezillas.FileServices.FileManager;
 import org.academiadecodigo.codezillas.Utils.Commands;
 import org.academiadecodigo.codezillas.Utils.Defaults;
+import org.academiadecodigo.codezillas.Utils.NavigationUtils;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -138,7 +139,7 @@ public class Client extends Peer implements Connectable {
     private File fileToUpload() {
 
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Insert the path of the file you want to upload"); //TODO: check message
+        System.out.println(NavigationUtils.UPLOAD_MESSAGE); //TODO: check message
         String path = scanner.nextLine();
 
         return FileManager.loadFile(path);

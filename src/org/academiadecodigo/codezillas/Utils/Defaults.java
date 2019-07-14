@@ -8,7 +8,7 @@ public class Defaults {
 
     public static final String CONNECTION_ERROR = "Server failed to start.";
     public static final String CLIENT_CONNECT_ERROR = "Failed to connect to client!";
-    public static final String CONNECTION_OK = "Sucessfully connected to client: ";
+    public static final String CONNECTION_OK = "Successfully connected to client: ";
 
     public static int rng(){return (int) ((Math.random() * 10000) + 1000);}
 

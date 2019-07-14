@@ -13,6 +13,26 @@ public abstract class FileTransferer {
      */
     public static void upload(OutputStream outputStream, File file){
 
+        DataOutputStream out = new DataOutputStream(new BufferedOutputStream(outputStream));
+
+        int count;
+        byte[] buffer = new byte[16*1024];
+
+        try {
+
+            InputStream inputStream = new FileInputStream(file);
+
+            while ( (count = inputStream.read(buffer)) > 0 ){
+                out.write(buffer, 0, count);
+            }
+
+            out.close();
+            inputStream.close();
+
+        }catch (IOException e){
+            System.out.println(e.getMessage());
+        }
+
         if (file.exists()){
 
             try {
@@ -33,10 +53,16 @@ public abstract class FileTransferer {
 
         try {
 
-            byte[] file = inputStream.readAllBytes();
-            FileOutputStream fileOutputStream = new FileOutputStream(path);
+            DataInputStream in = new DataInputStream(new BufferedInputStream(inputStream));
+            OutputStream outputStream = new FileOutputStream(path);
 
-            fileOutputStream.write(file);
+            byte[] buffer = new byte[16*1024];
+            int count;
+
+            while ( (count = in.read(buffer)) > 0 ){
+                int a = 1;
+                outputStream.write(buffer, 0, count);
+            }
 
         } catch (IOException e) {
             System.err.println(e.getMessage());

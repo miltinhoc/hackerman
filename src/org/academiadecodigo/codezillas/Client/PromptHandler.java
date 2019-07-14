@@ -56,15 +56,12 @@ class PromptHandler {
 
                     //TODO: Servidor tem de perguntar onde vou guardar o ficheiro
 
-                    String[] pathReceive = ((Commands.RECEIVE_FILE + receiveFileRequestHandler((StringInputScanner) serverRequest.getInputScanner())).split("/"));
-                    return pathReceive;
+                    return ((Commands.RECEIVE_FILE + receiveFileRequestHandler((StringInputScanner) serverRequest.getInputScanner())).split("/"));
 
                 case Commands.DOWNLOAD:
 
                     //TODO: Servidor tem de perguntar onde vou guardar o ficheiro
-
-                    String[] pathDownload = (Commands.DOWNLOAD + downloadRequestHandler((StringInputScanner) serverRequest.getInputScanner())).split("/");
-                    return pathDownload;
+                    return (Commands.DOWNLOAD + downloadRequestHandler((StringInputScanner) serverRequest.getInputScanner())).split("/");
 
                 case Commands.UPLOAD:
 
