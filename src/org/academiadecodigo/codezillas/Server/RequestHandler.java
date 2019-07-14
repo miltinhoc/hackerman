@@ -98,11 +98,23 @@ public class RequestHandler {
         return initMenu();
     }
 
-    public ServerRequest initMenu(){
+    public ServerRequest initMenu(String nickname){
+        navigationPossibilitiesType = NavigationPossibilitiesType.INITIAL_MENU;
+        return new ServerRequest(Commands.MENU, Navigation.clientMenu(nickname));
+    }
+    public ServerRequest initMenu( ){
         navigationPossibilitiesType = NavigationPossibilitiesType.INITIAL_MENU;
         return new ServerRequest(Commands.MENU, Navigation.clientMenu());
     }
 
+
+    public ServerRequest getNickname(){
+        return new ServerRequest(Commands.QUESTION, Navigation.getLogin());
+    }
+
+    public ServerRequest invalidNickname(){
+        return new ServerRequest(Commands.QUESTION, Navigation.getValidLogin());
+    }
 }
 
 

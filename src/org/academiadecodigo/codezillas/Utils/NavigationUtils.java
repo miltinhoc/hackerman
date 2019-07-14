@@ -8,6 +8,7 @@ import java.util.Map;
 
 public class NavigationUtils {
 
+    public static final String SET_NICKNAME_MESSAGE = "???WTF REIMAO STOP CHANGING SHIT" ;
     public static Map<NavigationPossibilitiesType, NavigationPossibilities> menuMap;
 
     public static String WELCOME_MESSAGE = ASCII.CLIENTINTRO + "\n" + "Welcome to <BROS Relay Oriented System >";

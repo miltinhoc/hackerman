@@ -4,6 +4,7 @@ import org.academiadecodigo.bootcamp.InputScanner;
 import org.academiadecodigo.bootcamp.scanners.menu.MenuInputScanner;
 import org.academiadecodigo.bootcamp.scanners.string.StringInputScanner;
 import org.academiadecodigo.codezillas.Utils.ASCII;
+import org.academiadecodigo.codezillas.Utils.Defaults;
 import org.academiadecodigo.codezillas.Utils.NavigationUtils;
 
 public class Navigation {
@@ -15,9 +16,17 @@ public class Navigation {
         return showMenu(NavigationUtils.INIT_CONNECTION_MENU_OPTIONS, NavigationUtils.INIT_CONNECTION_MENU_MESSAGE);
     }
 
-    public static InputScanner clientMenu(String nick) {
-        return showMenu(NavigationUtils.SELECT_MENU_OPTION, NavigationUtils.LOGGEDIN(nick));
+    public static InputScanner clientMenu(String nickname) {
+        return showMenu(NavigationUtils.SELECT_MENU_OPTION, NavigationUtils.LOGGEDIN(nickname));
     }
+
+    public static InputScanner clientMenu(){
+        return showMenu(NavigationUtils.SELECT_MENU_OPTION, Defaults.WELCOME);
+    }
+
+   /* public static InputScanner clientMenu( ) {
+        return showMenu(NavigationUtils.SELECT_MENU_OPTION, NavigationUtils.LOGGEDIN(S));
+    } */
 
     public static InputScanner uploadMessage() {
         return stringScanner(NavigationUtils.UPLOAD_MESSAGE);
