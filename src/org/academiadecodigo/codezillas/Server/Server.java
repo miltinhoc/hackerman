@@ -33,20 +33,20 @@ public class Server {
     }
 
     public void start(){
-        System.out.println(ASCII.SERVERINTRO);
-        System.out.println("SERVER BOOT: OK");
+        System.out.println(ASCII.SERVERINTRO + "\n" + Defaults.SERVER_BOOT);
         waitForConnections();
     }
 
     private void waitForConnections(){
 
-        System.out.println("Now waiting for connections...");
+        System.out.println(Defaults.WAITING);
+
         while (true){
 
             try {
 
                 servicePool.submit(new ClientHandler(serverSocket.accept()));
-                System.out.println(Defaults.CONNECTION_OK); //TODO: Include client IP and Port
+                System.out.println(Defaults.NEW_CONNECTION + "\n" + Defaults.CONNECTION_OK );
 
             } catch (IOException e) {
                 System.err.println(Defaults.CONNECTION_ERROR);
@@ -59,17 +59,16 @@ public class Server {
 
     public void shutdown(){
         try {
-            System.out.println("Shutting down server.");
+            System.err.println(Defaults.SHUTDOWN);
             serverSocket.close();
             System.exit(1);
         } catch (IOException e) {
-            System.out.println("Failed to Shutdown Server.");
+            System.err.println(Defaults.SHUTDOWN_FAIL);
             e.printStackTrace();
         }
     }
 
-    //package-private
-    String[] getActiveClientsNames(){
+    private String[] getActiveClientsNames(){
         return clientList.keySet().toArray(new String[0]);
     }
 
@@ -100,13 +99,6 @@ public class Server {
 
         }
 
-        public void setup(){
-            //prompt getnickname;
-
-            clientList.put(nickname, this);
-            System.out.println(Defaults.userDetails(nickname, client.getInetAddress().toString()));
-        }
-
         public void setupStream(){
             try {
                 inputStream = new ObjectInputStream(client.getInputStream());
@@ -115,33 +107,47 @@ public class Server {
                 System.out.println();
                 e.printStackTrace();
             }
-            System.out.println("CLIENT STREAMS SETUP: OK");
+            System.out.println(Defaults.STREAMS);
         }
 
         public void login(){
 
             respondRequest(requestHandler.getNickname());
-            logged = true;
-            ClientRequest clientRequest = null;
 
             try {
-                clientRequest = (ClientRequest) inputStream.readObject();
+
+                ClientRequest clientRequest = (ClientRequest) inputStream.readObject();
+
+                nickname = clientRequest.getAnswerString().trim().isEmpty() ?
+                        "Bro" + Defaults.rng() : clientRequest.getAnswerString();
+
+                validateLogin(nickname);
+
             } catch (IOException | ClassNotFoundException e) {
-                e.printStackTrace();
+                System.err.println("User " + nickname + " disconnected abruptly");
+                close();
             }
 
-            nickname = clientRequest.getAnswerString().trim().isEmpty() ?
-                    "Bro" + Defaults.rng() : clientRequest.getAnswerString();
+            logged = true;
+
+            System.out.println(Defaults.userDetails(nickname, client.getInetAddress().toString()));
+        }
+
+        public void validateLogin(String nickname) throws IOException, ClassNotFoundException{
+
+            while(clientList.containsKey(nickname)){
+                respondRequest(requestHandler.invalidNickname());
+                ClientRequest clientRequest = (ClientRequest) inputStream.readObject();
+                nickname = clientRequest.getAnswerString();
+            }
 
             clientList.put(nickname, this);
 
-            System.out.println("Client nickname is now " + nickname);
-            System.out.println(Defaults.userDetails(nickname, client.getInetAddress().toString()));
         }
 
         public void handle() throws IOException{
 
-            System.out.println("HANDLING CLIENT: OK");
+            System.out.println(Defaults.HANDLING_CLIENT);
             while(true){
                 try {
 
@@ -152,10 +158,13 @@ public class Server {
 
                     ClientRequest clientRequest = (ClientRequest) inputStream.readObject();
                     respondRequest(requestHandler.handleStart(clientRequest, nickname));
-                    System.out.println("nickname");
 
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();
+                } catch (EOFException EOFE){
+                    System.err.println("User " + nickname + " disconnected abruptly");
+                    close();
+                    break;
                 }
             }
 
@@ -172,7 +181,6 @@ public class Server {
 
         }
 
-
         public void close(){
             try {
                 clientList.remove(this.nickname);
@@ -180,7 +188,7 @@ public class Server {
                 System.out.println("CLIENT " + nickname + " DISCONNECT: OK");
 
             } catch (IOException e) {
-                System.err.println("System exiting error");
+                System.err.println(Defaults.DISCONNECT_FAIL);
                 e.printStackTrace();
             }
         }

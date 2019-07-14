@@ -4,12 +4,13 @@ public class NavigationUtils {
 
     public static String WELCOME_MESSAGE = ASCII.CLIENTINTRO + "\n" + "Welcome to <BROS Relay Oriented System >";
 
-    public static String SET_NICKNAME_MESSAGE = "Choose Nickname: ";
+    public static String SET_NICKNAME = "Choose Nickname: ";
+    public static String SET_VALID_NICKNAME = "Nickname already in use, please choose a different one: ";
 
     public static String SELECT_MENU_MESSAGE = "Logged in as ";
     public static String[] SELECT_MENU_OPTION = {"Upload File", "Download File", "Direct File Transfer"};
 
-    public static String SHOW_CLIENTS_MENU_MESSAGE = "Currently logged users: ";
+    public static String SHOW_CLIENTS_MENU = "Currently logged users: ";
 
     public static String CLIENT_NOT_FOUND = "User Not Found";
 

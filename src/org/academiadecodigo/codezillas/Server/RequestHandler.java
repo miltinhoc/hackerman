@@ -66,6 +66,10 @@ public class RequestHandler {
         return new ServerRequest(Commands.QUESTION, Navigation.getLogin());
     }
 
+    public ServerRequest invalidNickname(){
+        return new ServerRequest(Commands.QUESTION, Navigation.getValidLogin());
+    }
+
     public ServerRequest initMenu(String nickname) {
         menuPosition = 1;
         System.out.println("RequestHandler: menu position " + menuPosition);

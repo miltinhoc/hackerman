@@ -36,7 +36,11 @@ public class Navigation {
     }
 
     public static InputScanner getLogin(){
-        return stringScanner(ASCII.CLIENTINTRO + "\n" + NavigationUtils.SET_NICKNAME_MESSAGE);
+        return stringScanner(ASCII.CLIENTINTRO + "\n" + NavigationUtils.SET_NICKNAME);
+    }
+
+    public static InputScanner getValidLogin() {
+        return stringScanner(ASCII.CLIENTINTRO + "\n" + NavigationUtils.SET_VALID_NICKNAME);
     }
 
     private static String[] menuOptions(String[] array) {
