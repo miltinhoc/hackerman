@@ -8,6 +8,8 @@ import java.util.Map;
 
 public class NavigationUtils {
 
+    public static String[] files = {"file1", "file2"};
+
     public static Map<NavigationPossibilitiesType, NavigationPossibilities> menuMap;
 
     public static String WELCOME_MESSAGE = "<Welcome to WireMonkey>\n";

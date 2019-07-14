@@ -3,6 +3,7 @@ package org.academiadecodigo.codezillas.Client;
 import org.academiadecodigo.bootcamp.Prompt;
 import org.academiadecodigo.bootcamp.scanners.menu.MenuInputScanner;
 import org.academiadecodigo.bootcamp.scanners.string.StringInputScanner;
+import org.academiadecodigo.codezillas.FileServices.FileManager;
 import org.academiadecodigo.codezillas.Server.ServerRequest;
 import org.academiadecodigo.codezillas.Utils.Commands;
 
@@ -66,9 +67,16 @@ class PromptHandler {
 
                     String[] pathUpload = (Commands.UPLOAD + uploadRequestHandler((StringInputScanner) serverRequest.getInputScanner())).split("/");
                     System.out.println("escrevi");
-                    write(new ClientRequest(Commands.STRING, "yes"));
-                    System.out.println("enviei");
-                    return pathUpload;
+                    File file = new File(pathUpload[1]);
+
+                    if(file.exists()){
+                        write(new ClientRequest(Commands.STRING, "yes"));
+                        System.out.println("enviei");
+                        return pathUpload;
+                    }
+                    System.err.println("File doesn't exist");
+                    write(new ClientRequest(Commands.STRING, "no"));
+                    break;
 
                 case Commands.IP:
 

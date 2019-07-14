@@ -9,22 +9,22 @@ public abstract class FileTransferer {
     /**
      *
      * @param outputStream
-     * @param file
+     * @param container
      */
-    public static void upload(ObjectOutputStream outputStream, FileContainer file){
+    public static void upload(ObjectOutputStream outputStream, FileContainer container){
 
-        //if (file.exists()){
+        if (container.getFile() != null){
 
             try {
                 System.out.println("uploading");
-                outputStream.writeObject(file);
+                outputStream.writeObject(container);
                 outputStream.flush();
                 System.out.println("uploaded");
 
             } catch (IOException e) {
                 System.err.println(e.getMessage());
             }
-        //}
+        }
     }
 
     /**
@@ -42,6 +42,7 @@ public abstract class FileTransferer {
             FileContainer container = (FileContainer) inputStream.readObject();
 
             File file = container.getFile();
+
             System.out.println("File downloaded");
             System.out.println(file.getAbsolutePath());
 
@@ -58,6 +59,5 @@ public abstract class FileTransferer {
         } catch (ClassNotFoundException e){
             System.err.println("Class not found");
         }
-        //return new File(path);
     }
 }

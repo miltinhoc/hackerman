@@ -3,6 +3,7 @@ package org.academiadecodigo.codezillas.Client;
 import org.academiadecodigo.codezillas.Connectable;
 import org.academiadecodigo.codezillas.FileServices.FileContainer;
 import org.academiadecodigo.codezillas.FileServices.FileManager;
+import org.academiadecodigo.codezillas.FileServices.FileTransferer;
 import org.academiadecodigo.codezillas.Utils.Commands;
 import org.academiadecodigo.codezillas.Utils.Defaults;
 
