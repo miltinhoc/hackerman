@@ -8,11 +8,18 @@ public class ServerRequest implements Serializable {
 
     private String command;
     private String ip;
+    private String message;
     private InputScanner inputScanner;
 
     public ServerRequest(String command, InputScanner inputScanner) {
         this.command = command;
         this.inputScanner = inputScanner;
+    }
+
+    public ServerRequest(InputScanner inputScanner, String message){
+        this.inputScanner = inputScanner;
+        this.message = message;
+
     }
 
     public ServerRequest(String command, InputScanner inputScanner, String ip) {
