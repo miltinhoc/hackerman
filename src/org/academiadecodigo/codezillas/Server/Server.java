@@ -109,6 +109,8 @@ public class Server {
         public void handle() throws IOException{
 
             System.out.println("HANDLING CLIENT: OK");
+            ServerRequest serverRequest = new ServerRequest(Commands.MENU, Navigation.clientMenu());
+            respondRequest(serverRequest);
 
             if(!firstMenu){
                 respondRequest(requestHandler.initMenu());

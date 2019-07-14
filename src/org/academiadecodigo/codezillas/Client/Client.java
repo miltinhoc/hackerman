@@ -18,41 +18,55 @@ public class Client extends Peer implements Connectable {
     private BufferedReader reader;
     private PrintWriter writer;
     private Host host;
+    private ObjectOutputStream outputStream;
+    private ObjectInputStream inputStream;
     private PromptHandler promptHandler;
 
 
     public Client(String nickname) {
         this.nickname = nickname;
         host = new Host();
+        promptHandler = new PromptHandler();
     }
 
-     public void start(){
+    public void start() {
 
         init();
         serverCommunication();
 
     }
 
-    private void init(){
+    private void init() {
         connectToServer();
-        initPromptHandler(serverSocket);
     }
 
-    public void connectToServer(){
+    private void connectToServer() {
 
         try {
-            serverSocket = new Socket("localhost",Defaults.SERVER_PORT);
+
+            serverSocket = new Socket("localhost", Defaults.SERVER_PORT);
+            setUpStreams();
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("Something went wrong while trying to connect to the server");
         }
 
     }
 
-    private void initPromptHandler(Socket socket){
-        promptHandler = new PromptHandler(socket);
+    private void setUpStreams() {
+
+        try {
+
+            outputStream = new ObjectOutputStream(serverSocket.getOutputStream());
+            inputStream = new ObjectInputStream(serverSocket.getInputStream());
+            System.out.println("Streams opened"); //TODO: erase when debugging is done
+
+        } catch (IOException ex){
+            System.err.println("Something went Wrong while opening Client Streams");
+        }
     }
 
-    private void peerToPeerTransfer(String nickname, File file){
+
+    private void peerToPeerTransfer(String nickname, File file) {
 
         requestPeerConnection(nickname);
 
@@ -61,7 +75,7 @@ public class Client extends Peer implements Connectable {
             System.out.println("Waiting for a confirmation..."); //TODO: Check message; defaults?
             String answer = reader.readLine();
 
-            if (answer.toLowerCase().equals("no")){
+            if (answer.toLowerCase().equals("no")) {
                 System.out.println("The other client refused the connection."); //TODO: Check message; defaults?
                 return;
             }
@@ -79,9 +93,9 @@ public class Client extends Peer implements Connectable {
 
         while (serverSocket.isBound()) {
 
-            String[] command = promptHandler.handleRequests();
+            String[] command = promptHandler.handleRequests(inputStream, outputStream);
 
-            switch (command[0]){
+            switch (command[0]) {
 
                 case Commands.IP:
 
@@ -101,11 +115,11 @@ public class Client extends Peer implements Connectable {
         }
     }
 
-    private void requestPeerConnection(String nickname){
+    private void requestPeerConnection(String nickname) {
         writer.println("/request" + nickname);
     }
 
-    public void connectToPeer(String ip){
+    public void connectToPeer(String ip) {
 
         try {
             peerSocket = new Socket(ip, Defaults.CLIENT_PORT);
@@ -130,11 +144,11 @@ public class Client extends Peer implements Connectable {
         return FileManager.loadFile(path);
     }
 
-    private void writeToPeer(File file){
+    private void writeToPeer(File file) {
         super.write(file, peerSocket);
     }
 
-    private void download(String path){
+    private void download(String path) {
         super.download(path, serverSocket);
     }
 
@@ -159,12 +173,12 @@ public class Client extends Peer implements Connectable {
     //--------------------------------------------> Host class <------------------------------------------------------//
     //................................................................................................................//
 
-    private class Host extends Peer implements Connectable{
+    private class Host extends Peer implements Connectable {
 
         private ServerSocket serverSocket;
         private Socket connectionSocket;
 
-        public void start(String savePath){
+        public void start(String savePath) {
             initSocket();
             awaitConnection();
             File file = receiveFile(savePath);
@@ -172,7 +186,7 @@ public class Client extends Peer implements Connectable {
             shutdown();
         }
 
-        private void initSocket(){
+        private void initSocket() {
             try {
                 serverSocket = new ServerSocket(Defaults.CLIENT_PORT);
             } catch (IOException e) {

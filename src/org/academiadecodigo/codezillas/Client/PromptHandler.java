@@ -7,32 +7,26 @@ import org.academiadecodigo.codezillas.Server.ServerRequest;
 import org.academiadecodigo.codezillas.Utils.Commands;
 
 import java.io.*;
-import java.net.Socket;
 
-public class PromptHandler {
+class PromptHandler {
 
     private Prompt prompt;
     private ObjectInputStream inputStream;
     private ObjectOutputStream outputStream;
 
 
-    public PromptHandler(Socket socket) {
+    PromptHandler() {
 
-        try {
-
-            inputStream = new ObjectInputStream(socket.getInputStream());
-            outputStream = new ObjectOutputStream(socket.getOutputStream());
             prompt = new Prompt(System.in, System.out);
 
-        } catch (IOException e) {
-            System.err.println("Something went wrong while opening the Client Streams");
-        }
     }
 
-    public String[] handleRequests() {
+    String[] handleRequests(ObjectInputStream inputStream, ObjectOutputStream outputStream) {
+
+        this.inputStream = inputStream;
+        this.outputStream = outputStream;
 
         ServerRequest serverRequest = receiveRequest();
-
         String command = serverRequest.getCommand();
         String[] defaultAnswer = {""};
 
