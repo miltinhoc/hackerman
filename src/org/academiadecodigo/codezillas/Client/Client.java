@@ -1,6 +1,5 @@
 package org.academiadecodigo.codezillas.Client;
 
-import org.academiadecodigo.codezillas.Connectable;
 import org.academiadecodigo.codezillas.FileServices.FileManager;
 import org.academiadecodigo.codezillas.Utils.Commands;
 import org.academiadecodigo.codezillas.Utils.Defaults;
@@ -10,7 +9,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Scanner;
 
-public class Client extends Peer implements Connectable {
+public class Client extends Peer {
 
     private Socket serverSocket;
     private Socket peerSocket;
@@ -67,8 +66,8 @@ public class Client extends Peer implements Connectable {
 
 
     private void serverCommunication() {
-
         while (serverSocket.isBound()) {
+            System.out.println(Defaults.BROS);
 
             String[] command = promptHandler.handleRequests(inputStream, outputStream);
 
@@ -156,7 +155,7 @@ public class Client extends Peer implements Connectable {
     //--------------------------------------------> Host class <------------------------------------------------------//
     //................................................................................................................//
 
-    private class Host extends Peer implements Connectable {
+    private class Host extends Peer {
 
         private ServerSocket serverSocket;
         private Socket connectionSocket;

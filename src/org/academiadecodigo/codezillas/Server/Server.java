@@ -55,6 +55,16 @@ public class Server {
         }
     }
 
+    public void shutdown(){
+        try {
+            System.out.println("Shutting down server.");
+            serverSocket.close();
+        } catch (IOException e) {
+            System.out.println("Failed to Shutdown Server.");
+            e.printStackTrace();
+        }
+    }
+
     //package-private
     String[] getActiveClientsNames(){
         return clientList.keySet().toArray(new String[0]);
@@ -85,6 +95,8 @@ public class Server {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            
+            shutdown();
 
         }
 
@@ -109,8 +121,6 @@ public class Server {
         public void handle() throws IOException{
 
             System.out.println("HANDLING CLIENT: OK");
-            ServerRequest serverRequest = new ServerRequest(Commands.MENU, Navigation.clientMenu());
-            respondRequest(serverRequest);
 
             if(!firstMenu){
                 respondRequest(requestHandler.initMenu());

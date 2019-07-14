@@ -1,14 +1,12 @@
 package org.academiadecodigo.codezillas.Client;
 
-import org.academiadecodigo.codezillas.Connectable;
 import org.academiadecodigo.codezillas.FileServices.FileManager;
 import org.academiadecodigo.codezillas.FileServices.FileTransferer;
 
 import java.io.*;
-import java.net.ServerSocket;
 import java.net.Socket;
 
-public abstract class Peer implements Connectable {
+public abstract class Peer {
 
     public void write(File file, Socket socket){
 
