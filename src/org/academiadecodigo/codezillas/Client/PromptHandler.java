@@ -6,9 +6,7 @@ import org.academiadecodigo.bootcamp.scanners.string.StringInputScanner;
 import org.academiadecodigo.codezillas.Server.ServerRequest;
 import org.academiadecodigo.codezillas.Utils.Commands;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.net.Socket;
 
 public class PromptHandler {
@@ -18,7 +16,7 @@ public class PromptHandler {
     private ObjectOutputStream outputStream;
 
 
-    public PromptHandler(Socket socket){
+    public PromptHandler(Socket socket) {
 
         try {
 
@@ -100,7 +98,7 @@ public class PromptHandler {
         return defaultAnswer; //TODO: check if better alternative to return the ip
     }
 
-    private ServerRequest receiveRequest(){
+     private ServerRequest receiveRequest(){
 
         ServerRequest serverRequest = null;
 

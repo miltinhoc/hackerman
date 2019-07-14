@@ -1,5 +1,6 @@
 package org.academiadecodigo.codezillas.Server;
 
+import org.academiadecodigo.codezillas.Client.ClientRequest;
 import org.academiadecodigo.codezillas.Utils.Commands;
 import org.academiadecodigo.codezillas.Utils.Defaults;
 
@@ -34,6 +35,7 @@ public class Server {
     public void start(){
         System.out.println("SERVER BOOT: OK");
         waitForConnections();
+
     }
 
     private void waitForConnections(){
@@ -61,15 +63,15 @@ public class Server {
     private class ClientHandler implements Runnable{
 
         private Socket client;
-        private ObjectInputStream reader;
-        private ObjectOutputStream writer;
-        private boolean logged;
+        private ObjectInputStream inputStream;
+        private ObjectOutputStream outputStream;
         private String nickname;
         private RequestHandler requestHandler;
+        private boolean firstMenu;
 
         public ClientHandler(Socket client){
             this.client = client;
-            this.requestHandler = new RequestHandler();
+            requestHandler = new RequestHandler();
         }
 
         @Override
@@ -95,8 +97,8 @@ public class Server {
 
         public void setupStream(){
             try {
-                reader = new ObjectInputStream(client.getInputStream());
-                writer = new ObjectOutputStream(client.getOutputStream());
+                inputStream = new ObjectInputStream(client.getInputStream());
+                outputStream = new ObjectOutputStream(client.getOutputStream());
             } catch (IOException e) {
                 System.out.println();
                 e.printStackTrace();
@@ -106,23 +108,29 @@ public class Server {
 
         public void handle() throws IOException{
 
-            if(!logged){
-              //  ServerRequest serverRequest = requestHandler.
+            System.out.println("HANDLING CLIENT: OK");
+
+            if(!firstMenu){
+                respondRequest(requestHandler.initMenu());
+                firstMenu = true;
             }
 
-            System.out.println("HANDLING CLIENT: OK");
-            //TODO: Client-server API goes in here.
+            try {
 
+                ClientRequest clientRequest = (ClientRequest) inputStream.readObject();
+                respondRequest(requestHandler.handleStart(clientRequest));
 
-            //respondRequest(request);
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
 
         }
 
         public void respondRequest(ServerRequest request){
 
             try {
-                writer.writeObject(request);
-                writer.flush();
+                outputStream.writeObject(request);
+                outputStream.flush();
             } catch (IOException e) {
                 e.printStackTrace();
             }
