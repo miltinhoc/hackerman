@@ -61,17 +61,26 @@ public class PromptHandler {
                     break;
 
                 case Commands.RECEIVE_FILE:
+
                     //TODO: Servidor tem de perguntar onde vou guardar o ficheiro
+
                     String[] pathReceive = ((Commands.RECEIVE_FILE + receiveFileRequestHandler((StringInputScanner) serverRequest.getInputScanner())).split("/"));
                     return pathReceive;
 
                 case Commands.DOWNLOAD:
+
                     //TODO: Servidor tem de perguntar onde vou guardar o ficheiro
-                    String[] pathDownloadCommand = (Commands.DOWNLOAD + downloadRequestHandler((StringInputScanner) serverRequest.getInputScanner())).split("/");
-                    return pathDownloadCommand;
+
+                    String[] pathDownload = (Commands.DOWNLOAD + downloadRequestHandler((StringInputScanner) serverRequest.getInputScanner())).split("/");
+                    return pathDownload;
 
                 case Commands.UPLOAD:
 
+                    //TODO: Servidor tem de perguntar onde quero guardar o ficheiro na cloud
+
+                    String[] pathUpload = (Commands.UPLOAD + uploadRequestHandler((StringInputScanner) serverRequest.getInputScanner())).split("/");
+                    write(new ClientRequest(Commands.STRING, pathUpload[2]));
+                    return pathUpload;
 
                 case Commands.IP:
 
@@ -125,6 +134,10 @@ public class PromptHandler {
 
         return prompt.getUserInput(menuInputScanner);
 
+    }
+
+    private String uploadRequestHandler(StringInputScanner stringInputScanner){
+        return prompt.getUserInput(stringInputScanner);
     }
 
     private String downloadRequestHandler(StringInputScanner stringInputScanner){

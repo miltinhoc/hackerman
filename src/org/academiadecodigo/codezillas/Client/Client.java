@@ -84,7 +84,7 @@ public class Client extends Peer implements Connectable {
             switch (command[0]){
 
                 case Commands.IP:
-                    //TODO: add host implementation
+
                     break;
 
                 case Commands.RECEIVE_FILE:
