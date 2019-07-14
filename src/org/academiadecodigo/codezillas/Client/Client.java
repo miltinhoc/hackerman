@@ -1,12 +1,8 @@
 package org.academiadecodigo.codezillas.Client;
 
-import org.academiadecodigo.bootcamp.InputScanner;
-import org.academiadecodigo.bootcamp.Prompt;
 import org.academiadecodigo.codezillas.Connectable;
 import org.academiadecodigo.codezillas.FileServices.FileManager;
-import org.academiadecodigo.codezillas.FileServices.FileTransferer;
-import org.academiadecodigo.codezillas.Request;
-import org.academiadecodigo.codezillas.Server.ServerRequest;
+import org.academiadecodigo.codezillas.Utils.Commands;
 import org.academiadecodigo.codezillas.Utils.Defaults;
 
 import java.io.*;
@@ -45,7 +41,7 @@ public class Client extends Peer implements Connectable {
     public void connectToServer(){
 
         try {
-            serverSocket = new Socket("192.168.1.125",Defaults.SERVER_PORT);
+            serverSocket = new Socket("localhost",Defaults.SERVER_PORT);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -55,27 +51,6 @@ public class Client extends Peer implements Connectable {
     private void initPromptHandler(Socket socket){
         promptHandler = new PromptHandler(socket);
     }
-
-    /*public void initP2PTransfer(String nickname, File file){
-
-        Thread thread = new Thread(() -> peerToPeerTransfer(nickname, file));
-
-        thread.start();
-
-        try {
-            thread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }*/
-
-    /*private void initNotificationHandler(){
-
-        Thread thread = new Thread(() -> notificationHandler());
-
-        thread.start();
-
-    }*/
 
     private void peerToPeerTransfer(String nickname, File file){
 
@@ -104,38 +79,30 @@ public class Client extends Peer implements Connectable {
 
         while (serverSocket.isBound()) {
 
-           // String ip = promptHandler.handleRequests();
+            String[] command = promptHandler.handleRequests();
 
-          //  if(!ip.equals("")){
-            //    host.start(Defaults.ROOT); //TODO: check path name
+            switch (command[0]){
 
-            Prompt prompt = new Prompt(System.in, System.out);
+                case Commands.IP:
 
-            Request serverRequest = receiveResponse();
-            System.out.println(serverRequest.getCommand());
-            InputScanner inputScanner = serverRequest.getInputScanner();
+                    break;
 
+                case Commands.RECEIVE_FILE:
+                    host.start(command[2]);
+
+                case Commands.DOWNLOAD:
+                    download(command[1]);
+                    break;
+
+                case Commands.UPLOAD:
+                    uploadToServer();
+                    break;
+            }
         }
-
     }
-
-    public Request receiveResponse(){
-
-        //TODO: CHANGE LOCATION OF THIS METHOD
-        try {
-            ObjectInputStream ios = new ObjectInputStream(serverSocket.getInputStream());
-            return (Request) ios.readObject();
-
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        return null;
-    }
-
 
     private void requestPeerConnection(String nickname){
-        writer.println("/ " + nickname); //TODO: Implement /CODE, decide with Alex The Lion
+        writer.println("/request" + nickname);
     }
 
     public void connectToPeer(String ip){
@@ -148,27 +115,26 @@ public class Client extends Peer implements Connectable {
 
     }
 
-    private void setUpReaderStreams(){
+    private void uploadToServer() {
 
-        try {
-
-            reader = new BufferedReader(new InputStreamReader(serverSocket.getInputStream()));
-            writer = new PrintWriter(serverSocket.getOutputStream(), true);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void writeToServer(File file) {
+        File file = fileToUpload();
         super.write(file, serverSocket);
     }
 
-    public void writeToPeer(File file){
+    private File fileToUpload() {
+
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Insert the path of the file you want to upload"); //TODO: check message
+        String path = scanner.nextLine();
+
+        return FileManager.loadFile(path);
+    }
+
+    private void writeToPeer(File file){
         super.write(file, peerSocket);
     }
 
-    public void download(String path){
+    private void download(String path){
         super.download(path, serverSocket);
     }
 
@@ -197,7 +163,6 @@ public class Client extends Peer implements Connectable {
 
         private ServerSocket serverSocket;
         private Socket connectionSocket;
-        public static final int PORT = Defaults.CLIENT_PORT;
 
         public void start(String savePath){
             initSocket();
