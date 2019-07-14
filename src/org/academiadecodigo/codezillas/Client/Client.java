@@ -66,26 +66,11 @@ public class Client extends Peer implements Connectable {
     }
 
 
-    private void peerToPeerTransfer(String nickname, File file) {
+    private void peerToPeerTransfer(String ip) {
 
-        requestPeerConnection(nickname);
+            connectToPeer(ip);
+            sendToPeer();
 
-        try {
-
-            System.out.println("Waiting for a confirmation..."); //TODO: Check message; defaults?
-            String answer = reader.readLine();
-
-            if (answer.toLowerCase().equals("no")) {
-                System.out.println("The other client refused the connection."); //TODO: Check message; defaults?
-                return;
-            }
-
-            connectToPeer(answer);
-            writeToPeer(file);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
 
@@ -98,7 +83,7 @@ public class Client extends Peer implements Connectable {
             switch (command[0]) {
 
                 case Commands.IP:
-
+                    peerToPeerTransfer(command[1]);
                     break;
 
                 case Commands.RECEIVE_FILE:
@@ -115,11 +100,7 @@ public class Client extends Peer implements Connectable {
         }
     }
 
-    private void requestPeerConnection(String nickname) {
-        writer.println("/request" + nickname);
-    }
-
-    public void connectToPeer(String ip) {
+    private void connectToPeer(String ip) {
 
         try {
             peerSocket = new Socket(ip, Defaults.CLIENT_PORT);
@@ -138,14 +119,17 @@ public class Client extends Peer implements Connectable {
     private File fileToUpload() {
 
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Insert the path of the file you want to upload"); //TODO: check message
+        System.out.println("Insert the path of the file you want to send"); //TODO: check message
         String path = scanner.nextLine();
 
         return FileManager.loadFile(path);
     }
 
-    private void writeToPeer(File file) {
+    private void sendToPeer() {
+
+        File file = fileToUpload();
         super.write(file, peerSocket);
+
     }
 
     private void download(String path) {
