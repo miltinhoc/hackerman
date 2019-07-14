@@ -1,6 +1,7 @@
 package org.academiadecodigo.codezillas.Server;
 
 import org.academiadecodigo.bootcamp.InputScanner;
+import org.academiadecodigo.codezillas.FileServices.FileContainer;
 
 import java.io.Serializable;
 
@@ -8,7 +9,6 @@ public class ServerRequest implements Serializable {
 
     private String command;
     private String ip;
-    private String message;
     private InputScanner inputScanner;
 
     public ServerRequest(String command, InputScanner inputScanner) {
@@ -16,16 +16,9 @@ public class ServerRequest implements Serializable {
         this.inputScanner = inputScanner;
     }
 
-    public ServerRequest(InputScanner inputScanner, String message){
-        this.inputScanner = inputScanner;
-        this.message = message;
 
-    }
-
-    public ServerRequest(String command, InputScanner inputScanner, String ip) {
+    public ServerRequest(String command) {
         this.command = command;
-        this.inputScanner = inputScanner;
-        this.ip = ip;
     }
 
     public String getCommand() {

@@ -170,7 +170,7 @@ public class Server {
 
                     ClientRequest clientRequest = (ClientRequest) inputStream.readObject();
                     System.out.println(clientRequest.getAnswerString());
-                    respondRequest(requestHandler.handleRequest(clientRequest, inputStream));
+                    respondRequest(requestHandler.handleRequest(clientRequest, inputStream, outputStream));
 
 
                 } catch (ClassNotFoundException e) {

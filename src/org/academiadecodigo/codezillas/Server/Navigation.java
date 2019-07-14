@@ -60,9 +60,7 @@ public class Navigation {
 
         String[] newArray = new String[array.length + 1];
 
-        for (int i = 1; i < newArray.length; i++) {
-            newArray[i] = array[i-1];
-        }
+        System.arraycopy(array, 0, newArray, 1, newArray.length - 1);
 
         newArray[0] = "Quit";
 

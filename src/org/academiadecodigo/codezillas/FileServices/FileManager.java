@@ -3,7 +3,6 @@ package org.academiadecodigo.codezillas.FileServices;
 import org.academiadecodigo.codezillas.Utils.Defaults;
 
 import java.io.*;
-import java.nio.file.Path;
 
 public abstract class FileManager {
 
@@ -16,7 +15,7 @@ public abstract class FileManager {
         try {
 
             InputStream inputStream = new BufferedInputStream(new FileInputStream(file));
-            FileOutputStream fileOutputStream = new FileOutputStream(Defaults.ROOT + "gg.txt");
+            FileOutputStream fileOutputStream = new FileOutputStream(Defaults.SERVER_ROOT + "gg.txt");
 
             byte[] buffer = new byte[1024];
             int numOfBytes = inputStream.read(buffer);
@@ -78,7 +77,7 @@ public abstract class FileManager {
      */
     public static String[] listAllPathContent(String path){
 
-        File newPath = new File(Defaults.ROOT + path);
+        File newPath = new File(Defaults.SERVER_ROOT + path);
         File[] files = newPath.listFiles();
 
         if (files != null){
@@ -96,6 +95,30 @@ public abstract class FileManager {
             return content;
         }
         return null;
+    }
+
+    public static String[] listAllFiles(){
+        File path = new File(Defaults.SERVER_ROOT);
+        File[] files = path.listFiles();
+        int count = 0;
+
+        String[] content = null;
+
+        if (files != null){
+            for (File file : files) {
+                if (file.isFile()) {
+                    count++;
+                }
+            }
+
+            content = new String[count];
+            for (int i = 0; i < count; i++) {
+                if (files[i].isFile()){
+                    content[i] = files[i].getName();
+                }
+            }
+        }
+        return content;
     }
 
 

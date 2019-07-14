@@ -2,34 +2,47 @@ package org.academiadecodigo.codezillas.Server;
 
 import org.academiadecodigo.bootcamp.InputScanner;
 import org.academiadecodigo.codezillas.Client.ClientRequest;
+import org.academiadecodigo.codezillas.FileServices.FileContainer;
+import org.academiadecodigo.codezillas.FileServices.FileManager;
 import org.academiadecodigo.codezillas.FileServices.FileTransferer;
-import org.academiadecodigo.codezillas.Utils.Commands;
-import org.academiadecodigo.codezillas.Utils.NavigationPossibilities;
-import org.academiadecodigo.codezillas.Utils.NavigationPossibilitiesType;
-import org.academiadecodigo.codezillas.Utils.NavigationUtils;
+import org.academiadecodigo.codezillas.Utils.*;
 
+import java.io.File;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.Map;
 
 public class RequestHandler {
 
     private NavigationPossibilitiesType navigationPossibilitiesType;
     private Map<NavigationPossibilitiesType, NavigationPossibilities> possibilitesMap;
+    private int downloadChoice = 1;
 
     public RequestHandler() {
         NavigationUtils.initMap();
         possibilitesMap = NavigationUtils.menuMap;
     }
 
-    public ServerRequest handleRequest(ClientRequest clientRequest, ObjectInputStream inputStream){
+    public ServerRequest handleRequest(ClientRequest clientRequest, ObjectInputStream inputStream, ObjectOutputStream outputStream){
 
         String command = clientRequest.getCommand();
-        System.out.println(command);
         ServerRequest serverRequest = null;
+
+            System.out.println(navigationPossibilitiesType);
 
         switch (command){
 
+
             case Commands.INT:
+
+                if(navigationPossibilitiesType == NavigationPossibilitiesType.DOWNLOAD_MENU){
+
+                    System.out.println("entrar no tipo do download");
+                    downloadChoice = clientRequest.getAnswerInt();
+                    return new ServerRequest(Commands.DOWNLOAD);
+
+                }
+
                 serverRequest = analyzeIntAnswer(clientRequest.getAnswerInt());
                 break;
 
@@ -37,8 +50,21 @@ public class RequestHandler {
                 serverRequest = analyzeStringAnswer(clientRequest.getAnswerString(), inputStream);
                 break;
 
+            case Commands.MENU:
+                System.out.println("entrei no menu");
+                serverRequest = new ServerRequest(Commands.MENU, Navigation.clientMenu());
+                System.out.println(serverRequest.getCommand());
+                return serverRequest;
+
+            case Commands.UPLOAD:
+
+                System.out.println("A entrar no upload");
+                analyzeDownloadOption(downloadChoice, outputStream);
+                break;
         }
+
         return serverRequest;
+
     }
 
     private NavigationPossibilitiesType[] options(){
@@ -64,7 +90,7 @@ public class RequestHandler {
             if(answer - 1 == i){
                 inputScanner = options[i].getInputScanner();
                 navigationPossibilitiesType = options[i];
-                System.out.println(navigationPossibilitiesType);
+                System.out.println(navigationPossibilitiesType + " 2");
             }
         }
 
@@ -72,6 +98,7 @@ public class RequestHandler {
 
             if(answer - 1 == i){
                 command = nextComands[i];
+                System.out.println(navigationPossibilitiesType);
                 System.out.println(command);
             }
         }
@@ -79,6 +106,26 @@ public class RequestHandler {
         return new ServerRequest(command, inputScanner);
 
     }
+
+    private void analyzeDownloadOption(int answer, ObjectOutputStream outputStream){
+
+        String[] files = FileManager.listAllFiles();
+
+        for (int i = 0; i < files.length ; i++) {
+            files[i] = Defaults.SERVER_ROOT + files[i];
+        }
+
+        File file = new File(files[answer - 2]);
+
+        System.out.println("starting upload");
+
+        FileTransferer.upload(outputStream, new FileContainer(file));
+
+        System.out.println("upload done");
+
+    }
+
+
 
     private ServerRequest analyzeStringAnswer(String answer, ObjectInputStream inputStream){
 
@@ -91,7 +138,7 @@ public class RequestHandler {
                 if(answer.equals("yes")){
 
                     System.out.println("cheguei aqui");
-                    FileTransferer.download(inputStream, "goncalo.txt");
+                    FileTransferer.download(inputStream, Defaults.SERVER_ROOT);
                     System.out.println("e aqui");
                 }
         }
@@ -102,7 +149,7 @@ public class RequestHandler {
         navigationPossibilitiesType = NavigationPossibilitiesType.INITIAL_MENU;
         return new ServerRequest(Commands.MENU, Navigation.clientMenu(nickname));
     }
-    public ServerRequest initMenu( ){
+    public ServerRequest initMenu(){
         navigationPossibilitiesType = NavigationPossibilitiesType.INITIAL_MENU;
         return new ServerRequest(Commands.MENU, Navigation.clientMenu());
     }

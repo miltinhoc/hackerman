@@ -8,7 +8,6 @@ import java.util.Map;
 
 public class NavigationUtils {
 
-    public static String[] files = {"file1", "file2"}; //TODO: delete this when needed
 
     public static final String SET_NICKNAME_MESSAGE = "???WTF REIMAO STOP CHANGING SHIT" ;
     public static Map<NavigationPossibilitiesType, NavigationPossibilities> menuMap;
@@ -16,9 +15,11 @@ public class NavigationUtils {
     public static String WELCOME_MESSAGE = ASCII.CLIENTINTRO + "\n" + "Welcome to <BROS Relay Oriented System >";
 
     public static String SET_NICKNAME = "Choose Nickname: ";
+
     public static String SET_VALID_NICKNAME = "Nickname already in use, please choose a different one: ";
 
     public static String SELECT_MENU_MESSAGE = "Logged in as ";
+
     public static String[] SELECT_MENU_OPTION = {"Upload File", "Download File", "Direct File Transfer"};
 
     public static String SHOW_CLIENTS_MENU = "Currently logged users: ";
@@ -52,7 +53,7 @@ public class NavigationUtils {
 
         menuMap.put(NavigationPossibilitiesType.INITIAL_MENU, new NavigationPossibilities(Navigation.clientMenu(), setPossibilitiesType(), new String[]{Commands.UPLOAD, Commands.MENU, Commands.MENU}));
 
-        menuMap.put(NavigationPossibilitiesType.DOWNLOAD_MENU, new NavigationPossibilities(Navigation.downloadMenu(new String[]{"File1, File2"}), new String[]{Commands.DOWNLOAD})); //TODO: check path
+        menuMap.put(NavigationPossibilitiesType.DOWNLOAD_MENU, new NavigationPossibilities(Navigation.downloadMenu(FileManager.listAllFiles()), new String[]{Commands.DOWNLOAD})); //TODO: check path
 
         menuMap.put(NavigationPossibilitiesType.ACCEPT_NEW_CONNECTION_MENU, new NavigationPossibilities(Navigation.acceptConnectionMenu("An user"), new String[]{Commands.IP})); //TODO: add nick
 

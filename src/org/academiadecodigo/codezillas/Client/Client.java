@@ -4,7 +4,6 @@ import org.academiadecodigo.codezillas.FileServices.FileContainer;
 import org.academiadecodigo.codezillas.FileServices.FileManager;
 import org.academiadecodigo.codezillas.Utils.Commands;
 import org.academiadecodigo.codezillas.Utils.Defaults;
-
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -81,10 +80,18 @@ public class Client extends Peer {
                     host.start(command[1]);
 
                 case Commands.DOWNLOAD:
-                    //download(command[1]);
+
+                    super.download(inputStream, Defaults.CLIENT_ROOT);
+
+                    try {
+                        outputStream.writeObject(new ClientRequest(Commands.MENU, "yes"));
+                        outputStream.flush();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                     break;
 
-                case "upload":
+                case Commands.UPLOAD:
                     uploadToServer(command[1]);
                     break;
             }
@@ -125,10 +132,6 @@ public class Client extends Peer {
         super.write(file, peerSocket);
 
     } */
-
-    //private void download(String path) {
-    //    super.download(path, serverSocket);
-    //}
 
     @Override
     public void shutdown() {
