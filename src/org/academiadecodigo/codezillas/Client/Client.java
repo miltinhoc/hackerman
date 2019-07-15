@@ -5,23 +5,16 @@ import org.academiadecodigo.codezillas.FileServices.FileManager;
 import org.academiadecodigo.codezillas.Utils.Commands;
 import org.academiadecodigo.codezillas.Utils.Defaults;
 import java.io.*;
-import java.net.ServerSocket;
 import java.net.Socket;
 
 public class Client extends Peer {
 
     private Socket serverSocket;
-    private Socket peerSocket;
-    private String nickname;
-    private Host host;
     private ObjectOutputStream outputStream;
     private ObjectInputStream inputStream;
     private PromptHandler promptHandler;
 
-
-    public Client(String nickname) {
-        this.nickname = nickname;
-        host = new Host();
+    public Client() {
         promptHandler = new PromptHandler();
     }
 
@@ -29,6 +22,7 @@ public class Client extends Peer {
 
         init();
         serverCommunication();
+        shutdown();
 
     }
 
@@ -39,8 +33,12 @@ public class Client extends Peer {
     private void connectToServer() {
 
         try {
+<<<<<<< HEAD
 
             serverSocket = new Socket("192.168.1.125", Defaults.SERVER_PORT);
+=======
+            serverSocket = new Socket("localhost", Defaults.SERVER_PORT);
+>>>>>>> bbe951bf6e496468b9d5d8c7c0fa59c54dc3baaa
             setUpStreams();
         } catch (IOException e) {
             System.err.println("Something went wrong while trying to connect to the server");
@@ -54,15 +52,11 @@ public class Client extends Peer {
 
             outputStream = new ObjectOutputStream(serverSocket.getOutputStream());
             inputStream = new ObjectInputStream(serverSocket.getInputStream());
-            System.out.println("Streams opened"); //TODO: erase when debugging is done
 
         } catch (IOException ex){
             System.err.println("Something went Wrong while opening Client Streams");
         }
     }
-
-
-
 
     private void serverCommunication() {
 
@@ -72,16 +66,9 @@ public class Client extends Peer {
             System.out.println(command[0]);
             switch (command[0]) {
 
-                case Commands.IP:
-                    peerToPeerTransfer(command[1]);
-                    break;
-
-                case Commands.RECEIVE_FILE:
-                    host.start(command[1]);
-
                 case Commands.DOWNLOAD:
 
-                    super.download(inputStream, Defaults.CLIENT_ROOT);
+                    super.download(inputStream);
 
                     try {
                         outputStream.writeObject(new ClientRequest(Commands.MENU, "yes"));
@@ -98,25 +85,8 @@ public class Client extends Peer {
         }
     }
 
-    private void peerToPeerTransfer(String ip) {
-
-            connectToPeer(ip);
-            //sendToPeer();
-
-    }
-
-    private void connectToPeer(String ip) {
-
-        try {
-            peerSocket = new Socket(ip, Defaults.CLIENT_PORT);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
-
     private void uploadToServer(String path) {
-        System.out.println("starting to upload");
+        System.out.println("Upload starting... \n");
         File file = fileToUpload(path);
         super.write(new FileContainer(file), outputStream);
     }
@@ -126,19 +96,9 @@ public class Client extends Peer {
         return FileManager.loadFile(path);
     }
 
-   /* private void sendToPeer() {
-
-        File file = fileToUpload();
-        super.write(file, peerSocket);
-
-    } */
-
-    @Override
     public void shutdown() {
 
         try {
-
-            peerSocket.close();
             serverSocket.close();
 
         } catch (IOException e) {
@@ -146,61 +106,4 @@ public class Client extends Peer {
         }
     }
 
-    public String getNickname() {
-        return nickname;
-    }
-
-    //................................................................................................................//
-    //--------------------------------------------> Host class <------------------------------------------------------//
-    //................................................................................................................//
-
-    private class Host extends Peer {
-
-        private ServerSocket serverSocket;
-        private Socket connectionSocket;
-
-        public void start(String savePath) {
-            initSocket();
-            awaitConnection();
-            //File file = receiveFile(savePath);
-            //saveFile(file);
-            shutdown();
-        }
-
-        private void initSocket() {
-            try {
-                serverSocket = new ServerSocket(Defaults.CLIENT_PORT);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        private void awaitConnection() {
-            try {
-                connectionSocket = serverSocket.accept();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        //public File receiveFile(String path) {
-        //    return super.download(path, connectionSocket);
-        //}
-
-        @Override
-        public void saveFile(File file) {
-            super.saveFile(file);
-        }
-
-        @Override
-        public void shutdown() {
-
-            try {
-                serverSocket.close();
-                connectionSocket.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
 }

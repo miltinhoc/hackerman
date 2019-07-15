@@ -1,6 +1,5 @@
 package org.academiadecodigo.codezillas.Client;
 
-import org.academiadecodigo.codezillas.FileServices.FileManager;
 import org.academiadecodigo.codezillas.FileServices.FileTransferer;
 import org.academiadecodigo.codezillas.FileServices.FileContainer;
 
@@ -13,17 +12,10 @@ public abstract class Peer {
         FileTransferer.upload(outputStream, container);
     }
 
-    public void download(ObjectInputStream inputStream, String path){
+    public void download(ObjectInputStream inputStream ){
 
-        FileTransferer.download(inputStream, path);
+        FileTransferer.download(inputStream);
 
     }
-
-    public void saveFile(File file){
-        FileManager.saveFile(file);
-    }
-
-    public abstract void shutdown();
-
 
 }

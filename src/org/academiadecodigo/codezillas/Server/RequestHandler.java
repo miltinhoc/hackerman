@@ -28,8 +28,11 @@ public class RequestHandler {
         String command = clientRequest.getCommand();
         ServerRequest serverRequest = null;
 
+<<<<<<< HEAD
         switch (command) {
-
+=======
+        switch (command){
+>>>>>>> bbe951bf6e496468b9d5d8c7c0fa59c54dc3baaa
 
             case Commands.INT:
 
@@ -42,7 +45,6 @@ public class RequestHandler {
                     }
 
                     return new ServerRequest(Commands.DOWNLOAD);
-
                 }
 
                 if (clientRequest.getAnswerInt() == 1) {
@@ -59,12 +61,20 @@ public class RequestHandler {
                 break;
 
             case Commands.MENU:
+<<<<<<< HEAD
 
                 System.out.println("eu mandei este");
                 return initMenu();
 
             case Commands.UPLOAD:
 
+=======
+                serverRequest = new ServerRequest(Commands.MENU, Navigation.clientMenu());
+                System.out.println(serverRequest.getCommand());
+                return serverRequest;
+
+            case Commands.UPLOAD:
+>>>>>>> bbe951bf6e496468b9d5d8c7c0fa59c54dc3baaa
                 analyzeDownloadOption(downloadChoice, outputStream);
                 break;
         }
@@ -101,9 +111,14 @@ public class RequestHandler {
 
         for (int i = 0; i < nextCommands.length; i++) {
 
+<<<<<<< HEAD
             if (answer - 1 == i) {
                 command = nextCommands[i];
                 System.out.println(command);
+=======
+            if(answer - 1 == i){
+                command = nextComands[i];
+>>>>>>> bbe951bf6e496468b9d5d8c7c0fa59c54dc3baaa
             }
         }
 
@@ -121,14 +136,15 @@ public class RequestHandler {
 
         File file = new File(files[answer - 2]);
 
-        System.out.println("starting upload");
+        System.out.println("Starting upload");
 
         FileTransferer.upload(outputStream, new FileContainer(file));
 
-        System.out.println("upload done");
+        System.out.println("Upload finished");
 
     }
 
+<<<<<<< HEAD
 
     private ServerRequest analyzeStringAnswer(String answer, ObjectInputStream inputStream) {
 
@@ -139,6 +155,18 @@ public class RequestHandler {
                 if (answer.equals("yes")) {
 
                     FileTransferer.download(inputStream, Defaults.SERVER_ROOT);
+=======
+    private ServerRequest analyzeStringAnswer(String answer, ObjectInputStream inputStream){
+
+        switch (navigationPossibilitiesType){
+
+            case UPLOAD_MESSAGE:
+                System.out.println("Received download request...\n");
+                if(answer.equals("yes")){
+
+                    FileTransferer.download(inputStream);
+                    System.out.println("Download success.");
+>>>>>>> bbe951bf6e496468b9d5d8c7c0fa59c54dc3baaa
                 }
         }
         return initMenu();
@@ -149,13 +177,21 @@ public class RequestHandler {
         return new ServerRequest(Commands.MENU, Navigation.clientMenu(nickname));
     }
 
+<<<<<<< HEAD
     public ServerRequest initMenu() {
+=======
+    public ServerRequest initMenu(){
+>>>>>>> bbe951bf6e496468b9d5d8c7c0fa59c54dc3baaa
         navigationPossibilitiesType = NavigationPossibilitiesType.INITIAL_MENU;
         return new ServerRequest(Commands.MENU, Navigation.clientMenu());
     }
 
+<<<<<<< HEAD
 
     public ServerRequest getNickname() {
+=======
+    public ServerRequest getNickname(){
+>>>>>>> bbe951bf6e496468b9d5d8c7c0fa59c54dc3baaa
         return new ServerRequest(Commands.QUESTION, Navigation.getLogin());
     }
 
