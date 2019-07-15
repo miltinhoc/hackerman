@@ -101,7 +101,7 @@ public class Client extends Peer {
     private void peerToPeerTransfer(String ip) {
 
             connectToPeer(ip);
-            //sendToPeer();
+            sendToPeer();
 
     }
 
@@ -126,12 +126,12 @@ public class Client extends Peer {
         return FileManager.loadFile(path);
     }
 
-   /* private void sendToPeer() {
+    private void sendToPeer() {
 
         File file = fileToUpload();
         super.write(file, peerSocket);
 
-    } */
+    }
 
     @Override
     public void shutdown() {
