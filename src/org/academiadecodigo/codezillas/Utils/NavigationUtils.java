@@ -20,7 +20,7 @@ public class NavigationUtils {
 
     public static String SELECT_MENU_MESSAGE = "Logged in as ";
 
-    public static String[] SELECT_MENU_OPTION = {"Upload File", "Download File", "Direct File Transfer"};
+    public static String[] SELECT_MENU_OPTION = {"Quit", "Upload File", "Download File", "Direct File Transfer"};
 
     public static String SHOW_CLIENTS_MENU = "Currently logged users: ";
 
@@ -51,7 +51,7 @@ public class NavigationUtils {
 
         menuMap = new HashMap<>();
 
-        menuMap.put(NavigationPossibilitiesType.INITIAL_MENU, new NavigationPossibilities(Navigation.clientMenu(), setPossibilitiesType(), new String[]{Commands.UPLOAD, Commands.MENU, Commands.MENU}));
+        menuMap.put(NavigationPossibilitiesType.INITIAL_MENU, new NavigationPossibilities(Navigation.clientMenu(), setPossibilitiesType(), new String[]{Commands.QUIT, Commands.UPLOAD, Commands.MENU,Commands.MENU}));
 
         menuMap.put(NavigationPossibilitiesType.DOWNLOAD_MENU, new NavigationPossibilities(Navigation.downloadMenu(FileManager.listAllFiles()), new String[]{Commands.DOWNLOAD})); //TODO: check path
 
@@ -67,7 +67,7 @@ public class NavigationUtils {
 
     private static NavigationPossibilitiesType[] setPossibilitiesType(){
 
-        return new NavigationPossibilitiesType[]{NavigationPossibilitiesType.UPLOAD_MESSAGE, NavigationPossibilitiesType.DOWNLOAD_MENU, NavigationPossibilitiesType.ONLINE_CLIENTS_MENU};
+        return new NavigationPossibilitiesType[]{NavigationPossibilitiesType.QUIT, NavigationPossibilitiesType.UPLOAD_MESSAGE, NavigationPossibilitiesType.DOWNLOAD_MENU, NavigationPossibilitiesType.ONLINE_CLIENTS_MENU};
     }
 
 }

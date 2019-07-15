@@ -35,14 +35,20 @@ public class RequestHandler {
 
             case Commands.INT:
 
-                if(navigationPossibilitiesType == NavigationPossibilitiesType.DOWNLOAD_MENU){
+                if(navigationPossibilitiesType == NavigationPossibilitiesType.DOWNLOAD_MENU) {
 
                     System.out.println("entrar no tipo do download");
                     downloadChoice = clientRequest.getAnswerInt();
-                    if(downloadChoice == 1){
+                    if (downloadChoice == 1) {
                         return initMenu();
                     }
                     return new ServerRequest(Commands.DOWNLOAD);
+
+                }
+
+                if(clientRequest.getAnswerInt() == 1){
+
+                    return new ServerRequest(Commands.QUIT);
 
                 }
 
@@ -93,7 +99,6 @@ public class RequestHandler {
             if(answer - 1 == i){
                 inputScanner = options[i].getInputScanner();
                 navigationPossibilitiesType = options[i];
-                System.out.println(navigationPossibilitiesType + " 2");
             }
         }
 
@@ -101,7 +106,6 @@ public class RequestHandler {
 
             if(answer - 1 == i){
                 command = nextComands[i];
-                System.out.println(navigationPossibilitiesType);
                 System.out.println(command);
             }
         }

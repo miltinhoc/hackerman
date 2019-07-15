@@ -11,5 +11,6 @@ public class Commands {
     public static final String DOWNLOAD = "download/";
     public static final String UPLOAD = "upload/";
     public static final String RECEIVE_FILE = "receivefile/";
+    public static final String QUIT = "quit/";
 
 }
