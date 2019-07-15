@@ -39,6 +39,9 @@ public class RequestHandler {
 
                     System.out.println("entrar no tipo do download");
                     downloadChoice = clientRequest.getAnswerInt();
+                    if(downloadChoice == 1){
+                        return initMenu();
+                    }
                     return new ServerRequest(Commands.DOWNLOAD);
 
                 }

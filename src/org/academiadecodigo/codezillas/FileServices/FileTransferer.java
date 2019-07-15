@@ -24,7 +24,7 @@ public abstract class FileTransferer {
                 File file = container.getFile();
 
                 FileInputStream reader = new FileInputStream(file);
-                
+
                 String name = file.getName();
                 byte[] data = reader.readAllBytes();
 
@@ -52,7 +52,7 @@ public abstract class FileTransferer {
             System.out.println("Starting download");
 
 
-             FileData fileData = (FileData) inputStream.readObject();
+            FileData fileData = (FileData) inputStream.readObject();
 
             FileOutputStream fileOutputStream = new FileOutputStream(Defaults.CLIENT_ROOT + fileData.getName());
 
