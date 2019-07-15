@@ -36,14 +36,17 @@ class PromptHandler {
         String command = serverRequest.getCommand();
         String[] defaultAnswer = {""};
 
-
+        System.out.println("cheguei aqui");
         try {
 
             switch (command) {
 
                 case Commands.MENU:
-
+                    System.out.println("entrei no menu");
+                    System.out.println(serverRequest.getCommand());
+                    System.out.println(serverRequest.getInputScanner());
                     int answerMenu = menuRequestHandler((MenuInputScanner) serverRequest.getInputScanner());
+                    System.out.println("eu sei que é um menu");
                     write(new ClientRequest(Commands.INT, answerMenu));
                     break;
 
@@ -82,7 +85,6 @@ class PromptHandler {
 
                     if(file.exists()){
                         write(new ClientRequest(Commands.STRING, "yes"));
-                        System.out.println("enviei");
                         return path;
                     }
 
@@ -146,14 +148,6 @@ class PromptHandler {
 
         return prompt.getUserInput(menuInputScanner);
 
-    }
-
-    private String uploadRequestHandler(StringInputScanner stringInputScanner){
-        return prompt.getUserInput(stringInputScanner);
-    }
-
-    private String downloadRequestHandler(StringInputScanner stringInputScanner){
-        return prompt.getUserInput(stringInputScanner);
     }
 
     private String receiveFileRequestHandler(StringInputScanner stringInputScanner){

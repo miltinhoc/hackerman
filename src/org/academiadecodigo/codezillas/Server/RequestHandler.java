@@ -14,7 +14,7 @@ import java.util.Map;
 
 public class RequestHandler {
 
-    private NavigationPossibilitiesType navigationPossibilitiesType;
+    private NavigationPossibilitiesType navigationPossibilitiesType = NavigationPossibilitiesType.INITIAL_MENU;
     private Map<NavigationPossibilitiesType, NavigationPossibilities> possibilitesMap;
     private int downloadChoice = 1;
 
@@ -23,30 +23,29 @@ public class RequestHandler {
         possibilitesMap = NavigationUtils.menuMap;
     }
 
-    public ServerRequest handleRequest(ClientRequest clientRequest, ObjectInputStream inputStream, ObjectOutputStream outputStream){
+    public ServerRequest handleRequest(ClientRequest clientRequest, ObjectInputStream inputStream, ObjectOutputStream outputStream) {
 
         String command = clientRequest.getCommand();
         ServerRequest serverRequest = null;
 
-            System.out.println(navigationPossibilitiesType);
-
-        switch (command){
+        switch (command) {
 
 
             case Commands.INT:
 
-                if(navigationPossibilitiesType == NavigationPossibilitiesType.DOWNLOAD_MENU) {
+                if (navigationPossibilitiesType == NavigationPossibilitiesType.DOWNLOAD_MENU) {
 
-                    System.out.println("entrar no tipo do download");
                     downloadChoice = clientRequest.getAnswerInt();
+
                     if (downloadChoice == 1) {
                         return initMenu();
                     }
+
                     return new ServerRequest(Commands.DOWNLOAD);
 
                 }
 
-                if(clientRequest.getAnswerInt() == 1){
+                if (clientRequest.getAnswerInt() == 1) {
 
                     return new ServerRequest(Commands.QUIT);
 
@@ -60,14 +59,12 @@ public class RequestHandler {
                 break;
 
             case Commands.MENU:
-                System.out.println("entrei no menu");
-                serverRequest = new ServerRequest(Commands.MENU, Navigation.clientMenu());
-                System.out.println(serverRequest.getCommand());
-                return serverRequest;
+
+                System.out.println("eu mandei este");
+                return initMenu();
 
             case Commands.UPLOAD:
 
-                System.out.println("A entrar no upload");
                 analyzeDownloadOption(downloadChoice, outputStream);
                 break;
         }
@@ -76,36 +73,36 @@ public class RequestHandler {
 
     }
 
-    private NavigationPossibilitiesType[] options(){
+    private NavigationPossibilitiesType[] options() {
 
         return possibilitesMap.get(navigationPossibilitiesType).getOptionsType();
 
     }
 
-    private String[] nextCommands(){
+    private String[] nextCommands() {
         return possibilitesMap.get(navigationPossibilitiesType).getNextCommand();
     }
 
-    private ServerRequest analyzeIntAnswer(int answer){
+    private ServerRequest analyzeIntAnswer(int answer) {
 
-         NavigationPossibilitiesType[] options = options();
-         String[] nextComands = nextCommands();
+        NavigationPossibilitiesType[] options = options();
+        String[] nextCommands = nextCommands();
 
-         InputScanner inputScanner = null;
-         String command = "";
+        InputScanner inputScanner = null;
+        String command = "";
 
-        for (int i = 0; i < options.length ; i++) {
+        for (int i = 0; i < options.length; i++) {
 
-            if(answer - 1 == i){
+            if (answer - 1 == i) {
                 inputScanner = options[i].getInputScanner();
                 navigationPossibilitiesType = options[i];
             }
         }
 
-        for (int i = 0; i < nextComands.length; i++) {
+        for (int i = 0; i < nextCommands.length; i++) {
 
-            if(answer - 1 == i){
-                command = nextComands[i];
+            if (answer - 1 == i) {
+                command = nextCommands[i];
                 System.out.println(command);
             }
         }
@@ -114,11 +111,11 @@ public class RequestHandler {
 
     }
 
-    private void analyzeDownloadOption(int answer, ObjectOutputStream outputStream){
+    private void analyzeDownloadOption(int answer, ObjectOutputStream outputStream) {
 
         String[] files = FileManager.listAllFiles();
 
-        for (int i = 0; i < files.length ; i++) {
+        for (int i = 0; i < files.length; i++) {
             files[i] = Defaults.SERVER_ROOT + files[i];
         }
 
@@ -133,40 +130,36 @@ public class RequestHandler {
     }
 
 
+    private ServerRequest analyzeStringAnswer(String answer, ObjectInputStream inputStream) {
 
-    private ServerRequest analyzeStringAnswer(String answer, ObjectInputStream inputStream){
 
-        System.out.println("entrei no analyzeString");
-
-        switch (navigationPossibilitiesType){
+        switch (navigationPossibilitiesType) {
 
             case UPLOAD_MESSAGE:
-                System.out.println("upload");
-                if(answer.equals("yes")){
+                if (answer.equals("yes")) {
 
-                    System.out.println("cheguei aqui");
                     FileTransferer.download(inputStream, Defaults.SERVER_ROOT);
-                    System.out.println("e aqui");
                 }
         }
         return initMenu();
     }
 
-    public ServerRequest initMenu(String nickname){
+    public ServerRequest initMenu(String nickname) {
         navigationPossibilitiesType = NavigationPossibilitiesType.INITIAL_MENU;
         return new ServerRequest(Commands.MENU, Navigation.clientMenu(nickname));
     }
-    public ServerRequest initMenu(){
+
+    public ServerRequest initMenu() {
         navigationPossibilitiesType = NavigationPossibilitiesType.INITIAL_MENU;
         return new ServerRequest(Commands.MENU, Navigation.clientMenu());
     }
 
 
-    public ServerRequest getNickname(){
+    public ServerRequest getNickname() {
         return new ServerRequest(Commands.QUESTION, Navigation.getLogin());
     }
 
-    public ServerRequest invalidNickname(){
+    public ServerRequest invalidNickname() {
         return new ServerRequest(Commands.QUESTION, Navigation.getValidLogin());
     }
 }

@@ -24,10 +24,6 @@ public class Navigation {
         return showMenu(NavigationUtils.SELECT_MENU_OPTION, Defaults.WELCOME);
     }
 
-   /* public static InputScanner clientMenu( ) {
-        return showMenu(NavigationUtils.SELECT_MENU_OPTION, NavigationUtils.LOGGEDIN(S));
-    } */
-
     public static InputScanner uploadMessage() {
         return stringScanner(NavigationUtils.UPLOAD_MESSAGE);
     }

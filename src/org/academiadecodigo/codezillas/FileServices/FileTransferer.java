@@ -1,14 +1,10 @@
 package org.academiadecodigo.codezillas.FileServices;
 
-import org.academiadecodigo.codezillas.Server.ServerRequest;
 import org.academiadecodigo.codezillas.Utils.Defaults;
 
-import javax.imageio.stream.FileCacheImageOutputStream;
 import java.io.*;
-import java.nio.file.Files;
 
 public abstract class FileTransferer {
-    //can be made non-abstract if necessary
 
     /**
      *
