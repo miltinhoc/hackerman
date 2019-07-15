@@ -7,6 +7,7 @@ import org.academiadecodigo.codezillas.Utils.Defaults;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Scanner;
 
 public class Client extends Peer {
 
@@ -73,11 +74,13 @@ public class Client extends Peer {
             switch (command[0]) {
 
                 case Commands.IP:
-                    peerToPeerTransfer(command[1]);
+                    Scanner scanner = new Scanner(System.in);
+                    System.out.println("Enter receiver ip");
+                    peerToPeerTransfer(scanner.nextLine());
                     break;
 
                 case Commands.RECEIVE_FILE:
-                    host.start(command[1]);
+                    host.start("client");
 
                 case Commands.DOWNLOAD:
 
@@ -128,8 +131,13 @@ public class Client extends Peer {
 
     private void sendToPeer() {
 
-        File file = fileToUpload();
-        super.write(file, peerSocket);
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Enter path of desired file: ");
+
+        File file = fileToUpload(scanner.nextLine());
+
+        super.write(new FileContainer(file), outputStream);
 
     }
 
@@ -162,12 +170,12 @@ public class Client extends Peer {
         public void start(String savePath) {
             initSocket();
             awaitConnection();
-            //File file = receiveFile(savePath);
-            //saveFile(file);
+            super.download(inputStream, savePath);
             shutdown();
         }
 
         private void initSocket() {
+
             try {
                 serverSocket = new ServerSocket(Defaults.CLIENT_PORT);
             } catch (IOException e) {
@@ -182,10 +190,6 @@ public class Client extends Peer {
                 e.printStackTrace();
             }
         }
-
-        //public File receiveFile(String path) {
-        //    return super.download(path, connectionSocket);
-        //}
 
         @Override
         public void saveFile(File file) {

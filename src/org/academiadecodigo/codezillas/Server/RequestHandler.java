@@ -60,7 +60,6 @@ public class RequestHandler {
 
             case Commands.MENU:
 
-                System.out.println("eu mandei este");
                 return initMenu();
 
             case Commands.UPLOAD:
@@ -138,7 +137,7 @@ public class RequestHandler {
             case UPLOAD_MESSAGE:
                 if (answer.equals("yes")) {
 
-                    FileTransferer.download(inputStream, Defaults.SERVER_ROOT);
+                    FileTransferer.download(inputStream, "server");
                 }
         }
         return initMenu();

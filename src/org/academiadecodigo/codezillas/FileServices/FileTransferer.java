@@ -38,10 +38,10 @@ public abstract class FileTransferer {
     /**
      *
      * @param inputStream
-     * @param path
+     * @param receiver
      * @return
      */
-    public static void download(ObjectInputStream inputStream, String path){
+    public static void download(ObjectInputStream inputStream, String receiver){
 
         try {
 
@@ -49,8 +49,18 @@ public abstract class FileTransferer {
 
 
             FileData fileData = (FileData) inputStream.readObject();
+            FileOutputStream fileOutputStream = null;
 
-            FileOutputStream fileOutputStream = new FileOutputStream(Defaults.CLIENT_ROOT + fileData.getName());
+            if(receiver.equals("client")){
+
+               fileOutputStream = new FileOutputStream(Defaults.CLIENT_ROOT + fileData.getName());
+            }
+
+            if(receiver.equals("server")){
+
+                fileOutputStream = new FileOutputStream(Defaults.SERVER_ROOT + fileData.getName());
+
+            }
 
             fileOutputStream.write(fileData.getData());
             fileOutputStream.flush();
