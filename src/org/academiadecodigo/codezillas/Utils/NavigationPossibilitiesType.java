@@ -4,7 +4,7 @@ import org.academiadecodigo.bootcamp.InputScanner;
 import org.academiadecodigo.codezillas.FileServices.FileManager;
 import org.academiadecodigo.codezillas.Server.Navigation;
 
-public enum NavigationPossibilitiesType {
+/*public enum NavigationPossibilitiesType {
 
     INITIAL_MENU(Navigation.clientMenu()),
     DOWNLOAD_MENU(Navigation.downloadMenu(FileManager.listAllFiles())), //TODO: add path
@@ -20,7 +20,12 @@ public enum NavigationPossibilitiesType {
         this.inputScanner = inputScanner;
     }
 
-    public InputScanner getInputScanner() {
+    public InputScanner getInputScanner()
+    {
         return inputScanner;
     }
-}
+
+    public void setInputScanner(InputScanner inputScanner) {
+        this.inputScanner = inputScanner;
+    }
+}*/

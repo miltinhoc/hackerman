@@ -1,7 +1,9 @@
 package org.academiadecodigo.codezillas.Utils;
 
+import org.academiadecodigo.bootcamp.InputScanner;
 import org.academiadecodigo.codezillas.FileServices.FileManager;
 import org.academiadecodigo.codezillas.Server.Navigation;
+import org.academiadecodigo.codezillas.Server.Server;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -9,8 +11,7 @@ import java.util.Map;
 public class NavigationUtils {
 
 
-    public static final String SET_NICKNAME_MESSAGE = "???WTF REIMAO STOP CHANGING SHIT" ;
-    public static Map<NavigationPossibilitiesType, NavigationPossibilities> menuMap;
+    public static Map<Server.NavigationPossibilitiesType, NavigationPossibilities> menuMap;
 
     public static String WELCOME_MESSAGE = ASCII.CLIENTINTRO + "\n" + "Welcome to <BROS Relay Oriented System >";
 
@@ -47,27 +48,27 @@ public class NavigationUtils {
     }
     //TODO: check messages;
 
-    public static void initMap(){
+    public static void initMap(InputScanner inputScanner){
 
         menuMap = new HashMap<>();
 
-        menuMap.put(NavigationPossibilitiesType.INITIAL_MENU, new NavigationPossibilities(Navigation.clientMenu(), setPossibilitiesType(), new String[]{Commands.QUIT, Commands.UPLOAD, Commands.MENU,Commands.MENU}));
+        menuMap.put(Server.NavigationPossibilitiesType.INITIAL_MENU, new NavigationPossibilities(Navigation.clientMenu(), setPossibilitiesType(), new String[]{Commands.QUIT, Commands.UPLOAD, Commands.MENU,Commands.MENU}));
 
-        menuMap.put(NavigationPossibilitiesType.DOWNLOAD_MENU, new NavigationPossibilities(Navigation.downloadMenu(FileManager.listAllFiles()), new String[]{Commands.DOWNLOAD})); //TODO: check path
+        menuMap.put(Server.NavigationPossibilitiesType.DOWNLOAD_MENU, new NavigationPossibilities(Navigation.downloadMenu(FileManager.listAllFiles()), new String[]{Commands.DOWNLOAD})); //TODO: check path
 
-        menuMap.put(NavigationPossibilitiesType.ACCEPT_NEW_CONNECTION_MENU, new NavigationPossibilities(Navigation.acceptConnectionMenu("An user"), new String[]{Commands.IP})); //TODO: add nick
+        menuMap.put(Server.NavigationPossibilitiesType.ACCEPT_NEW_CONNECTION_MENU, new NavigationPossibilities(Navigation.acceptConnectionMenu("An user"), new String[]{Commands.IP})); //TODO: add nick
 
-        menuMap.put(NavigationPossibilitiesType.ONLINE_CLIENTS_MENU, new NavigationPossibilities(Navigation.onlineClientsMenu(new String[]{"User1, User2"}), new String[]{Commands.CONNECTION})); //TODO: add online clients
+        menuMap.put(Server.NavigationPossibilitiesType.ONLINE_CLIENTS_MENU, new NavigationPossibilities(inputScanner, new String[]{Commands.CONNECTION}));
 
-        menuMap.put(NavigationPossibilitiesType.UPLOAD_MESSAGE, new NavigationPossibilities(Navigation.uploadMessage(), new String[]{Commands.MENU}));
+        menuMap.put(Server.NavigationPossibilitiesType.UPLOAD_MESSAGE, new NavigationPossibilities(Navigation.uploadMessage(), new String[]{Commands.MENU}));
 
-        menuMap.put(NavigationPossibilitiesType.NICKNAME_MESSAGE, new NavigationPossibilities(Navigation.setNickname(), new String[]{Commands.MENU}));
+        menuMap.put(Server.NavigationPossibilitiesType.NICKNAME_MESSAGE, new NavigationPossibilities(Navigation.setNickname(), new String[]{Commands.MENU}));
 
     }
 
-    private static NavigationPossibilitiesType[] setPossibilitiesType(){
+    private static Server.NavigationPossibilitiesType[] setPossibilitiesType(){
 
-        return new NavigationPossibilitiesType[]{NavigationPossibilitiesType.QUIT, NavigationPossibilitiesType.UPLOAD_MESSAGE, NavigationPossibilitiesType.DOWNLOAD_MENU, NavigationPossibilitiesType.ONLINE_CLIENTS_MENU};
+        return new Server.NavigationPossibilitiesType[]{Server.NavigationPossibilitiesType.QUIT, Server.NavigationPossibilitiesType.UPLOAD_MESSAGE, Server.NavigationPossibilitiesType.DOWNLOAD_MENU, Server.NavigationPossibilitiesType.ONLINE_CLIENTS_MENU};
     }
 
 }

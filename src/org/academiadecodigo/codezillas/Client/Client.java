@@ -41,7 +41,7 @@ public class Client extends Peer {
 
         try {
 
-            serverSocket = new Socket("192.168.1.125", Defaults.SERVER_PORT);
+            serverSocket = new Socket("localhost", Defaults.SERVER_PORT);
             setUpStreams();
         } catch (IOException e) {
             System.err.println("Something went wrong while trying to connect to the server");

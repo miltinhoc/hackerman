@@ -2,14 +2,15 @@ package org.academiadecodigo.codezillas.Utils;
 
 
 import org.academiadecodigo.bootcamp.InputScanner;
+import org.academiadecodigo.codezillas.Server.Server;
 
 public class NavigationPossibilities {
 
-    private NavigationPossibilitiesType[] optionsType;
+    private Server.NavigationPossibilitiesType[] optionsType;
     private InputScanner inputScanner;
     private String[] nextCommand;
 
-    public NavigationPossibilities(InputScanner inputScanner, NavigationPossibilitiesType[] optionsType, String[] nextCommand){
+    public NavigationPossibilities(InputScanner inputScanner, Server.NavigationPossibilitiesType[] optionsType, String[] nextCommand){
         this.inputScanner = inputScanner;
         this.optionsType = optionsType;
         this.nextCommand = nextCommand;
@@ -24,7 +25,7 @@ public class NavigationPossibilities {
         return inputScanner;
     }
 
-    public NavigationPossibilitiesType[] getOptionsType() {
+    public Server.NavigationPossibilitiesType[] getOptionsType() {
         return optionsType;
     }
 

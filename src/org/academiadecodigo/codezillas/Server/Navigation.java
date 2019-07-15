@@ -37,7 +37,7 @@ public class Navigation {
     }
 
     public static InputScanner setNickname(){
-        return stringScanner(NavigationUtils.SET_NICKNAME_MESSAGE);
+        return stringScanner(NavigationUtils.SET_NICKNAME);
     }
 
     public static InputScanner acceptConnectionMenu(String requestingClientNickname) {

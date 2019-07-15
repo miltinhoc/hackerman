@@ -1,6 +1,8 @@
 package org.academiadecodigo.codezillas.Server;
 
+import org.academiadecodigo.bootcamp.InputScanner;
 import org.academiadecodigo.codezillas.Client.ClientRequest;
+import org.academiadecodigo.codezillas.FileServices.FileManager;
 import org.academiadecodigo.codezillas.Utils.ASCII;
 import org.academiadecodigo.codezillas.Utils.Commands;
 import org.academiadecodigo.codezillas.Utils.Defaults;
@@ -23,10 +25,12 @@ public class Server {
     private Socket connectionSocket;
     private ObjectInputStream inputStream;
     private ObjectOutputStream outputStream;
+    private RequestHandler requestHandler;
 
     public Server(){
         servicePool = Executors.newCachedThreadPool();
         clientList = Collections.synchronizedMap(new HashMap<>());
+        requestHandler = new RequestHandler(this);
 
         try {
             serverSocket = new ServerSocket(Defaults.SERVER_PORT);
@@ -78,7 +82,7 @@ public class Server {
         }
     }
 
-    private String[] getActiveClientsNames(){
+    public String[] getActiveClientsNames(){
         return clientList.keySet().toArray(new String[0]);
     }
 
@@ -88,12 +92,10 @@ public class Server {
         private ObjectInputStream inputStream;
         private ObjectOutputStream outputStream;
         private String nickname;
-        private RequestHandler requestHandler;
         private boolean logged;
 
         public ClientHandler(Socket client, ObjectInputStream inputStream, ObjectOutputStream outputStream){
             this.client = client;
-            requestHandler = new RequestHandler();
             this.inputStream = inputStream;
             this.outputStream = outputStream;
         }
@@ -225,5 +227,30 @@ public class Server {
 
 
     }
+        public enum NavigationPossibilitiesType {
+
+            INITIAL_MENU(Navigation.clientMenu()),
+            DOWNLOAD_MENU(Navigation.downloadMenu(FileManager.listAllFiles())), //TODO: add path
+            ACCEPT_NEW_CONNECTION_MENU(Navigation.acceptConnectionMenu("An user")), //TODO: add user
+            ONLINE_CLIENTS_MENU(Navigation.onlineClientsMenu(new String[]{"User1, User2"})), //TODO: add online clients
+            UPLOAD_MESSAGE(Navigation.uploadMessage()),
+            NICKNAME_MESSAGE(Navigation.setNickname()),
+            QUIT(null);
+
+            private InputScanner inputScanner;
+
+            NavigationPossibilitiesType(InputScanner inputScanner){
+                this.inputScanner = inputScanner;
+            }
+
+            public InputScanner getInputScanner()
+            {
+                return inputScanner;
+            }
+
+            public void setInputScanner(InputScanner inputScanner) {
+                this.inputScanner = inputScanner;
+            }
+        }
 
 }
