@@ -224,15 +224,13 @@ public class Server {
             return clientsLoggedIn;
         }
 
-
-
     }
         public enum NavigationPossibilitiesType {
 
             INITIAL_MENU(Navigation.clientMenu()),
             DOWNLOAD_MENU(Navigation.downloadMenu(FileManager.listAllFiles())), //TODO: add path
             ACCEPT_NEW_CONNECTION_MENU(Navigation.acceptConnectionMenu("An user")), //TODO: add user
-            ONLINE_CLIENTS_MENU(Navigation.onlineClientsMenu(new String[]{"User1, User2"})), //TODO: add online clients
+            ONLINE_CLIENTS_MENU(Navigation.onlineClientsMenu(new String[]{"ola"})), //TODO: add online clients
             UPLOAD_MESSAGE(Navigation.uploadMessage()),
             NICKNAME_MESSAGE(Navigation.setNickname()),
             QUIT(null);
@@ -251,6 +249,6 @@ public class Server {
             public void setInputScanner(InputScanner inputScanner) {
                 this.inputScanner = inputScanner;
             }
-        }
 
+        }
 }

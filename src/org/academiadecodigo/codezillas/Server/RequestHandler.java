@@ -17,10 +17,12 @@ public class RequestHandler {
     private Server.NavigationPossibilitiesType navigationPossibilitiesType = Server.NavigationPossibilitiesType.INITIAL_MENU;
     private Map<Server.NavigationPossibilitiesType, NavigationPossibilities> possibilitiesMap;
     private int downloadChoice = 1;
+    private Server server;
 
     public RequestHandler(Server server) {
         NavigationUtils.initMap(Navigation.onlineClientsMenu(server.getActiveClientsNames()));
         possibilitiesMap = NavigationUtils.menuMap;
+        this.server = server;
     }
 
     public ServerRequest handleRequest(ClientRequest clientRequest, ObjectInputStream inputStream, ObjectOutputStream outputStream) {
@@ -32,6 +34,7 @@ public class RequestHandler {
 
 
             case Commands.INT:
+                Server.NavigationPossibilitiesType.ONLINE_CLIENTS_MENU.setInputScanner(Navigation.onlineClientsMenu(server.getActiveClientsNames()));
 
                 if (navigationPossibilitiesType == Server.NavigationPossibilitiesType.DOWNLOAD_MENU) {
 
