@@ -5,6 +5,7 @@ import org.academiadecodigo.bootcamp.scanners.menu.MenuInputScanner;
 import org.academiadecodigo.bootcamp.scanners.string.StringInputScanner;
 import org.academiadecodigo.codezillas.Server.Navigation;
 import org.academiadecodigo.codezillas.Server.ServerRequest;
+import org.academiadecodigo.codezillas.Utils.ASCII;
 import org.academiadecodigo.codezillas.Utils.Commands;
 
 import java.io.*;
@@ -78,6 +79,9 @@ class PromptHandler {
                     write(new ClientRequest(Commands.STRING, "no"));
                     break;
 
+                case Commands.QUIT:
+                    System.out.println(ASCII.LATER);
+                    System.exit(1);
             }
 
         } catch (IOException ex){

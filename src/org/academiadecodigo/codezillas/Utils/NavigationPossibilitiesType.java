@@ -11,7 +11,8 @@ public enum NavigationPossibilitiesType {
     ACCEPT_NEW_CONNECTION_MENU(Navigation.acceptConnectionMenu("An user")), //TODO: add user
     ONLINE_CLIENTS_MENU(Navigation.onlineClientsMenu(new String[]{"User1, User2"})), //TODO: add online clients
     UPLOAD_MESSAGE(Navigation.uploadMessage()),
-    NICKNAME_MESSAGE(Navigation.setNickname());
+    NICKNAME_MESSAGE(Navigation.setNickname()),
+    QUIT(null);
 
     private InputScanner inputScanner;
 

@@ -32,13 +32,19 @@ public class RequestHandler {
 
             case Commands.INT:
 
-                if(navigationPossibilitiesType == NavigationPossibilitiesType.DOWNLOAD_MENU){
+                if(navigationPossibilitiesType == NavigationPossibilitiesType.DOWNLOAD_MENU) {
 
                     downloadChoice = clientRequest.getAnswerInt();
-                    if(downloadChoice == 1){
+                    if (downloadChoice == 1) {
                         return initMenu();
                     }
                     return new ServerRequest(Commands.DOWNLOAD);
+                }
+
+                if(clientRequest.getAnswerInt() == 1){
+
+                    return new ServerRequest(Commands.QUIT);
+
                 }
 
                 serverRequest = analyzeIntAnswer(clientRequest.getAnswerInt());
