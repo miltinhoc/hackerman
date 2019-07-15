@@ -16,7 +16,7 @@ public class Navigation {
     }
 
     public static InputScanner clientMenu(){
-        return showMenu(NavigationUtils.SELECT_MENU_OPTION, Defaults.WELCOME);
+        return showMenu(NavigationUtils.SELECT_MENU_OPTION, Defaults.EXTENDED);
     }
 
     public static InputScanner uploadMessage() {
