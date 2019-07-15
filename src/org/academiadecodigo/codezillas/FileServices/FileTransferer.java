@@ -7,13 +7,7 @@ import java.io.*;
 import java.nio.file.Files;
 
 public abstract class FileTransferer {
-    //can be made non-abstract if necessary
 
-    /**
-     *
-     * @param outputStream
-     * @param container
-     */
     public static void upload(ObjectOutputStream outputStream, FileContainer container){
 
         if (container.getFile() != null){
@@ -30,12 +24,6 @@ public abstract class FileTransferer {
         }
     }
 
-    /**
-     *
-     * @param inputStream
-     * @param path
-     * @return
-     */
     public static void download(ObjectInputStream inputStream, String path){
 
         try {
@@ -48,7 +36,6 @@ public abstract class FileTransferer {
 
             System.out.println("File downloaded");
             System.out.println(file.getAbsolutePath());
-
 
             byte[] data = Files.readAllBytes(file.toPath());
 
@@ -63,4 +50,5 @@ public abstract class FileTransferer {
             System.err.println("Class not found");
         }
     }
+
 }

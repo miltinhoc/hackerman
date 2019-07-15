@@ -16,7 +16,6 @@ class PromptHandler {
     private ObjectInputStream inputStream;
     private ObjectOutputStream outputStream;
 
-
     PromptHandler() {
 
             prompt = new Prompt(System.in, System.out);
@@ -34,7 +33,6 @@ class PromptHandler {
         }
         String command = serverRequest.getCommand();
         String[] defaultAnswer = {""};
-
 
         try {
 
@@ -65,13 +63,11 @@ class PromptHandler {
 
                 case Commands.DOWNLOAD:
 
-                    String[] pathDownload = (new String[]{Commands.DOWNLOAD}); //+ downloadRequestHandler((StringInputScanner) serverRequest.getInputScanner())).split("/");
+                    String[] pathDownload = (new String[]{Commands.DOWNLOAD});
                     write(new ClientRequest(Commands.UPLOAD, "yes"));
                     return pathDownload;
 
                 case Commands.UPLOAD:
-
-                    String[] pathUpload = (new String[]{Commands.UPLOAD}); //+ uploadRequestHandler((StringInputScanner) serverRequest.getInputScanner())).split("/");
 
                     Scanner scanner = new Scanner(System.in);
                     System.out.println("Enter the path of the desired file: ");
@@ -141,14 +137,6 @@ class PromptHandler {
 
         return prompt.getUserInput(menuInputScanner);
 
-    }
-
-    private String uploadRequestHandler(StringInputScanner stringInputScanner){
-        return prompt.getUserInput(stringInputScanner);
-    }
-
-    private String downloadRequestHandler(StringInputScanner stringInputScanner){
-        return prompt.getUserInput(stringInputScanner);
     }
 
     private String receiveFileRequestHandler(StringInputScanner stringInputScanner){

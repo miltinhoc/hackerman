@@ -32,7 +32,6 @@ public class RequestHandler {
 
         switch (command){
 
-
             case Commands.INT:
 
                 if(navigationPossibilitiesType == NavigationPossibilitiesType.DOWNLOAD_MENU){
@@ -125,8 +124,6 @@ public class RequestHandler {
 
     }
 
-
-
     private ServerRequest analyzeStringAnswer(String answer, ObjectInputStream inputStream){
 
         System.out.println("entrei no analyzeString");
@@ -149,11 +146,11 @@ public class RequestHandler {
         navigationPossibilitiesType = NavigationPossibilitiesType.INITIAL_MENU;
         return new ServerRequest(Commands.MENU, Navigation.clientMenu(nickname));
     }
+
     public ServerRequest initMenu(){
         navigationPossibilitiesType = NavigationPossibilitiesType.INITIAL_MENU;
         return new ServerRequest(Commands.MENU, Navigation.clientMenu());
     }
-
 
     public ServerRequest getNickname(){
         return new ServerRequest(Commands.QUESTION, Navigation.getLogin());

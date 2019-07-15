@@ -2,7 +2,6 @@ package org.academiadecodigo.codezillas.Server;
 
 import org.academiadecodigo.codezillas.Client.ClientRequest;
 import org.academiadecodigo.codezillas.Utils.ASCII;
-import org.academiadecodigo.codezillas.Utils.Commands;
 import org.academiadecodigo.codezillas.Utils.Defaults;
 
 import java.io.*;
@@ -11,7 +10,6 @@ import java.net.Socket;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -20,9 +18,6 @@ public class Server {
     private ServerSocket serverSocket;
     private ExecutorService servicePool;
     private Map<String, ClientHandler> clientList;
-    private Socket connectionSocket;
-    private ObjectInputStream inputStream;
-    private ObjectOutputStream outputStream;
 
     public Server(){
         servicePool = Executors.newCachedThreadPool();
@@ -49,14 +44,8 @@ public class Server {
         while (true){
 
             try {
-                connectionSocket = serverSocket.accept();
-                System.out.println("Connection established");
-                inputStream = new ObjectInputStream(connectionSocket.getInputStream());
-                outputStream = new ObjectOutputStream(connectionSocket.getOutputStream());
-                System.out.println("Streams oppened");
-
-                servicePool.submit(new ClientHandler(connectionSocket, inputStream, outputStream));
-                System.out.println(Defaults.CONNECTION_OK); //TODO: Include client IP and Port
+                servicePool.submit(new ClientHandler(serverSocket.accept()));
+                System.out.println(Defaults.NEW_CONNECTION);
 
             } catch (IOException e) {
                 System.err.println(Defaults.CONNECTION_ERROR);
@@ -91,19 +80,17 @@ public class Server {
         private RequestHandler requestHandler;
         private boolean logged;
 
-        public ClientHandler(Socket client, ObjectInputStream inputStream, ObjectOutputStream outputStream){
+        public ClientHandler(Socket client){
             this.client = client;
+            setupStream();
             requestHandler = new RequestHandler();
-            this.inputStream = inputStream;
-            this.outputStream = outputStream;
         }
 
         @Override
         public void run() {
 
-            //setupStream();
-
             try {
+
                 handle();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -131,18 +118,18 @@ public class Server {
                 ClientRequest clientRequest = (ClientRequest) inputStream.readObject();
 
                 nickname = clientRequest.getAnswerString().trim().isEmpty() ?
-                        "Bro" + Defaults.rng() : clientRequest.getAnswerString();
+                        Defaults.NAME : clientRequest.getAnswerString();
 
                 validateLogin(nickname);
 
             } catch (IOException | ClassNotFoundException e) {
-                System.err.println("User " + nickname + " disconnected abruptly");
+                System.err.println(Defaults.disconnected(nickname));
                 close();
             }
 
             logged = true;
 
-            System.out.println(Defaults.userDetails(nickname, client.getInetAddress().toString()));
+            System.out.println(Defaults.userDetails(nickname, client.getInetAddress().getHostAddress()));
         }
 
         public void validateLogin(String nickname) throws IOException, ClassNotFoundException{
@@ -153,6 +140,7 @@ public class Server {
                 nickname = clientRequest.getAnswerString();
             }
 
+            this.nickname = nickname;
             clientList.put(nickname, this);
 
         }
@@ -166,17 +154,17 @@ public class Server {
                     if(!logged){
                         login();
                         respondRequest(requestHandler.initMenu(nickname));
+                        Defaults.printLoggedUsers(getActiveClientsNames());
                     }
 
                     ClientRequest clientRequest = (ClientRequest) inputStream.readObject();
                     System.out.println(clientRequest.getAnswerString());
                     respondRequest(requestHandler.handleRequest(clientRequest, inputStream, outputStream));
 
-
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();
                 } catch (EOFException EOFE){
-                    System.err.println("User " + nickname + " disconnected abruptly");
+                    System.err.println(Defaults.disconnected(nickname));
                     close();
                     break;
                 }
@@ -206,24 +194,6 @@ public class Server {
                 e.printStackTrace();
             }
         }
-
-        public String[] loggedClients(){
-
-            Set<String> nicknames = clientList.keySet();
-            String[] clientsLoggedIn = new String[nicknames.size()];
-
-            int counter = 0;
-
-            for (String n: nicknames) {                     //TODO: change to Array method
-                clientsLoggedIn[counter] = n;
-                counter++;
-            }
-
-            return clientsLoggedIn;
-        }
-
-
-
     }
 
 }

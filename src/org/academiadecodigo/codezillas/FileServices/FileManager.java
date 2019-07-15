@@ -44,59 +44,6 @@ public abstract class FileManager {
         return null;
     }
 
-    /**
-     *
-     * @param receivedPath String
-     * @return true if Directory exists, false if doesn't exist
-     */
-    public boolean pathExists(String receivedPath){
-
-        File path = new File(receivedPath);
-        return path.isDirectory();
-    }
-
-    public static void choosePath(String path){
-
-    }
-
-    /**
-     *
-     * @param path String name of the directory to create
-     */
-    public static void createDirectory(String path){
-
-        File directory = new File(path);
-        if (!directory.exists()){
-            boolean result = directory.mkdir();
-        }
-    }
-
-    /**
-     *
-     * @return Array of String if not null
-     */
-    public static String[] listAllPathContent(String path){
-
-        File newPath = new File(Defaults.SERVER_ROOT + path);
-        File[] files = newPath.listFiles();
-
-        if (files != null){
-            int size = files.length;
-            String[] content = new String[size];
-
-            for (int i = 0; i < size; i++) {
-
-                if (files[i].isDirectory()){
-                    content[i] = String.format("/%s", files[i].getName());
-                    continue;
-                }
-                content[i] = files[i].getName();
-            }
-            return content;
-        }
-        return null;
-    }
-
     public static String[] listAllFiles(){
         File path = new File(Defaults.SERVER_ROOT);
         File[] files = path.listFiles();
@@ -120,6 +67,5 @@ public abstract class FileManager {
         }
         return content;
     }
-
 
 }

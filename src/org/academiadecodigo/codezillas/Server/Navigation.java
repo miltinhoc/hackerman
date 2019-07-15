@@ -9,12 +9,7 @@ import org.academiadecodigo.codezillas.Utils.NavigationUtils;
 
 public class Navigation {
 
-
     public Navigation() {}
-
-    public static InputScanner loginRegisterMenu() {
-        return showMenu(NavigationUtils.INIT_CONNECTION_MENU_OPTIONS, NavigationUtils.INIT_CONNECTION_MENU_MESSAGE);
-    }
 
     public static InputScanner clientMenu(String nickname) {
         return showMenu(NavigationUtils.SELECT_MENU_OPTION, NavigationUtils.LOGGEDIN(nickname));
@@ -23,10 +18,6 @@ public class Navigation {
     public static InputScanner clientMenu(){
         return showMenu(NavigationUtils.SELECT_MENU_OPTION, Defaults.WELCOME);
     }
-
-   /* public static InputScanner clientMenu( ) {
-        return showMenu(NavigationUtils.SELECT_MENU_OPTION, NavigationUtils.LOGGEDIN(S));
-    } */
 
     public static InputScanner uploadMessage() {
         return stringScanner(NavigationUtils.UPLOAD_MESSAGE);
@@ -45,7 +36,8 @@ public class Navigation {
     }
 
     public static InputScanner acceptConnectionMenu(String requestingClientNickname) {
-        return showMenu(NavigationUtils.ACCEPT_CONNECTION_OPTIONS, requestingClientNickname + NavigationUtils.ACCEPT_CONNECTION_MESSAGE);
+        return showMenu(NavigationUtils.ACCEPT_CONNECTION_OPTIONS, requestingClientNickname
+                + NavigationUtils.ACCEPT_CONNECTION_MESSAGE);
     }
 
     public static InputScanner getLogin(){

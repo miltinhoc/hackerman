@@ -19,11 +19,4 @@ public abstract class Peer {
 
     }
 
-    public void saveFile(File file){
-        FileManager.saveFile(file);
-    }
-
-    public abstract void shutdown();
-
-
 }

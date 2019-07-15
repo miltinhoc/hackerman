@@ -20,10 +20,6 @@ public class NavigationPossibilities {
         this.nextCommand = nextCommand;
     }
 
-    public InputScanner getInputScanner() {
-        return inputScanner;
-    }
-
     public NavigationPossibilitiesType[] getOptionsType() {
         return optionsType;
     }
