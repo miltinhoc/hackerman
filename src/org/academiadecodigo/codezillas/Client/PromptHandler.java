@@ -50,16 +50,9 @@ class PromptHandler {
                     write(new ClientRequest(Commands.STRING, answerQuestion));
                     break;
 
-                case Commands.CONNECTION:
-
-                    int answerConnection = connectionRequestHandler((MenuInputScanner) serverRequest.getInputScanner());
-                    write(new ClientRequest(Commands.INT, answerConnection));
-                    break;
-
                 case Commands.RECEIVE_FILE:
 
-                    String[] pathReceive = ((Commands.RECEIVE_FILE + receiveFileRequestHandler((StringInputScanner) serverRequest.getInputScanner())).split("/"));
-                    return pathReceive;
+                    return ((Commands.RECEIVE_FILE + receiveFileRequestHandler((StringInputScanner) serverRequest.getInputScanner())).split("/"));
 
                 case Commands.DOWNLOAD:
 
@@ -70,14 +63,14 @@ class PromptHandler {
                 case Commands.UPLOAD:
 
                     Scanner scanner = new Scanner(System.in);
-                    System.out.println("Enter the path of the desired file: ");
+                    System.out.println("Enter path of the desired file: ");
                     String path[] = new String[]{Commands.UPLOAD,scanner.nextLine()};
 
                     File file = new File(path[1]);
 
                     if(file.exists()){
                         write(new ClientRequest(Commands.STRING, "yes"));
-                        System.out.println("enviei");
+                        System.out.println("File was sent!");
                         return path;
                     }
 
@@ -85,20 +78,10 @@ class PromptHandler {
                     write(new ClientRequest(Commands.STRING, "no"));
                     break;
 
-                case Commands.IP:
-
-                    String[] ip = (Commands.IP + serverRequest.getIp()).split("/");
-
-                   if(ip[1].equals("no")){
-
-                       System.out.println("Destination User refused to connect"); //TODO: check message
-                       return defaultAnswer;
-                   }
-                    return ip;
             }
 
         } catch (IOException ex){
-            System.err.println("Something went wrong while handlingTheRequest");
+            System.err.println("Something went wrong while handling The Request");
         }
         return defaultAnswer; //TODO: check if better alternative to return the ip
     }
@@ -130,12 +113,6 @@ class PromptHandler {
     private String questionRequestHandler(StringInputScanner stringInputScanner) {
 
         return prompt.getUserInput(stringInputScanner);
-
-    }
-
-    private int connectionRequestHandler(MenuInputScanner menuInputScanner) {
-
-        return prompt.getUserInput(menuInputScanner);
 
     }
 

@@ -28,21 +28,17 @@ public class RequestHandler {
         String command = clientRequest.getCommand();
         ServerRequest serverRequest = null;
 
-            System.out.println(navigationPossibilitiesType);
-
         switch (command){
 
             case Commands.INT:
 
                 if(navigationPossibilitiesType == NavigationPossibilitiesType.DOWNLOAD_MENU){
 
-                    System.out.println("entrar no tipo do download");
                     downloadChoice = clientRequest.getAnswerInt();
                     if(downloadChoice == 1){
                         return initMenu();
                     }
                     return new ServerRequest(Commands.DOWNLOAD);
-
                 }
 
                 serverRequest = analyzeIntAnswer(clientRequest.getAnswerInt());
@@ -53,14 +49,11 @@ public class RequestHandler {
                 break;
 
             case Commands.MENU:
-                System.out.println("entrei no menu");
                 serverRequest = new ServerRequest(Commands.MENU, Navigation.clientMenu());
                 System.out.println(serverRequest.getCommand());
                 return serverRequest;
 
             case Commands.UPLOAD:
-
-                System.out.println("A entrar no upload");
                 analyzeDownloadOption(downloadChoice, outputStream);
                 break;
         }
@@ -92,7 +85,6 @@ public class RequestHandler {
             if(answer - 1 == i){
                 inputScanner = options[i].getInputScanner();
                 navigationPossibilitiesType = options[i];
-                System.out.println(navigationPossibilitiesType + " 2");
             }
         }
 
@@ -100,8 +92,6 @@ public class RequestHandler {
 
             if(answer - 1 == i){
                 command = nextComands[i];
-                System.out.println(navigationPossibilitiesType);
-                System.out.println(command);
             }
         }
 
@@ -119,27 +109,24 @@ public class RequestHandler {
 
         File file = new File(files[answer - 2]);
 
-        System.out.println("starting upload");
+        System.out.println("Starting upload");
 
         FileTransferer.upload(outputStream, new FileContainer(file));
 
-        System.out.println("upload done");
+        System.out.println("Upload finished");
 
     }
 
     private ServerRequest analyzeStringAnswer(String answer, ObjectInputStream inputStream){
 
-        System.out.println("entrei no analyzeString");
-
         switch (navigationPossibilitiesType){
 
             case UPLOAD_MESSAGE:
-                System.out.println("upload");
+                System.out.println("Received download request...\n");
                 if(answer.equals("yes")){
 
-                    System.out.println("cheguei aqui");
-                    FileTransferer.download(inputStream, Defaults.SERVER_ROOT);
-                    System.out.println("e aqui");
+                    FileTransferer.download(inputStream);
+                    System.out.println("Download success.");
                 }
         }
         return initMenu();

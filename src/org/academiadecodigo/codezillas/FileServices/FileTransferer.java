@@ -1,15 +1,9 @@
 package org.academiadecodigo.codezillas.FileServices;
 
-import org.academiadecodigo.codezillas.Server.ServerRequest;
 import org.academiadecodigo.codezillas.Utils.Defaults;
-
-import javax.imageio.stream.FileCacheImageOutputStream;
 import java.io.*;
-import java.nio.file.Files;
 
 public abstract class FileTransferer {
-    //can be made non-abstract if necessary
-
     /**
      *
      * @param outputStream
@@ -28,10 +22,8 @@ public abstract class FileTransferer {
                 String name = file.getName();
                 byte[] data = reader.readAllBytes();
 
-                System.out.println("uploading");
                 outputStream.writeObject(new FileData(data, name));
                 outputStream.flush();
-                System.out.println("uploaded");
 
             } catch (IOException e) {
                 System.err.println(e.getMessage());
@@ -39,17 +31,11 @@ public abstract class FileTransferer {
         }
     }
 
-    /**
-     *
-     * @param inputStream
-     * @param path
-     * @return
-     */
-    public static void download(ObjectInputStream inputStream, String path){
+    public static void download(ObjectInputStream inputStream ){
 
         try {
 
-            System.out.println("Starting download");
+            System.out.println("Download is starting...");
 
 
             FileData fileData = (FileData) inputStream.readObject();

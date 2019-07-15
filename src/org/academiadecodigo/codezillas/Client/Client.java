@@ -14,7 +14,6 @@ public class Client extends Peer {
     private ObjectInputStream inputStream;
     private PromptHandler promptHandler;
 
-
     public Client() {
         promptHandler = new PromptHandler();
     }
@@ -48,7 +47,6 @@ public class Client extends Peer {
 
             outputStream = new ObjectOutputStream(serverSocket.getOutputStream());
             inputStream = new ObjectInputStream(serverSocket.getInputStream());
-            System.out.println("Streams opened"); //TODO: erase when debugging is done
 
         } catch (IOException ex){
             System.err.println("Something went Wrong while opening Client Streams");
@@ -65,7 +63,7 @@ public class Client extends Peer {
 
                 case Commands.DOWNLOAD:
 
-                    super.download(inputStream, Defaults.CLIENT_ROOT);
+                    super.download(inputStream);
 
                     try {
                         outputStream.writeObject(new ClientRequest(Commands.MENU, "yes"));
@@ -83,7 +81,7 @@ public class Client extends Peer {
     }
 
     private void uploadToServer(String path) {
-        System.out.println("starting to upload");
+        System.out.println("Upload starting... \n");
         File file = fileToUpload(path);
         super.write(new FileContainer(file), outputStream);
     }

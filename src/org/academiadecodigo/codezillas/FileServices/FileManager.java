@@ -8,29 +8,6 @@ public abstract class FileManager {
 
     /**
      *
-     * @param file String of the wanted path to save the file
-     */
-    public static void saveFile(File file){
-
-        try {
-
-            InputStream inputStream = new BufferedInputStream(new FileInputStream(file));
-            FileOutputStream fileOutputStream = new FileOutputStream(Defaults.SERVER_ROOT + "gg.txt");
-
-            byte[] buffer = new byte[1024];
-            int numOfBytes = inputStream.read(buffer);
-
-            while (numOfBytes != -1){
-                fileOutputStream.write(buffer,0, numOfBytes);
-                numOfBytes = inputStream.read(buffer);
-            }
-        } catch (IOException e) {
-            System.err.println(e.getMessage());
-        }
-    }
-
-    /**
-     *
      * @param filepath String of the path to the file
      * @return a File if exists, null if doesn't exist
      */
