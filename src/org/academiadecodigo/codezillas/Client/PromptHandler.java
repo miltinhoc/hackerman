@@ -36,17 +36,12 @@ class PromptHandler {
         String command = serverRequest.getCommand();
         String[] defaultAnswer = {""};
 
-        System.out.println("cheguei aqui");
         try {
 
             switch (command) {
 
                 case Commands.MENU:
-                    System.out.println("entrei no menu");
-                    System.out.println(serverRequest.getCommand());
-                    System.out.println(serverRequest.getInputScanner());
                     int answerMenu = menuRequestHandler((MenuInputScanner) serverRequest.getInputScanner());
-                    System.out.println("eu sei que é um menu");
                     write(new ClientRequest(Commands.INT, answerMenu));
                     break;
 
